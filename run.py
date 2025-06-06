@@ -132,11 +132,15 @@ def comparador():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+# Página principal
 @app.route('/')
 def home():
     return render_template('index.html')
 
-import os
+# (Opcional: compatibilidad si se usa 'index' en url_for desde templates antiguos)
+@app.route('/index')
+def index():
+    return redirect(url_for('home'))
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=10000)
