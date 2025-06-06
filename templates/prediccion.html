@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Predicción Automática de KPIs</h2>
+<p>Sube un dataset y selecciona la variable objetivo (target) para obtener una predicción de KPIs y su error.</p>
+<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
+    <input type="file" name="data_kpi" accept=".csv,.xlsx" required>
+    <input type="text" name="target" placeholder="Variable objetivo (ej: ventas)" required style="margin-left:1rem;">
+    <button type="submit" class="btn" style="margin-left:1rem;">Predecir</button>
+</form>
+{% if resultado %}
+    <div class="alert" style="margin-top:2rem; color:#232946;">{{ resultado }}</div>
+{% endif %}
+{% endblock %}
