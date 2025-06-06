@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Perfilado de Datos</h2>
-<form method="post" enctype="multipart/form-data" style="margin-bottom: 2rem;">
+<p>Sube tu archivo CSV o Excel para generar un informe interactivo de calidad de datos.</p>
+<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
     <input type="file" name="dataset" accept=".csv,.xlsx" required>
-    <button type="submit" style="margin-left: 1rem;">Cargar y Generar Perfil</button>
+    <button type="submit" class="btn">Cargar y Generar Perfil</button>
 </form>
-{% if profile_report %}
-    <a href="{{ url_for('uploaded_file', filename='informe_perfilado.html') }}" target="_blank" class="btn">Ver Informe de Perfilado</a>
-{% endif %}
+<p>
+    {% if profile_report %}
+        <a href="{{ url_for('uploaded_file', filename='informe_perfilado.html') }}" target="_blank" class="btn">Ver Informe de Perfilado</a>
+    {% endif %}
+</p>
 {% endblock %}
