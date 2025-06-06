@@ -1,16 +1,32 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Dashboard Automático · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Dashboard Inicial</h2>
-<p>Sube un dataset y explora histogramas automáticos de tus variables numéricas.</p>
-<form method="post" enctype="multipart/form-data">
-    <input type="file" name="dashboard_data" accept=".csv,.xlsx" required>
-    <button type="submit" class="btn">Visualizar</button>
-</form>
-{% if graphs %}
-    <div style="margin-top:2rem;">
-        {% for graph in graphs %}
-            <div style="margin-bottom:2rem;">{{ graph | safe }}</div>
-        {% endfor %}
+<section class="dashboard-section container" style="max-width:860px; margin-top:3rem;">
+    <h2 class="section-title">Dashboard de Análisis Rápido</h2>
+    <p style="text-align:center; color:var(--primary); font-size:1.13rem;">
+        Sube un <strong>CSV</strong> o <strong>Excel</strong> con tus datos y visualiza automáticamente histogramas de todas las variables numéricas.<br>
+        Perfecto para una exploración rápida y detectar tendencias de un vistazo.
+    </p>
+    <form method="POST" enctype="multipart/form-data" style="margin:2.1rem auto 2.1rem auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
+        <input type="file" name="dashboard_data" accept=".csv,.xlsx,.xls" required
+            style="background:var(--white); border:2px solid var(--secondary); border-radius:1.2rem; padding:1rem; margin-bottom:1.2rem; width:100%; font-size:1rem;">
+        <button type="submit" class="cta-button btn-details" style="width:100%;">Ver dashboard</button>
+    </form>
+    {% if graphs %}
+        <div style="margin-top:2.1rem;">
+            <h3 style="text-align:center; color:var(--primary); font-size:1.18rem; margin-bottom:1.3rem;">Visualizaciones automáticas</h3>
+            {% for graph in graphs %}
+                <div style="background:var(--white); border-radius:1.1rem; box-shadow:0 2px 16px rgba(44,62,80,0.07); padding:1.1rem; margin-bottom:2.2rem;">
+                    {{ graph|safe }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div style="text-align:center; margin-top:1.4rem;">
+        <a href="{{ url_for('index') }}" style="color:var(--primary); font-weight:600; text-decoration:underline; font-size:1.02rem;">
+            ← Volver al inicio
+        </a>
     </div>
-{% endif %}
+</section>
 {% endblock %}
