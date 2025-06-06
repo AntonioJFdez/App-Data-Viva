@@ -1,0 +1,78 @@
+<!-- app/templates/visual_compare.html -->
+{% extends 'base.html' %}
+
+{% block head %}
+  {{ super() }}
+  <!-- Favicon integration -->
+  <link rel="icon" href="{{ url_for('static', filename='img/logo_favicon.png') }}" type="image/png">
+{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #f5f2ea;
+  }
+  .card-header {
+    background-color: #2c3e50 !important;
+    color: #ffffff !important;
+  }
+  .btn-success {
+    background-color: #7f8c8d;
+    border-color: #7f8c8d;
+  }
+  .btn-outline-primary {
+    border-color: #2c3e50;
+    color: #2c3e50;
+  }
+  .btn-outline-primary:hover {
+    background-color: #2c3e50;
+    color: white;
+  }
+  .logo-container {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .logo-container img {
+    max-height: 100px;
+  }
+</style>
+
+<div class="logo-container">
+  <img src="{{ url_for('static', filename='img/logo_data_viva.png') }}" alt="Logo Data Viva">
+</div>
+
+<div class="container py-5">
+  <h2 class="mb-4 text-center" style="color:#2c3e50">🖼️ Comparador Visual de Dashboards</h2>
+
+  <div class="card shadow mb-4">
+    <div class="card-header">Sube dos archivos (imagen o PDF)</div>
+    <div class="card-body">
+      <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="image1">Archivo 1:</label>
+          <input type="file" class="form-control-file" name="image1" required>
+        </div>
+        <div class="form-group">
+          <label for="image2">Archivo 2:</label>
+          <input type="file" class="form-control-file" name="image2" required>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">🔍 Comparar</button>
+      </form>
+    </div>
+  </div>
+
+  {% if result_image %}
+  <div class="card shadow">
+    <div class="card-header" style="background-color:#debfb0; color:#020202">🔎 Resultado de la Comparación</div>
+    <div class="card-body text-center">
+      <img src="/uploads/{{ result_image }}" class="img-fluid" style="border: 1px solid #ccc; max-height: 600px;">
+      <div class="mt-3">
+        <a href="/uploads/{{ result_image }}" class="btn btn-outline-primary" download>
+          ⬇ Descargar Resultado
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
