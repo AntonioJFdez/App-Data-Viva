@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Perfilado de Datos</h2>
+<form method="post" enctype="multipart/form-data" style="margin-bottom: 2rem;">
+    <input type="file" name="dataset" accept=".csv,.xlsx" required>
+    <button type="submit" style="margin-left: 1rem;">Cargar y Generar Perfil</button>
+</form>
+{% if profile_report %}
+    <a href="{{ url_for('uploaded_file', filename='informe_perfilado.html') }}" target="_blank" class="btn">Ver Informe de Perfilado</a>
+{% endif %}
+{% endblock %}
