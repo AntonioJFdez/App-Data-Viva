@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Antonio J. Fernández - Data Viva{% endblock %}</title>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/Logo-favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo-favicon.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -83,13 +83,12 @@
 </head>
 <body>
     <header>
-        <div class="nav-container container">
-            <div class="nav-logo">
-                <a href="{{ url_for('home') }}">
-                    <img src="{{ url_for('static', filename='img/Logo Data Viva actual.png') }}" alt="Logo Data Viva">
-                    <span>Data Viva</span>
-                </a>
-            </div>
+        <div class="nav-logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='img/logo-data-viva.png') }}" alt="Logo Data Viva">
+                <span>Data Viva</span>
+            </a>
+        </div>
             <nav>
                 <ul>
                     <li><a href="{{ url_for('home') }}">Inicio</a></li>
