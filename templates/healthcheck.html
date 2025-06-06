@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Health Checker de Datos</h2>
+<p>Sube un dataset para detectar problemas típicos de calidad antes de trabajar con Power BI o análisis avanzados.</p>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="health_data" accept=".csv,.xlsx" required>
+    <button type="submit" class="btn">Revisar Calidad</button>
+</form>
+{% if resultados %}
+    <ul style="margin-top:2rem;">
+        {% for item in resultados %}
+            <li style="color: #e53170;">{{ item }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
