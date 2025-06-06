@@ -1,14 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Comparador Visual · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Comparador Visual de Dashboards</h2>
-<p>Sube dos imágenes de dashboards para ver sus diferencias visuales combinadas.</p>
-<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
-    <input type="file" name="image1" accept="image/*" required>
-    <input type="file" name="image2" accept="image/*" required>
-    <button type="submit" class="btn" style="margin-left:1rem;">Comparar</button>
-</form>
-{% if result_image %}
-    <h3>Resultado:</h3>
-    <img src="{{ url_for('uploaded_file', filename=result_image) }}" alt="Resultado Comparación" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px #eee;">
-{% endif %}
+<section class="download-section container" style="max-width:700px; margin-top:3rem;">
+    <h2 class="section-title" style="margin-bottom:1.2rem;">Comparador Visual</h2>
+    <p style="text-align:center; color:var(--primary); font-size:1.13rem; margin-bottom:1.4rem;">
+        Sube dos imágenes (<strong>PNG, JPG</strong>) para comparar visualmente y generar una <strong>fusión interactiva</strong> de ambas.<br>
+        Perfecto para detectar diferencias o mostrar cambios entre versiones de un mismo gráfico, plano o dashboard.
+    </p>
+    <form method="POST" enctype="multipart/form-data" style="margin:0 auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
+        <input type="file" name="image1" accept="image/png,image/jpeg" required
+            style="background:var(--white); border:2px solid var(--secondary); border-radius:1.2rem; padding:1rem; margin-bottom:1.1rem; width:100%; font-size:1rem;">
+        <input type="file" name="image2" accept="image/png,image/jpeg" required
+            style="background:var(--white); border:2px solid var(--secondary); border-radius:1.2rem; padding:1rem; margin-bottom:1.2rem; width:100%; font-size:1rem;">
+        <button type="submit" class="cta-button btn-details" style="width:100%;">Comparar imágenes</button>
+    </form>
+    {% if result_image %}
+        <div style="background:var(--secondary); border-radius:1.2rem; margin-top:2rem; padding:1.3rem 1rem; text-align:center;">
+            <h3 style="font-size:1.12rem; font-weight:700; margin-bottom:1rem; color:var(--primary);">Imagen fusionada (50/50)</h3>
+            <img src="{{ url_for('uploaded_file', filename=result_image) }}" alt="Resultado de comparación visual" style="max-width:100%; border-radius:1.2rem; box-shadow:0 2px 16px rgba(44,62,80,0.14);">
+            <div style="font-size:1.04rem; color:var(--primary); margin-top:1.1rem;">
+                <strong>Interpreta las zonas claras y oscuras para ver diferencias y solapamientos.</strong>
+            </div>
+        </div>
+    {% elif result_image is defined %}
+        <div style="background:var(--background); color:var(--primary); border-radius:1.2rem; margin-top:2rem; text-align:center; padding:1.2rem 1rem; font-size:1.06rem;">
+            No se ha podido generar la imagen comparada.
+        </div>
+    {% endif %}
+    <div style="text-align:center; margin-top:1.8rem;">
+        <a href="{{ url_for('index') }}" style="color:var(--primary); font-weight:600; text-decoration:underline; font-size:1.02rem;">
+            ← Volver al inicio
+        </a>
+    </div>
+</section>
 {% endblock %}
