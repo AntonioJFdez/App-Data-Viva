@@ -1,13 +1,29 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Predicción Automática de KPIs · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Predicción Automática de KPIs</h2>
-<p>Sube un dataset y selecciona la variable objetivo (target) para obtener una predicción de KPIs y su error.</p>
-<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
-    <input type="file" name="data_kpi" accept=".csv,.xlsx" required>
-    <input type="text" name="target" placeholder="Variable objetivo (ej: ventas)" required style="margin-left:1rem;">
-    <button type="submit" class="btn" style="margin-left:1rem;">Predecir</button>
-</form>
-{% if resultado %}
-    <div class="alert" style="margin-top:2rem; color:#232946;">{{ resultado }}</div>
-{% endif %}
+<section class="download-section container" style="max-width: 600px; margin-top:3rem;">
+    <h2 class="section-title" style="margin-bottom:1.3rem;">Predicción Automática de KPIs</h2>
+    <p style="text-align:center; color:var(--primary); font-size:1.13rem; margin-bottom:1.4rem;">
+        Sube tu dataset <strong>(CSV/Excel)</strong>, elige la variable objetivo y obtén una predicción automática<br>
+        con <strong>Random Forest</strong> y el error cuadrático medio como métrica de calidad.
+    </p>
+    <form method="POST" enctype="multipart/form-data" style="margin:0 auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
+        <input type="file" name="data_kpi" accept=".csv,.xlsx,.xls" required
+            style="background:var(--white); border:2px solid var(--secondary); border-radius:1.2rem; padding:1rem; margin-bottom:1.2rem; width:100%; font-size:1rem;">
+        <input type="text" name="target" placeholder="Variable objetivo (nombre exacto de la columna)" required
+            style="background:var(--white); border:2px solid var(--secondary); border-radius:1.2rem; padding:1rem; margin-bottom:1.2rem; width:100%; font-size:1rem;">
+        <button type="submit" class="cta-button btn-details" style="width:100%;">Predecir KPI</button>
+    </form>
+    {% if resultado %}
+        <div style="background:var(--secondary); color:var(--primary); border-radius:1.2rem; margin-top:2rem; text-align:center; padding:1.4rem 1rem; font-size:1.14rem; font-weight:600;">
+            {{ resultado }}
+        </div>
+    {% endif %}
+    <div style="text-align:center; margin-top:1.8rem;">
+        <a href="{{ url_for('index') }}" style="color:var(--primary); font-weight:600; text-decoration:underline; font-size:1.02rem;">
+            ← Volver al inicio
+        </a>
+    </div>
+</section>
 {% endblock %}
