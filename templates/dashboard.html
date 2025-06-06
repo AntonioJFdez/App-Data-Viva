@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Dashboard Inicial</h2>
+<p>Sube un dataset y explora histogramas automáticos de tus variables numéricas.</p>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="dashboard_data" accept=".csv,.xlsx" required>
+    <button type="submit" class="btn">Visualizar</button>
+</form>
+{% if graphs %}
+    <div style="margin-top:2rem;">
+        {% for graph in graphs %}
+            <div style="margin-bottom:2rem;">{{ graph | safe }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}
