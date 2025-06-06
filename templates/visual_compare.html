@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Comparador Visual de Dashboards</h2>
+<p>Sube dos imágenes de dashboards para ver sus diferencias visuales combinadas.</p>
+<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
+    <input type="file" name="image1" accept="image/*" required>
+    <input type="file" name="image2" accept="image/*" required>
+    <button type="submit" class="btn" style="margin-left:1rem;">Comparar</button>
+</form>
+{% if result_image %}
+    <h3>Resultado:</h3>
+    <img src="{{ url_for('uploaded_file', filename=result_image) }}" alt="Resultado Comparación" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px #eee;">
+{% endif %}
+{% endblock %}
