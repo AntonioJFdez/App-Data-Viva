@@ -1,7 +1,0 @@
-flask
-pandas
-plotly
-scikit-learn
-opencv-python
-pdf2image
-ydata-profiling
