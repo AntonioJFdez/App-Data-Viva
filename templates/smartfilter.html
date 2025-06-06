@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Recomendador de Filtros Inteligentes</h2>
+<p>Sube un dataset y la app sugerirá agrupaciones de segmentos/filtros para análisis.</p>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="filter_data" accept=".csv,.xlsx" required>
+    <button type="submit" class="btn">Generar Sugerencias</button>
+</form>
+{% if recomendaciones %}
+    <h3 style="margin-top:2rem;">Sugerencias de Filtros:</h3>
+    <pre style="background:#f6f6f6; padding:1rem; border-radius:12px;">{{ recomendaciones | safe }}</pre>
+{% endif %}
+{% endblock %}
