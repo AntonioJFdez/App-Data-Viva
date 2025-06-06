@@ -1,13 +1,56 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Smart Filter Recommender · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Recomendador de Filtros Inteligentes</h2>
-<p>Sube un dataset y la app sugerirá agrupaciones de segmentos/filtros para análisis.</p>
-<form method="post" enctype="multipart/form-data">
-    <input type="file" name="filter_data" accept=".csv,.xlsx" required>
-    <button type="submit" class="btn">Generar Sugerencias</button>
-</form>
-{% if recomendaciones %}
-    <h3 style="margin-top:2rem;">Sugerencias de Filtros:</h3>
-    <pre style="background:#f6f6f6; padding:1rem; border-radius:12px;">{{ recomendaciones | safe }}</pre>
-{% endif %}
+<section class="download-section container" style="max-width:650px; margin-top:3rem;">
+    <h2 class="section-title" style="margin-bottom:1.2rem;">Smart Filter Recommender</h2>
+    <p style="text-align:center; color:var(--primary); font-size:1.13rem; margin-bottom:1.4rem;">
+        Sube tu dataset <strong>(CSV/Excel)</strong> y te sugeriré <strong>agrupaciones inteligentes</strong> para filtrar y segmentar tus datos automáticamente usando clustering.
+    </p>
+    <form method="POST" enctype="multipart/form-data" style="margin:0 auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
+        <input type="file" name="filter_data" accept=".csv,.xlsx,.xls" required
+            style="background:var(--white); border:2px solid var(--secondary); border-radius:1.2rem; padding:1rem; margin-bottom:1.2rem; width:100%; font-size:1rem;">
+        <button type="submit" class="cta-button btn-details" style="width:100%;">Obtener Recomendaciones</button>
+    </form>
+    {% if recomendaciones %}
+        <div style="background:var(--secondary); color:var(--primary); border-radius:1.2rem; margin-top:2rem; padding:1.4rem 1rem;">
+            <h3 style="font-size:1.12rem; font-weight:700; margin-bottom:1rem; text-align:center;">Resumen de Clusters Detectados</h3>
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; margin-bottom:1rem;">
+                    <thead>
+                        <tr style="background:var(--primary); color:var(--white);">
+                            <th style="padding:0.7rem;">Cluster</th>
+                            {% for col in recomendaciones.keys() %}
+                                <th style="padding:0.7rem;">{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set clusters = recomendaciones[recomendaciones|list|first].keys() %}
+                        {% for cluster in clusters %}
+                        <tr style="background:var(--white); color:var(--primary);">
+                            <td style="padding:0.7rem; font-weight:600;">{{ cluster }}</td>
+                            {% for col in recomendaciones.keys() %}
+                                <td style="padding:0.7rem;">{{ '%.2f' % recomendaciones[col][cluster] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align:center; font-size:1.03rem;">
+                <strong>Usa los clusters como sugerencias de filtros inteligentes para dashboards o segmentaciones avanzadas.</strong>
+            </div>
+        </div>
+    {% elif recomendaciones is defined %}
+        <div style="background:var(--background); color:var(--primary); border-radius:1.2rem; margin-top:2rem; text-align:center; padding:1.2rem 1rem; font-size:1.06rem;">
+            No se han generado recomendaciones para este dataset.
+        </div>
+    {% endif %}
+    <div style="text-align:center; margin-top:1.8rem;">
+        <a href="{{ url_for('index') }}" style="color:var(--primary); font-weight:600; text-decoration:underline; font-size:1.02rem;">
+            ← Volver al inicio
+        </a>
+    </div>
+</section>
 {% endblock %}
