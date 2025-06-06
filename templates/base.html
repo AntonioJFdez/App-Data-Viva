@@ -8,7 +8,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-            :root {
+        :root {
             --primary: #2c3e50;
             --secondary: #debfb0;
             --tertiary: #7f8c8d;
@@ -53,22 +53,12 @@
             padding: 0.4rem 0.9rem; border-radius: 1.5rem; transition: background 0.2s; position: relative;
         }
         nav a:hover { background: var(--secondary); color: var(--primary); }
+        main { min-height: 70vh; }
         section { margin-bottom: 2.8rem; }
         .section-title {
             color: var(--primary); text-align: center; font-size: 2.1rem; margin-bottom: 2rem;
             font-weight: 700; letter-spacing: 0.03em;
         }
-        .download-section, .about-section, .skills-section, .video-section, .contact-section, .projects-section, .dashboard-section, .testimonials-section {
-            background: var(--white); border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: 2.5rem 2rem 2.5rem 2rem; margin-bottom: 2.2rem;
-        }
-        .hero {
-            min-height: 400px; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(45deg, rgba(44,62,80,0.94), rgba(222,191,176,0.30)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80') center/cover;
-            border-bottom-left-radius: 2.5rem; border-bottom-right-radius: 2.5rem; margin-bottom: 2rem;
-        }
-        .hero .container { text-align: center; color: var(--white); padding: 5rem 2rem 3rem 2rem; }
-        .hero h1 { font-size: 3.2rem; margin-bottom: 0.7rem; font-weight: 700; text-shadow: 0 4px 20px rgba(0,0,0,0.13); letter-spacing: 0.02em; }
-        .hero h2 { font-size: 1.8rem; font-weight: 400; color: var(--secondary); margin-bottom: 1.5rem; text-shadow: 0 2px 10px rgba(44,62,80,0.18);}
         .cta-button {
             display: inline-block; padding: 1.2rem 3rem; font-size: 1.1rem; background: var(--secondary); color: var(--primary);
             border-radius: 2.5rem; font-weight: 700; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
@@ -77,181 +67,17 @@
         .cta-button:hover {
             background: var(--primary); color: var(--secondary); transform: scale(1.04) translateY(-3px); box-shadow: 0 6px 24px rgba(222,191,176,0.21);
         }
-        /* Secciones visuales */
-        .about-content { display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: center; }
-        #about img { width: 230px; border-radius: var(--border-radius); box-shadow: var(--box-shadow); }
-        #about .bio { flex: 1; min-width: 250px; }
-        #about h2 { color: var(--primary); margin-bottom: 1.3rem; }
-        #about p { margin-bottom: 1.2rem; line-height: 1.75; text-align: justify; }
-        /* Video CV */
-        .video-section h2 { color: var(--primary); text-align: center; margin-bottom: 1.6rem; }
-        .video-responsive { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 1.5rem; margin-bottom: 1.3rem; box-shadow: 0 6px 32px rgba(44,62,80,0.15);}
-        .video-responsive iframe, .video-responsive video { position: absolute; top:0; left:0; width:100%; height:100%; border-radius: 1.5rem; }
-        /* CV */
-        .download-grid { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
-        .download-card { background: var(--background); padding: 2rem 1.2rem; border-radius: var(--border-radius); text-align: center; box-shadow: 0 2px 16px rgba(222,191,176,0.11); flex: 1 1 340px; max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center;}
-        .download-card h3 { color: var(--primary); font-size: 1.2rem; margin-bottom: 1.2rem; }
-        /* Dashboard Section */
-        .dashboard-section .section-title { text-align: center; }
-        .dashboard-section .dashboard-text, .dashboard-section .dashboard-highlights, .dashboard-section .cta-dashboard {
-            max-width: 780px; margin: 0 auto 1rem auto; text-align: center; font-size: 1.10rem;
-        }
-        .dashboard-section .dashboard-highlights {
-            color: var(--secondary); font-weight: 600; font-size: 1.07rem; margin-bottom: 0.5rem;
-        }
-        .dashboard-section .dashboard-text strong { color: var(--primary); }
-        .dashboard-section .cta-dashboard { color: var(--primary); font-weight: 600; }
-        .dashboard-section .cta-dashboard a { color: var(--secondary); text-decoration: underline; }
-        /* Proyectos */
-        .projects-section { padding: 2.3rem 2rem 2.3rem 2rem; }
-        .projects-grid { display: flex; flex-wrap: wrap; gap: 2.1rem; justify-content: center; }
-        .project-card {
-            background: var(--background); border-radius: 1.7rem; box-shadow: 0 2px 16px rgba(44,62,80,0.10); padding: 2rem 1.3rem; max-width: 470px; min-width: 260px; flex: 1 1 320px; text-align: center; margin: 0 auto; transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .project-card:hover { box-shadow: 0 4px 28px rgba(44,62,80,0.18); transform: scale(1.025);}
-        .project-title { color: var(--secondary); font-weight: bold; font-size: 1.18rem; margin-bottom: 1rem; }
-        .project-desc strong { color: var(--primary);}
-        /* Skills */
-        .skills-section { padding-bottom: 2.5rem; }
-        .skills-container { display: flex; flex-wrap: wrap; gap: 1.7rem; justify-content: center; }
-        .skill-category { background: rgba(255,255,255,0.55); padding: 1.3rem 1.2rem 1.6rem 1.2rem; border-radius: 1.7rem; flex: 1 1 280px; min-width: 240px; max-width: 350px; box-shadow: 0 2px 12px rgba(44,62,80,0.06);}
-        .skill-category h3 { color: var(--secondary); font-size: 1.15rem; margin-bottom: 0.7rem; font-weight: 700; border-bottom: 2px solid var(--secondary); display: inline-block; padding-bottom: 0.3rem;}
-        .skills-grid { display: flex; flex-wrap: wrap; gap: 0.7rem;}
-        .skill { background: var(--primary); color: var(--white); padding: 0.65rem 1.2rem; border-radius: 1.3rem; font-size: 0.98rem; margin-bottom: 0.4rem; box-shadow: 0 1px 5px rgba(44,62,80,0.06); transition: transform 0.18s;}
-        .skill strong { color: var(--secondary);}
-        .skill:hover { transform: scale(1.06); background: var(--secondary); color: var(--primary);}
-        /* Testimonials */
-        .testimonials-section .testimonial { color:var(--tertiary); font-style:italic; text-align:center; }
-        /* Contacto */
-        .contact-section h2 { color: var(--primary); text-align: center; margin-bottom: 1.8rem; }
-        .contact-form { max-width: 450px; margin: 0 auto; display: flex; flex-direction: column;}
-        .contact-form input, .contact-form textarea {
-            width: 100%; padding: 1rem; margin-bottom: 1.2rem; border: 2px solid var(--background); border-radius: 1.5rem;
-            transition: var(--transition); font-family: inherit; font-size: 1rem;
-        }
-        .contact-form input:focus, .contact-form textarea:focus {
-            border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(222, 191, 176, 0.18);
-        }
-        /* Footer */
-        footer {
-            background: var(--primary); color: var(--white); text-align: center; padding: 2.2rem 0 1rem 0;
-            margin-top: 2rem; font-size: 1rem; border-top-left-radius: 1.7rem; border-top-right-radius: 1.7rem;
-        }
         /* Responsive */
         @media (max-width: 900px) {
             .container { padding: 2rem 0; }
             .nav-container { flex-direction: column; gap: 1.1rem; }
             nav ul { flex-wrap: wrap; justify-content: center; gap: 1rem; }
-            .hero .container { padding: 3.2rem 1rem 2rem 1rem; }
-            .about-content { flex-direction: column; text-align: center; }
-            .download-grid { flex-direction: column; gap: 1.5rem; }
-            .skills-container { flex-direction: column; gap: 1.5rem; }
         }
         @media (max-width: 600px) {
-            .hero h1 { font-size: 2.1rem; }
-            .hero h2 { font-size: 1.13rem; }
             .cta-button { font-size: 1rem; padding: 1rem 2rem; }
-            .download-card { padding: 1.2rem 0.7rem; }
-            .about-section { padding-left: 1.2rem; padding-right: 1.2rem; }
-            #about .bio { padding-left: 0.3rem; padding-right: 0.3rem; }
-            .skills-section .section-title { text-align: center; }
-            .skills-container { flex-direction: column; align-items: center; }
-            .skill-category { text-align: center; margin-left: 0; margin-right: 0; max-width: 100%; min-width: 0; padding-left: 0.5rem; padding-right: 0.5rem;}
-            .skills-grid { flex-direction: column; align-items: center; }
-            .skill { width: 100%; margin: 0.18rem 0; text-align: center; word-break: break-word;}
-            .contact-section { padding-left: 1.2rem; padding-right: 1.2rem; }
-            .contact-form input, .contact-form textarea { padding-left: 1rem; padding-right: 1rem;}
+            .nav-logo img { width: 44px; height: 44px; }
+            .nav-logo span { font-size: 1.12rem; }
         }
-        /* Más aire para contenedores en móvil en la sección CV */
-        @media (max-width: 700px) {
-            #cv .download-grid { margin-top: 0.7rem !important; margin-bottom: 0.7rem !important;}
-            #cv .download-card { margin-top: 0.8rem !important; margin-bottom: 0.8rem !important; padding-top: 1.2rem !important; padding-bottom: 1.2rem !important;}
-            .download-section { padding: 1.5rem 1.2rem 1.5rem 1.2rem !important; margin-left: 0.5rem !important; margin-right: 0.5rem !important; border-radius: 1.3rem;}
-        }
-        /* Botón estilos homogéneos */
-        .cta-button.btn-details { background: var(--secondary); color: var(--primary); border-radius: 2.5rem; padding: 1rem 2rem; font-weight: 600; text-decoration: none; border: none; box-shadow: 0 4px 14px rgba(44,62,80,0.13); transition: background 0.18s, color 0.18s;}
-        .cta-button.btn-details:hover { background: var(--primary); color: var(--secondary);}
-
-         @media (max-width: 800px) {
-            .iframe-cv { display: none; }
-            .boton-cv { display: block; }
-        }
-        @media (min-width: 801px) {
-            .iframe-cv { display: block; }
-            .boton-cv { display: none; }
-        }
-
-        a[href^="tel:"]:hover, a[href^="mailto:"]:hover {
-            color: var(--primary); /* O el color que prefieras */
-            text-decoration: underline;
-        }
-
-        a[href^="tel:"]:hover, 
-        a[href^="mailto:"]:hover, 
-        a[href*="linkedin.com"]:hover {
-            color: var(--primary);
-            text-decoration: underline;
-        }
-
-
-        .cert-slider {
-  display: flex;
-  overflow-x: auto;
-  gap: 1.2rem;
-  padding: 1.2rem 1rem 1.2rem 1rem;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  box-sizing: border-box;
-}
-.cert-card {
-  flex: 0 0 245px;
-  min-width: 245px;
-  max-width: 260px;
-  background: var(--background, #f5f2ea);
-  border-radius: 1.3rem;
-  box-shadow: 0 2px 14px rgba(44,62,80,0.09);
-  text-align: center;
-  padding: 1.1rem 0.8rem 1.1rem 0.8rem;
-  scroll-snap-align: start;
-  transition: box-shadow 0.2s;
-  border: 1.5px solid #eee;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.cert-card img {
-  width: 48px; height: 48px; margin-bottom: 0.7rem; border-radius: 0.8rem; object-fit:contain; background:#fff;
-}
-.cert-title {
-  color: var(--primary, #2c3e50);
-  font-weight: bold;
-  font-size: 1.06rem;
-  margin-bottom: 0.4rem;
-}
-.cert-issuer {
-  color: var(--secondary, #debfb0);
-  font-size: 0.98rem;
-  margin-bottom: 0.1rem;
-}
-.cert-card:hover {
-  box-shadow: 0 4px 24px rgba(44,62,80,0.14);
-  transform: scale(1.025);
-}
-/* Mobile */
-@media (max-width: 700px) {
-  .cert-slider {
-    gap: 0.6rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-bottom: 1.2rem;
-  }
-  .cert-card {
-    min-width: 84vw;
-    max-width: 92vw;
-    flex: 0 0 84vw;
-    font-size: 0.97rem;
-    padding: 1rem 0.6rem 1rem 0.6rem;
-  }
-}
     </style>
     {% block head %}{% endblock %}
 </head>
@@ -267,10 +93,13 @@
             <nav>
                 <ul>
                     <li><a href="{{ url_for('home') }}">Inicio</a></li>
-                    <li><a href="#about">Sobre Mí</a></li>
-                    <li><a href="#skills">Habilidades</a></li>
-                    <li><a href="#cv">CV</a></li>
-                    <li><a href="#contact">Contacto</a></li>
+                    <li><a href="{{ url_for('perfilado') }}">Perfilado</a></li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('prediccion') }}">Predicción KPIs</a></li>
+                    <li><a href="{{ url_for('healthcheck') }}">Health Checker</a></li>
+                    <li><a href="{{ url_for('smartfilter') }}">Smart Filter</a></li>
+                    <li><a href="{{ url_for('comparador') }}">Comparador Visual</a></li>
+                    <li><a href="https://antoniojfdez.github.io/dataviva/" target="_blank" style="color:var(--secondary);font-weight:600;">← Volver al Portfolio</a></li>
                 </ul>
             </nav>
         </div>
@@ -279,47 +108,45 @@
         {% block content %}{% endblock %}
     </main>
     <footer>
-          <div class="container" style="text-align:center;">
-    <p>&copy; 2025 <strong>Data Viva</strong>. Todos los derechos reservados.</p>
-    <div style="margin-top:0.7rem; display:flex; flex-wrap:wrap; justify-content:center; gap:1.8rem;">
-      <!-- Email -->
-      <a href="mailto:datavivalab@gmail.com"
-         style="color:var(--secondary);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:1.09rem;">
-        <!-- Icono Email Feather -->
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-          <rect x="3" y="5" width="18" height="14" rx="2"/>
-          <polyline points="3 7 12 13 21 7"/>
-        </svg>
-        <span style="vertical-align:middle;">datavivalab@gmail.com</span>
-      </a>
-      <!-- Teléfono -->
-      <a href="tel:+34621003808"
-         style="color:var(--secondary);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:1.09rem;">
-        <!-- Icono Teléfono Feather (muy reconocible) -->
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-          <path d="M22 16.92V21a1 1 0 0 1-1.09 1A19.85 19.85 0 0 1 3 5.09 1 1 0 0 1 4 4h4.09a1 1 0 0 1 1 .75l1.13 4.45a1 1 0 0 1-.29 1l-2.2 2.2a16 16 0 0 0 7 7l2.2-2.2a1 1 0 0 1 1-.29l4.45 1.13a1 1 0 0 1 .75 1V20z"/>
-        </svg>
-        <span style="vertical-align:middle;">+34 621 00 38 08</span>
-      </a>
-      <!-- LinkedIn -->
-      <a href="https://www.linkedin.com/in/antonioj-fernández-científicodedatos-analistadedatos"
-         target="_blank"
-         style="color:var(--secondary);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:1.09rem;">
-        <!-- Icono LinkedIn Feather, perfectamente cuadrado -->
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-          <rect x="2" y="2" width="20" height="20" rx="3"/>
-          <line x1="8" y1="11" x2="8" y2="16"/>
-          <line x1="8" y1="8" x2="8" y2="8"/>
-          <line x1="12" y1="16" x2="12" y2="11"/>
-          <path d="M16 16v-3a2 2 0 0 0-4 0"/>
-        </svg>
-        <span style="vertical-align:middle;">LinkedIn</span>
-      </a>
-    </div>
-  </div>
+        <div class="container" style="text-align:center;">
+            <p>&copy; 2025 <strong>Data Viva</strong>. Todos los derechos reservados.</p>
+            <div style="margin-top:0.7rem; display:flex; flex-wrap:wrap; justify-content:center; gap:1.8rem;">
+                <!-- Email -->
+                <a href="mailto:datavivalab@gmail.com"
+                   style="color:var(--secondary);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:1.09rem;">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="14" rx="2"/>
+                        <polyline points="3 7 12 13 21 7"/>
+                    </svg>
+                    <span style="vertical-align:middle;">datavivalab@gmail.com</span>
+                </a>
+                <!-- Teléfono -->
+                <a href="tel:+34621003808"
+                   style="color:var(--secondary);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:1.09rem;">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M22 16.92V21a1 1 0 0 1-1.09 1A19.85 19.85 0 0 1 3 5.09 1 1 0 0 1 4 4h4.09a1 1 0 0 1 1 .75l1.13 4.45a1 1 0 0 1-.29 1l-2.2 2.2a16 16 0 0 0 7 7l2.2-2.2a1 1 0 0 1 1-.29l4.45 1.13a1 1 0 0 1 .75 1V20z"/>
+                    </svg>
+                    <span style="vertical-align:middle;">+34 621 00 38 08</span>
+                </a>
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/antonioj-fernández-científicodedatos-analistadedatos"
+                   target="_blank"
+                   style="color:var(--secondary);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:1.09rem;">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="2" y="2" width="20" height="20" rx="3"/>
+                        <line x1="8" y1="11" x2="8" y2="16"/>
+                        <line x1="8" y1="8" x2="8" y2="8"/>
+                        <line x1="12" y1="16" x2="12" y2="11"/>
+                        <path d="M16 16v-3a2 2 0 0 0-4 0"/>
+                    </svg>
+                    <span style="vertical-align:middle;">LinkedIn</span>
+                </a>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
+
 
 
 
