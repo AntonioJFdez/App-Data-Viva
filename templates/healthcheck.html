@@ -3,8 +3,8 @@
 
 {% block content %}
 <section class="download-section container" style="max-width:600px; margin-top:3rem;">
-    <h2 class="section-title">Health Checker de Datasets</h2>
-    <p style="text-align:center; color:var(--primary); font-size:1.12rem; margin-bottom:1.4rem;">
+    <h2 class="corp-title center"><b>Health Checker de Datasets</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.12rem; margin-bottom:1.4rem;">
         Sube tu dataset <strong>(CSV/Excel)</strong> y detecta <strong>problemas de calidad</strong> comunes automáticamente: nulos, cardinalidad, columnas poco útiles y más.
     </p>
     <form method="POST" enctype="multipart/form-data" style="margin:0 auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
@@ -24,9 +24,10 @@
             No se han detectado problemas importantes en tu dataset.
         </div>
     {% endif %}
-    <div style="text-align:center;">
-        <a href="{{ url_for('home') }}" class="cta-button-home">← Volver al inicio</a>
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
     </div>
 </section>
 {% endblock %}
+
 
