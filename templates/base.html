@@ -13,11 +13,13 @@
 <body>
     <header>
         <div class="nav-container">
-            <a class="nav-logo" href="{{ url_for('home') }}">
-                <img src="{{ url_for('static', filename='img/logo_data_viva.png') }}" alt="Logo Data Viva">
-                <span>Data Viva</span>
-            </a>
-            <nav>
+            <div class="nav-section">
+                <a class="nav-logo" href="{{ url_for('home') }}">
+                    <img src="{{ url_for('static', filename='img/logo_data_viva.png') }}" alt="Logo Data Viva">
+                    <span>Data Viva</span>
+                </a>
+            </div>
+            <nav class="nav-section">
                 <ul>
                     <li><a href="{{ url_for('home') }}">Inicio</a></li>
                     <li><a href="{{ url_for('perfilado') }}">Perfilado</a></li>
@@ -28,9 +30,11 @@
                     <li><a href="{{ url_for('comparador') }}">Comparador Visual</a></li>
                 </ul>
             </nav>
-            <a class="cta-nav" href="https://antoniojfdez.github.io/dataviva/" target="_blank">
-                ← Volver al Portfolio
-            </a>
+            <div class="nav-section" style="justify-content: flex-end;">
+                <a class="cta-nav" href="https://antoniojfdez.github.io/dataviva/" target="_blank">
+                    ← Volver al Portfolio
+                </a>
+            </div>
         </div>
     </header>
     <main>
@@ -46,6 +50,7 @@
     </footer>
 </body>
 </html>
+
 
 
 
