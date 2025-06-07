@@ -5,179 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Data Viva · Soluciones Automáticas{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo_favicon.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #debfb0;
-            --tertiary: #7f8c8d;
-            --background: #f5f2ea;
-            --white: #ffffff;
-            --text: #020202;
-            --border-radius: 2rem;
-            --box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-            --header-height: 80px;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--text);
-            background: var(--background);
-            min-height: 100vh;
-        }
-        .container {
-            width: 92%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 0;
-        }
-        header {
-            position: sticky; top: 0; background: var(--primary); z-index: 1000;
-            padding: 0.5rem 0; box-shadow: var(--box-shadow);
-            height: var(--header-height);
-        }
-        .nav-container {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 2rem; height: var(--header-height);
-        }
-        .nav-logo { display: flex; align-items: center; gap: 1rem; }
-        .nav-logo a { display: flex; align-items: center; text-decoration: none; }
-        .nav-logo img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--secondary);}
-        .nav-logo span { color: var(--secondary); font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; margin-left: 0.5rem; }
-        nav ul { display: flex; gap: 2.2rem; list-style: none; }
-        nav a {
-            color: var(--white); text-decoration: none; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.03em;
-            padding: 0.4rem 0.9rem; border-radius: 1.5rem; transition: background 0.2s; position: relative;
-            display: inline-block; text-align: center;
-        }
-        nav a:hover { background: var(--secondary); color: var(--primary); }
-        /* Botón destacado para "Volver al Portfolio" */
-        nav a.cta-nav {
-            background: var(--secondary);
-            color: var(--primary) !important;
-            font-weight: 700;
-            border-radius: 2.5rem;
-            padding: 1rem 2.5rem;
-            margin-left: 1.3rem;
-            font-size: 1.13rem;
-            border: none;
-            box-shadow: 0 4px 20px rgba(44,62,80,0.13);
-            transition: background 0.18s, color 0.18s, transform 0.18s;
-        }
-        nav a.cta-nav:hover {
-            background: var(--primary);
-            color: var(--secondary) !important;
-            border: 2px solid var(--secondary);
-            text-decoration: underline;
-            transform: scale(1.04) translateY(-3px);
-        }
-        main { min-height: 70vh; }
-        /* --- Cards y grids --- */
-        .projects-section, .section-centered {
-            padding: 2.3rem 2rem;
-            display: flex; flex-direction: column; align-items: center; width: 100%;
-        }
-        .projects-grid, .cards-grid {
-            display: flex; flex-wrap: wrap; gap: 2.1rem; justify-content: center; align-items: stretch; width: 100%;
-        }
-        .project-card, .card, .result-card, .template-box {
-            background: var(--background); border-radius: 1.7rem; box-shadow: 0 2px 16px rgba(44,62,80,0.10);
-            padding: 2.2rem 1.4rem; max-width: 470px; min-width: 260px; flex: 1 1 320px;
-            margin: 0 auto; transition: box-shadow 0.2s, transform 0.2s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; min-height: 230px;
-        }
-        .project-card:hover, .card:hover, .result-card:hover, .template-box:hover {
-            box-shadow: 0 4px 28px rgba(44,62,80,0.18); transform: scale(1.025);
-        }
-        .project-title { color: var(--secondary); font-weight: bold; font-size: 1.18rem; margin-bottom: 1rem;}
-        .project-desc, .result-text, .template-desc {
-            color: var(--primary); font-size: 1.07rem; text-align: center;
-            width: 100%; display: flex; align-items: center; justify-content: center;
-        }
-        /* --- Botones uniformes --- */
-        .cta-button, .button, button, input[type="submit"] {
-            display: inline-block; padding: 1.2rem 3rem; font-size: 1.1rem; background: var(--secondary); color: var(--primary);
-            border-radius: 2.5rem; font-weight: 700; text-decoration: none; border: none;
-            box-shadow: 0 4px 20px rgba(44,62,80,0.13);
-            transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
-            font-family: 'Poppins', sans-serif;
-            text-align: center; min-width: 200px;
-        }
-        .cta-button:hover, .button:hover, button:hover, input[type="submit"]:hover { background: var(--primary); color: var(--secondary); transform: scale(1.04) translateY(-3px);}
-        /* Botón "Volver al inicio" */
-        .cta-button-home, .button-home {
-            background: var(--primary);
-            color: var(--secondary);
-            border: 2px solid var(--secondary);
-            font-weight: 700;
-        }
-        .cta-button-home:hover, .button-home:hover {
-            background: var(--secondary);
-            color: var(--primary);
-        }
-        /* Inputs y selects personalizados */
-        input[type="file"], select {
-            border-radius: 1.5rem;
-            border: 1.5px solid var(--secondary);
-            background: var(--background);
-            padding: 1.1rem 1.3rem;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.06rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 10px rgba(44,62,80,0.09);
-            transition: border 0.15s, box-shadow 0.15s;
-        }
-        input[type="file"]:hover, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(222, 191, 176, 0.15);
-        }
-        input[type="text"], input[type="number"], input[type="email"], textarea {
-            border-radius: 1.5rem;
-            border: 1.3px solid var(--secondary);
-            background: var(--white);
-            padding: 1.1rem 1.3rem;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.06rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(44,62,80,0.05);
-            transition: border 0.15s, box-shadow 0.15s;
-        }
-        input:focus, textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(222,191,176,0.17);
-        }
-        /* --- Footer igual que portfolio --- */
-        footer {
-            background: var(--primary); color: var(--white); text-align: center; padding: 2.2rem 0 1rem 0;
-            margin-top: 2rem; font-size: 1rem; border-top-left-radius: 1.7rem; border-top-right-radius: 1.7rem;
-        }
-        .footer-contactos {
-            margin-top: 0.7rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.8rem;
-        }
-        .footer-contactos a { color: var(--secondary); text-decoration: none; display:inline-flex; align-items:center; gap:0.5rem; font-size:1.09rem;}
-        .footer-contactos a:hover {color: var(--white);}
-        /* Responsive */
-        @media (max-width: 900px) {
-            .container { padding: 2rem 0; }
-            .nav-container { flex-direction: column; gap: 1.1rem; }
-            nav ul { flex-wrap: wrap; justify-content: center; gap: 1rem; }
-            .projects-grid, .cards-grid { gap: 1.2rem;}
-        }
-        @media (max-width: 600px) {
-            .nav-logo img { width: 40px; height: 40px;}
-            .nav-logo span { font-size: 1rem;}
-            nav a { font-size: 1rem; }
-            .cta-button, .button, button, input[type="submit"] { font-size: 1rem; padding: 1rem 2rem; min-width: 140px;}
-        }
-        @media (max-width: 700px) {
-            .project-card, .card, .result-card, .template-box { min-width: 88vw; max-width: 99vw;}
-        }
+      :root {
+        --primary: #2c3e50;
+        --secondary: #debfb0;
+        --background: #f5f2ea;
+        --white: #fff;
+        --border-radius: 2rem;
+      }
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: var(--background);
+        margin: 0;
+      }
+      .container {
+        width: 92%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 3rem 0;
+      }
+      header {
+        position: sticky; top: 0; background: var(--primary); z-index: 1000;
+        padding: 0.5rem 0; box-shadow: 0 12px 40px rgba(0,0,0,0.08); height: 80px;
+      }
+      .nav-container {
+        display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; height: 80px;
+      }
+      .nav-logo img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--secondary);}
+      .nav-logo span { color: var(--secondary); font-size: 1.5rem; font-weight: bold; margin-left: 0.5rem; }
+      nav ul { display: flex; gap: 2.2rem; list-style: none; }
+      nav a {
+        color: var(--white); text-decoration: none; font-size: 1.1rem; font-weight: 600;
+        padding: 0.4rem 0.9rem; border-radius: 1.5rem; transition: background 0.2s;
+        display: inline-block; text-align: center;
+      }
+      nav a:hover { background: var(--secondary); color: var(--primary);}
+      nav a.cta-nav {
+        background: var(--secondary); color: var(--primary) !important; font-weight: 700;
+        border-radius: 2.5rem; padding: 1rem 2.5rem; margin-left: 1.3rem; font-size: 1.13rem; border: none;
+        box-shadow: 0 4px 20px rgba(44,62,80,0.13); transition: background 0.18s, color 0.18s, transform 0.18s;
+      }
+      nav a.cta-nav:hover { background: var(--primary); color: var(--secondary) !important; border: 2px solid var(--secondary); text-decoration: underline; transform: scale(1.04) translateY(-3px);}
+      /* Cards */
+      .projects-grid { display: flex; flex-wrap: wrap; gap: 2.1rem; justify-content: center; align-items: stretch; width: 100%;}
+      .project-card {
+        background: var(--white); border-radius: 1.7rem; box-shadow: 0 2px 16px rgba(44,62,80,0.10);
+        padding: 2.2rem 1.4rem; max-width: 470px; min-width: 260px; flex: 1 1 320px; 
+        margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 230px;
+      }
+      .project-card:hover { box-shadow: 0 4px 28px rgba(44,62,80,0.18); transform: scale(1.025);}
+      .project-title { color: var(--secondary); font-weight: bold; font-size: 1.18rem; margin-bottom: 1rem;}
+      .project-desc { color: var(--primary); font-size: 1.07rem; text-align: center; width: 100%; display: flex; align-items: center; justify-content: center;}
+      .cta-button, .button, button, input[type="submit"] {
+        display: inline-block; padding: 1.2rem 3rem; font-size: 1.1rem; background: var(--secondary); color: var(--primary);
+        border-radius: 2.5rem; font-weight: 700; text-decoration: none; border: none;
+        box-shadow: 0 4px 20px rgba(44,62,80,0.13); transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
+        font-family: 'Poppins', sans-serif; text-align: center; min-width: 200px;
+      }
+      .cta-button:hover, .button:hover, button:hover, input[type="submit"]:hover { background: var(--primary); color: var(--secondary); transform: scale(1.04) translateY(-3px);}
+      .cta-button-home { background: var(--primary); color: var(--secondary); border: 2px solid var(--secondary); font-weight: 700;}
+      .cta-button-home:hover { background: var(--secondary); color: var(--primary);}
+      /* Footer */
+      footer { background: var(--primary); color: var(--white); text-align: center; padding: 2.2rem 0 1rem 0; margin-top: 2rem; font-size: 1rem; border-top-left-radius: 1.7rem; border-top-right-radius: 1.7rem;}
+      .footer-contactos { margin-top: 0.7rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.8rem;}
+      .footer-contactos a { color: var(--secondary); text-decoration: none; display:inline-flex; align-items:center; gap:0.5rem; font-size:1.09rem;}
+      .footer-contactos a:hover {color: var(--white);}
+      @media (max-width: 900px) {
+        .container { padding: 2rem 0; }
+        .nav-container { flex-direction: column; gap: 1.1rem; }
+        nav ul { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        .projects-grid { gap: 1.2rem;}
+      }
+      @media (max-width: 600px) {
+        .nav-logo img { width: 40px; height: 40px;}
+        .nav-logo span { font-size: 1rem;}
+        nav a { font-size: 1rem; }
+        .cta-button, .button, button, input[type="submit"] { font-size: 1rem; padding: 1rem 2rem; min-width: 140px;}
+      }
+      @media (max-width: 700px) {
+        .project-card { min-width: 88vw; max-width: 99vw;}
+      }
     </style>
     {% block head %}{% endblock %}
 </head>
@@ -243,6 +151,7 @@
     </footer>
 </body>
 </html>
+
 
 
 
