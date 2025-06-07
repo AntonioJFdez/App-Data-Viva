@@ -8,14 +8,12 @@
         Sube tu archivo <strong>CSV</strong> o <strong>Excel</strong> y genera un <strong>informe automático</strong> de calidad y estructura del dataset. Perfecto para validar y documentar tus datos antes de analizarlos.
     </p>
     <form method="POST" enctype="multipart/form-data" style="margin:2.2rem auto 1rem auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
-        <input type="file" name="dataset" accept=".csv,.xlsx,.xls" required
-            style="background:var(--white); border:2px solid var(--secondary); border-radius:1.2rem; padding:1rem; margin-bottom:1.2rem; width:100%; font-size:1rem;">
+        <input type="file" name="dataset" accept=".csv,.xlsx,.xls" required>
         <button type="submit" class="cta-button btn-details" style="width:100%;">Generar informe</button>
     </form>
-    <div style="text-align:center; margin-top:1.4rem;">
-        <a href="{{ url_for('home') }}" style="color:var(--primary); font-weight:600; text-decoration:underline; font-size:1.02rem;">
-            ← Volver al inicio
-        </a>
+    <div style="text-align:center;">
+        <a href="{{ url_for('home') }}" class="cta-button-home">← Volver al inicio</a>
     </div>
 </section>
 {% endblock %}
+
