@@ -7,303 +7,16 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo_favicon.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #debfb0;
-            --tertiary: #7f8c8d;
-            --background: #f5f2ea;
-            --white: #ffffff;
-            --text: #020202;
-            --border-radius: 2rem;
-            --box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-            --header-height: 80px;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--text);
-            background: var(--background);
-            min-height: 100vh;
-        }
-        .container {
-            width: 92%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 0;
-        }
-        header {
-            position: sticky;
-            top: 0;
-            background: var(--primary);
-            z-index: 1000;
-            box-shadow: var(--box-shadow);
-            min-height: var(--header-height);
-        }
-        .nav-container {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            height: var(--header-height);
-            width: 100%;
-            gap: 2rem;
-        }
-        .nav-logo { display: flex; align-items: center; gap: 1rem; }
-        .nav-logo a { display: flex; align-items: center; text-decoration: none; }
-        .nav-logo img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--secondary);}
-        .nav-logo span { color: var(--secondary); font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; margin-left: 0.5rem;}
-        nav ul {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 1.7rem;
-            list-style: none;
-            margin: 0;
-        }
-        nav a {
-            color: var(--white);
-            text-decoration: none;
-            font-size: 1.08rem;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-            padding: 0.4rem 0.9rem;
-            border-radius: 1.5rem;
-            transition: background 0.2s;
-            position: relative;
-            display: inline-block;
-            text-align: center;
-        }
-        nav a:hover { background: var(--secondary); color: var(--primary); }
-        nav a.cta-nav {
-            margin-left: 1rem;
-            padding: 0.6rem 1.7rem;
-            font-size: 1.07rem;
-            border-radius: 2rem;
-            background: var(--secondary);
-            color: var(--primary) !important;
-            font-weight: 700;
-            border: none;
-            box-shadow: 0 2px 12px rgba(44,62,80,0.13);
-            transition: background 0.18s, color 0.18s, transform 0.18s;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        nav a.cta-nav:hover {
-            background: var(--primary);
-            color: var(--secondary) !important;
-            border: 2px solid var(--secondary);
-            text-decoration: underline;
-            transform: scale(1.04) translateY(-3px);
-        }
-
-        main { min-height: 70vh; }
-
-        /* HERO */
-        .hero-info-card {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 2.4rem 2rem 2rem 2rem;
-            margin-bottom: 2.7rem;
-            text-align: center;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .corp-title {
-            color: var(--primary);
-            font-size: 2.08rem;
-            font-weight: 700;
-            margin-bottom: 1.1rem;
-        }
-
-        /* SOLUCIONES AUTOMÁTICAS: CARDS INICIO */
-        .projects-section {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-        .projects-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2.1rem;
-            justify-content: center;
-            align-items: stretch;
-            width: 100%;
-            max-width: 1200px;
-        }
-        .project-card {
-            background: var(--white);
-            border-radius: 1.7rem;
-            box-shadow: 0 2px 16px rgba(44,62,80,0.10);
-            padding: 2.2rem 1.4rem 1.4rem 1.4rem;
-            max-width: 360px;
-            min-width: 260px;
-            flex: 1 1 320px;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            text-align: left;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .project-card:hover { box-shadow: 0 4px 28px rgba(44,62,80,0.18); transform: scale(1.025);}
-        .project-title {
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.17rem;
-            margin-bottom: 0.7rem;
-            text-align: left;
-            width: 100%;
-        }
-        .project-desc {
-            color: var(--primary);
-            font-size: 1.07rem;
-            margin-bottom: 1.1rem;
-            width: 100%;
-            text-align: left;
-        }
-        .project-card .cta-button {
-            margin-top: auto;
-            width: 100%;
-            min-width: 0;
-            margin-bottom: 0;
-        }
-
-        /* BOTONES */
-        .cta-button, .button, button, input[type="submit"] {
-            display: inline-block;
-            padding: 1.1rem 2rem;
-            font-size: 1.07rem;
-            background: var(--secondary);
-            color: var(--primary);
-            border-radius: 2rem;
-            font-weight: 700;
-            text-decoration: none;
-            border: none;
-            box-shadow: 0 2px 12px rgba(44,62,80,0.13);
-            transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            width: 100%;
-            min-width: 0;
-            margin-top: 0.7rem;
-        }
-        .cta-button:hover, .button:hover, button:hover, input[type="submit"]:hover {
-            background: var(--primary);
-            color: var(--secondary);
-            transform: scale(1.04) translateY(-3px);
-        }
-        /* Botón "Volver al inicio" */
-        .cta-button-home, .button-home {
-            display: inline-block;
-            background: var(--primary);
-            color: var(--secondary);
-            border: 2px solid var(--secondary);
-            border-radius: 2rem;
-            padding: 1rem 2.2rem;
-            font-weight: 700;
-            font-size: 1.04rem;
-            box-shadow: 0 2px 10px rgba(44,62,80,0.10);
-            text-decoration: none !important;
-            margin-top: 1.1rem;
-            margin-bottom: 0.4rem;
-            transition: background 0.17s, color 0.17s, border 0.17s, transform 0.17s;
-        }
-        .cta-button-home:hover, .button-home:hover {
-            background: var(--secondary);
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            text-decoration: none !important;
-            transform: scale(1.04) translateY(-2px);
-        }
-
-        /* FORMULARIOS Y INPUTS */
-        input[type="file"], input[type="text"], input[type="number"], input[type="email"], textarea, select {
-            border-radius: 1.5rem;
-            border: 1.5px solid var(--secondary);
-            background: var(--white);
-            padding: 1.1rem 1.3rem;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.06rem;
-            color: var(--primary);
-            margin-bottom: 1.1rem;
-            box-shadow: 0 2px 10px rgba(44,62,80,0.09);
-            transition: border 0.15s, box-shadow 0.15s;
-            width: 100%;
-            display: block;
-        }
-        input[type="file"]:hover, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(222, 191, 176, 0.15);
-        }
-        input:focus, textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(222,191,176,0.17);
-        }
-
-        /* Footer igual que portfolio */
-        footer {
-            background: var(--primary);
-            color: var(--white);
-            text-align: center;
-            padding: 2.2rem 0 1rem 0;
-            margin-top: 2rem;
-            font-size: 1rem;
-            border-top-left-radius: 1.7rem;
-            border-top-right-radius: 1.7rem;
-        }
-        .footer-contactos {
-            margin-top: 0.7rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.8rem;
-        }
-        .footer-contactos a {
-            color: var(--secondary);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.09rem;
-        }
-        .footer-contactos a:hover { color: var(--white); }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .container { padding: 2rem 0; }
-            .nav-container { flex-direction: column; gap: 1.1rem; height: auto; }
-            nav ul { flex-wrap: wrap; justify-content: center; gap: 1rem; }
-            .projects-grid { gap: 1.2rem;}
-        }
-        @media (max-width: 700px) {
-            .hero-info-card, .projects-grid { max-width: 99vw; }
-            .project-card { min-width: 96vw; max-width: 99vw;}
-        }
-        @media (max-width: 600px) {
-            .nav-logo img { width: 40px; height: 40px;}
-            .nav-logo span { font-size: 1rem;}
-            nav a { font-size: 1rem; }
-            .cta-button, .button, button, input[type="submit"] { font-size: 1rem; padding: 1rem 2rem;}
-            .cta-button-home { font-size: 1rem; padding: 0.9rem 1.4rem;}
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
     {% block head %}{% endblock %}
 </head>
 <body>
     <header>
-        <div class="nav-container container">
-            <div class="nav-logo">
-                <a href="{{ url_for('home') }}">
-                    <img src="{{ url_for('static', filename='img/logo_data_viva.png') }}" alt="Logo Data Viva">
-                    <span>Data Viva</span>
-                </a>
-            </div>
+        <div class="nav-container">
+            <a class="nav-logo" href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='img/logo_data_viva.png') }}" alt="Logo Data Viva">
+                <span>Data Viva</span>
+            </a>
             <nav>
                 <ul>
                     <li><a href="{{ url_for('home') }}">Inicio</a></li>
@@ -313,13 +26,11 @@
                     <li><a href="{{ url_for('healthcheck') }}">Health Checker</a></li>
                     <li><a href="{{ url_for('smartfilter') }}">Smart Filter</a></li>
                     <li><a href="{{ url_for('comparador') }}">Comparador Visual</a></li>
-                    <li>
-                        <a class="cta-nav" href="https://antoniojfdez.github.io/dataviva/" target="_blank">
-                            ← Volver al Portfolio
-                        </a>
-                    </li>
                 </ul>
             </nav>
+            <a class="cta-nav" href="https://antoniojfdez.github.io/dataviva/" target="_blank">
+                ← Volver al Portfolio
+            </a>
         </div>
     </header>
     <main>
@@ -329,7 +40,7 @@
         <div class="container">
             <p>&copy; 2025 <strong>Data Viva</strong>. Todos los derechos reservados.</p>
             <div class="footer-contactos">
-                <a href="mailto:datavivalab@gmail.com">
+                 <a href="mailto:datavivalab@gmail.com">
                     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <rect x="3" y="5" width="18" height="14" rx="2"/>
                         <polyline points="3 7 12 13 21 7"/>
@@ -357,6 +68,7 @@
     </footer>
 </body>
 </html>
+
 
 
 
