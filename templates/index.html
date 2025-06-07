@@ -3,50 +3,46 @@
 
 {% block content %}
 <div class="container">
-    <!-- HERO SOLO EN INICIO -->
     <div class="hero-info-card">
-        <div class="corp-title">
-            Soluciones Automáticas para el Análisis y la Ciencia de Datos
-        </div>
-        <div>
-            Optimiza tu análisis de datos, informes y toma de decisiones con herramientas automáticas y paneles de control inteligentes.<br>
-            Integra IA y visualización avanzada en tus procesos, sin curva de aprendizaje ni esperas.<br>
-            Automatiza informes, explora datos de un vistazo, valida la calidad y predice KPIs clave.<br>
+        <h1 class="corp-title center"><b>Soluciones Automáticas para el Análisis y la Ciencia de Datos</b></h1>
+        <div class="center">
+            <span class="bold">Optimiza tu análisis de datos, informes y toma de decisiones con herramientas automáticas y paneles de control inteligentes.</span><br>
+            <span>Integra <b>IA</b> y visualización avanzada en tus procesos, sin curva de aprendizaje ni esperas.</span><br>
+            <span><b>Automatiza informes</b>, explora datos de un vistazo, valida la calidad y predice KPIs clave.</span><br>
             <span>
-                Prueba gratis las soluciones que usan líderes en agricultura, tecnología, seguros y más.
+                <b>Prueba gratis</b> las soluciones que usan líderes en agricultura, tecnología, seguros y más.
             </span>
         </div>
     </div>
-    <!-- 6 TARJETAS DE SOLUCIONES AUTOMÁTICAS -->
     <section class="projects-section">
         <div class="projects-grid">
             <div class="project-card">
-                <div class="project-title">Perfilado Automático de Datos</div>
+                <div class="project-title"><b>Perfilado Automático de Datos</b></div>
                 <div class="project-desc">Sube tu dataset y obtén un informe de calidad profesional.</div>
                 <a href="{{ url_for('perfilado') }}" class="cta-button">Probar ahora</a>
             </div>
             <div class="project-card">
-                <div class="project-title">Dashboard Exploratorio</div>
+                <div class="project-title"><b>Dashboard Exploratorio</b></div>
                 <div class="project-desc">Visualiza y explora datos subidos, con gráficos automáticos.</div>
                 <a href="{{ url_for('dashboard') }}" class="cta-button">Explorar</a>
             </div>
             <div class="project-card">
-                <div class="project-title">Predicción de KPIs</div>
+                <div class="project-title"><b>Predicción de KPIs</b></div>
                 <div class="project-desc">Carga tus datos y predice variables clave con IA.</div>
                 <a href="{{ url_for('prediccion') }}" class="cta-button">Predecir</a>
             </div>
             <div class="project-card">
-                <div class="project-title">Health Checker</div>
+                <div class="project-title"><b>Health Checker</b></div>
                 <div class="project-desc">Detecta problemas y calidad de tu dataset con un clic.</div>
                 <a href="{{ url_for('healthcheck') }}" class="cta-button">Comprobar</a>
             </div>
             <div class="project-card">
-                <div class="project-title">Smart Filter Recommender</div>
+                <div class="project-title"><b>Smart Filter Recommender</b></div>
                 <div class="project-desc">Obtén sugerencias de segmentación y filtros para tus datos.</div>
                 <a href="{{ url_for('smartfilter') }}" class="cta-button">Probar filtro</a>
             </div>
             <div class="project-card">
-                <div class="project-title">Comparador Visual</div>
+                <div class="project-title"><b>Comparador Visual</b></div>
                 <div class="project-desc">Sube dos imágenes y compara visualmente.</div>
                 <a href="{{ url_for('comparador') }}" class="cta-button">Comparar imágenes</a>
             </div>
@@ -54,6 +50,7 @@
     </section>
 </div>
 {% endblock %}
+
 
 
 
