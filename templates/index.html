@@ -3,17 +3,8 @@
 
 {% block content %}
 <div class="container">
-    <!-- HERO SOLO EN INICIO -->
-    <div class="hero-info-card" style="
-        background: var(--white); 
-        border-radius: var(--border-radius); 
-        box-shadow: var(--box-shadow); 
-        padding: 2.4rem 2rem 2rem 2rem; 
-        margin-bottom: 2.7rem; 
-        text-align: center; 
-        max-width: 980px; 
-        margin-left: auto; 
-        margin-right: auto;">
+    <!-- HERO: Sólo en inicio -->
+    <div class="hero-info-card">
         <div class="corp-title">
             Soluciones Automáticas para el Análisis y la Ciencia de Datos
         </div>
@@ -26,49 +17,45 @@
             </span>
         </div>
     </div>
-    <!-- 6 TARJETAS DE SOLUCIONES -->
+
+    <!-- GRID DE 6 SOLUCIONES AUTOMÁTICAS -->
     <section class="projects-section">
         <div class="projects-grid">
             <div class="project-card">
                 <div class="project-title">Perfilado Automático de Datos</div>
-                <div class="project-desc">Sube tu dataset y obtén un informe de calidad profesional.<br><br>
-                    <a href="{{ url_for('perfilado') }}" class="cta-button" style="margin-top:1.2rem;">Probar ahora</a>
-                </div>
+                <div class="project-desc">Sube tu dataset y obtén un informe de calidad profesional.</div>
+                <a href="{{ url_for('perfilado') }}" class="cta-button">Probar ahora</a>
             </div>
             <div class="project-card">
                 <div class="project-title">Dashboard Exploratorio</div>
-                <div class="project-desc">Visualiza y explora datos subidos, con gráficos automáticos.<br><br>
-                    <a href="{{ url_for('dashboard') }}" class="cta-button" style="margin-top:1.2rem;">Explorar</a>
-                </div>
+                <div class="project-desc">Visualiza y explora datos subidos, con gráficos automáticos.</div>
+                <a href="{{ url_for('dashboard') }}" class="cta-button">Explorar</a>
             </div>
             <div class="project-card">
                 <div class="project-title">Predicción de KPIs</div>
-                <div class="project-desc">Carga tus datos y predice variables clave con IA.<br><br>
-                    <a href="{{ url_for('prediccion') }}" class="cta-button" style="margin-top:1.2rem;">Predecir</a>
-                </div>
+                <div class="project-desc">Carga tus datos y predice variables clave con IA.</div>
+                <a href="{{ url_for('prediccion') }}" class="cta-button">Predecir</a>
             </div>
             <div class="project-card">
                 <div class="project-title">Health Checker</div>
-                <div class="project-desc">Detecta problemas y calidad de tu dataset con un clic.<br><br>
-                    <a href="{{ url_for('healthcheck') }}" class="cta-button" style="margin-top:1.2rem;">Comprobar</a>
-                </div>
+                <div class="project-desc">Detecta problemas y calidad de tu dataset con un clic.</div>
+                <a href="{{ url_for('healthcheck') }}" class="cta-button">Comprobar</a>
             </div>
             <div class="project-card">
                 <div class="project-title">Smart Filter Recommender</div>
-                <div class="project-desc">Obtén sugerencias de segmentación y filtros para tus datos.<br><br>
-                    <a href="{{ url_for('smartfilter') }}" class="cta-button" style="margin-top:1.2rem;">Probar filtro</a>
-                </div>
+                <div class="project-desc">Obtén sugerencias de segmentación y filtros para tus datos.</div>
+                <a href="{{ url_for('smartfilter') }}" class="cta-button">Probar filtro</a>
             </div>
             <div class="project-card">
                 <div class="project-title">Comparador Visual</div>
-                <div class="project-desc">Sube dos imágenes y compara visualmente.<br><br>
-                    <a href="{{ url_for('comparador') }}" class="cta-button" style="margin-top:1.2rem;">Comparar imágenes</a>
-                </div>
+                <div class="project-desc">Sube dos imágenes y compara visualmente.</div>
+                <a href="{{ url_for('comparador') }}" class="cta-button">Comparar imágenes</a>
             </div>
         </div>
     </section>
 </div>
 {% endblock %}
+
 
 
 
