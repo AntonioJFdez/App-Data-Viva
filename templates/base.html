@@ -34,10 +34,13 @@
             padding: 3rem 0;
         }
         header {
-            position: sticky; top: 0; background: var(--primary); z-index: 1000; padding: 0.5rem 0; box-shadow: var(--box-shadow); height: var(--header-height);
+            position: sticky; top: 0; background: var(--primary); z-index: 1000;
+            padding: 0.5rem 0; box-shadow: var(--box-shadow);
+            height: var(--header-height);
         }
         .nav-container {
-            display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; height: var(--header-height);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 2rem; height: var(--header-height);
         }
         .nav-logo { display: flex; align-items: center; gap: 1rem; }
         .nav-logo a { display: flex; align-items: center; text-decoration: none; }
@@ -71,7 +74,7 @@
             transform: scale(1.04) translateY(-3px);
         }
         main { min-height: 70vh; }
-        /* --- Cards, resultados y plantillas --- */
+        /* --- Cards y grids --- */
         .projects-section, .section-centered {
             padding: 2.3rem 2rem;
             display: flex; flex-direction: column; align-items: center; width: 100%;
@@ -81,14 +84,19 @@
         }
         .project-card, .card, .result-card, .template-box {
             background: var(--background); border-radius: 1.7rem; box-shadow: 0 2px 16px rgba(44,62,80,0.10);
-            padding: 2.2rem 1.4rem; max-width: 470px; min-width: 260px; flex: 1 1 320px; 
+            padding: 2.2rem 1.4rem; max-width: 470px; min-width: 260px; flex: 1 1 320px;
             margin: 0 auto; transition: box-shadow 0.2s, transform 0.2s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-            /* CENTRADO VERTICAL Y HORIZONTAL ABSOLUTO */
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; min-height: 230px;
         }
-        .project-card:hover, .card:hover, .result-card:hover, .template-box:hover { box-shadow: 0 4px 28px rgba(44,62,80,0.18); transform: scale(1.025);}
+        .project-card:hover, .card:hover, .result-card:hover, .template-box:hover {
+            box-shadow: 0 4px 28px rgba(44,62,80,0.18); transform: scale(1.025);
+        }
         .project-title { color: var(--secondary); font-weight: bold; font-size: 1.18rem; margin-bottom: 1rem;}
-        .project-desc, .result-text, .template-desc { color: var(--primary); font-size: 1.07rem; display: flex; align-items: center; justify-content: center; text-align: center;}
+        .project-desc, .result-text, .template-desc {
+            color: var(--primary); font-size: 1.07rem; text-align: center;
+            width: 100%; display: flex; align-items: center; justify-content: center;
+        }
         /* --- Botones uniformes --- */
         .cta-button, .button, button, input[type="submit"] {
             display: inline-block; padding: 1.2rem 3rem; font-size: 1.1rem; background: var(--secondary); color: var(--primary);
@@ -167,7 +175,6 @@
             nav a { font-size: 1rem; }
             .cta-button, .button, button, input[type="submit"] { font-size: 1rem; padding: 1rem 2rem; min-width: 140px;}
         }
-        /* Cards full width on mobile */
         @media (max-width: 700px) {
             .project-card, .card, .result-card, .template-box { min-width: 88vw; max-width: 99vw;}
         }
@@ -176,7 +183,7 @@
 </head>
 <body>
     <header>
-        <div class="nav-container container">
+        <div class="nav-container">
             <div class="nav-logo">
                 <a href="{{ url_for('home') }}">
                     <img src="{{ url_for('static', filename='img/logo_data_viva.png') }}" alt="Logo Data Viva">
