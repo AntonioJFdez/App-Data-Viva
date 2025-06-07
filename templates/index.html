@@ -2,54 +2,58 @@
 {% block title %}Inicio · Data Viva{% endblock %}
 
 {% block content %}
+<!-- BLOQUE INTRODUCTORIO CENTRADO -->
+<div style="max-width:640px;margin:0 auto 2.8rem auto;text-align:center;">
+    <h2 class="section-title" style="margin-bottom:1.3rem;">
+        Soluciones Automáticas para el Análisis y la Ciencia de Datos
+    </h2>
+    <p style="color:var(--primary);font-size:1.13rem;line-height:1.7;margin-bottom:1.1rem;">
+        Optimiza tu análisis, reporting y toma de decisiones con herramientas automáticas y dashboards inteligentes.
+        <br>
+        Integra <strong>IA</strong> y <strong>visualización avanzada</strong> en tus procesos, de forma inmediata y sin curva de aprendizaje.
+    </p>
+    <p style="color:var(--primary);font-size:1.11rem;line-height:1.7;margin-bottom:0;">
+        <strong>Automatiza informes, explora datos de un vistazo, valida la calidad y predice KPIs clave.</strong>
+        <br>
+        Prueba gratis las soluciones que utilizan líderes en sectores como <strong>agricultura, tecnología, seguros</strong> y más.
+    </p>
+</div>
 
-<!-- RESUMEN EJECUTIVO -->
-<section style="max-width: 700px; margin: 2.7rem auto 1.7rem auto; background: var(--white); border-radius: 1.7rem; box-shadow: 0 2px 16px rgba(44,62,80,0.09); padding: 2.6rem 1.6rem 2.2rem 1.6rem;">
-    <h1 style="text-align:center; color:var(--primary); font-size:2.15rem; font-weight:700; margin-bottom:1.2rem; letter-spacing:0.02em;">Soluciones Automáticas para el Análisis y la Ciencia de Datos</h1>
-    <div style="text-align:center; color:var(--primary); font-size:1.15rem; line-height:1.6;">
-        <strong>Optimiza tu análisis de datos, reporting y toma de decisiones con herramientas automáticas y dashboards inteligentes.<br> 
-        Integra IA y visualización avanzada en tus procesos, de forma inmediata y sin curva de aprendizaje.</strong>
-        <br><br>
-        Automatiza tus informes, explora datos de un vistazo, valida la calidad y predice KPIs clave.<br>
-        <span style="color:var(--secondary); font-weight:600;">Prueba gratis las soluciones que utilizan líderes en sectores como agricultura, tecnología, seguros y más.</span>
+<!-- GRID DE TARJETAS DE SOLUCIONES -->
+<section class="projects-section container" style="display:flex;flex-direction:column;align-items:center;margin-bottom:4rem;">
+  <div class="projects-grid" style="justify-content:center;width:100%;margin:0 auto;margin-bottom:2.8rem;gap:2.1rem;">
+    <div class="project-card">
+      <div class="project-title"><strong>Perfilado Automático de Datos</strong></div>
+      <div class="project-desc">Sube tu dataset y obtén un informe de calidad profesional.</div>
+      <a href="{{ url_for('perfilado') }}" class="cta-button btn-details" style="margin-top:1rem;">Probar ahora</a>
     </div>
-</section>
-
-<!-- SOLUCIONES AUTOMÁTICAS -->
-<section class="projects-section container" style="margin:0 auto; max-width:1020px;">
-    <h2 class="section-title" style="margin-bottom:1.7rem;">Soluciones <strong>Automáticas</strong></h2>
-    <div class="projects-grid">
-        <div class="project-card">
-            <div class="project-title"><strong>Perfilado Automático de Datos</strong></div>
-            <div class="project-desc">Sube tu dataset y obtén un informe de calidad profesional.</div>
-            <a href="{{ url_for('perfilado') }}" class="cta-button">Probar ahora</a>
-        </div>
-        <div class="project-card">
-            <div class="project-title"><strong>Dashboard Exploratorio</strong></div>
-            <div class="project-desc">Visualiza y explora datos subidos, con gráficos automáticos.</div>
-            <a href="{{ url_for('dashboard') }}" class="cta-button">Explorar</a>
-        </div>
-        <div class="project-card">
-            <div class="project-title"><strong>Predicción de KPIs</strong></div>
-            <div class="project-desc">Carga tus datos y predice variables clave con IA.</div>
-            <a href="{{ url_for('prediccion') }}" class="cta-button">Predecir</a>
-        </div>
-        <div class="project-card">
-            <div class="project-title"><strong>Health Checker</strong></div>
-            <div class="project-desc">Detecta problemas y calidad de tu dataset con un clic.</div>
-            <a href="{{ url_for('healthcheck') }}" class="cta-button">Comprobar</a>
-        </div>
-        <div class="project-card">
-            <div class="project-title"><strong>Smart Filter Recommender</strong></div>
-            <div class="project-desc">Obtén sugerencias de segmentación y filtros inteligentes.</div>
-            <a href="{{ url_for('smartfilter') }}" class="cta-button">Probar filtro</a>
-        </div>
-        <div class="project-card">
-            <div class="project-title"><strong>Comparador Visual</strong></div>
-            <div class="project-desc">Sube dos imágenes y compara visualmente.</div>
-            <a href="{{ url_for('comparador') }}" class="cta-button">Comparar imágenes</a>
-        </div>
+    <div class="project-card">
+      <div class="project-title"><strong>Dashboard Exploratorio</strong></div>
+      <div class="project-desc">Visualiza y explora datos subidos, con gráficos automáticos.</div>
+      <a href="{{ url_for('dashboard') }}" class="cta-button btn-details" style="margin-top:1rem;">Explorar</a>
     </div>
+    <div class="project-card">
+      <div class="project-title"><strong>Predicción de KPIs</strong></div>
+      <div class="project-desc">Carga tus datos y predice variables clave con IA.</div>
+      <a href="{{ url_for('prediccion') }}" class="cta-button btn-details" style="margin-top:1rem;">Predecir</a>
+    </div>
+    <div class="project-card">
+      <div class="project-title"><strong>Health Checker</strong></div>
+      <div class="project-desc">Detecta problemas y calidad de tu dataset con un clic.</div>
+      <a href="{{ url_for('healthcheck') }}" class="cta-button btn-details" style="margin-top:1rem;">Comprobar</a>
+    </div>
+    <div class="project-card">
+      <div class="project-title"><strong>Smart Filter Recommender</strong></div>
+      <div class="project-desc">Obtén sugerencias de segmentación y filtros para tus datos.</div>
+      <a href="{{ url_for('smartfilter') }}" class="cta-button btn-details" style="margin-top:1rem;">Probar filtro</a>
+    </div>
+    <div class="project-card">
+      <div class="project-title"><strong>Comparador Visual</strong></div>
+      <div class="project-desc">Sube dos imágenes y compara visualmente.</div>
+      <a href="{{ url_for('comparador') }}" class="cta-button btn-details" style="margin-top:1rem;">Comparar imágenes</a>
+    </div>
+  </div>
 </section>
 {% endblock %}
+
 
