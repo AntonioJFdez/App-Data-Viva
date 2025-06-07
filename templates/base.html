@@ -36,16 +36,35 @@
         .nav-logo a { display: flex; align-items: center; text-decoration: none; }
         .nav-logo img { width: 54px; height: 54px; border-radius: 50%; border: 3px solid var(--secondary);}
         .nav-logo span { color: var(--secondary); font-size: 1.45rem; font-weight: bold; margin-left: 0.6rem; }
-        nav ul { display: flex; gap: 2.1rem; list-style: none; margin: 0; }
+        nav ul { display: flex; gap: 2.1rem; list-style: none; margin: 0; padding-left: 0;}
         nav a {
-            color: var(--white); text-decoration: none; font-size: 1.08rem; font-weight: 600; border-radius: 1.5rem; transition: background 0.2s; padding: 0.5rem 1.1rem;
+            color: var(--white); text-decoration: none; font-size: 1.08rem; font-weight: 600; border-radius: 1.5rem; transition: background 0.2s, color 0.2s; padding: 0.5rem 1.1rem;
         }
         nav a:hover { background: var(--secondary); color: var(--primary);}
+        /* Estilo especial para el botón "Volver al Portfolio" */
+        nav a[href*="github.io"], nav a[href*="dataviva"] {
+            background: transparent;
+            color: var(--secondary) !important;
+            font-weight: 600;
+            transition: color 0.2s, background 0.2s;
+        }
+        nav a[href*="github.io"]:hover, nav a[href*="dataviva"]:hover {
+            background: var(--primary) !important;
+            color: var(--white) !important;
+            text-decoration: underline;
+        }
         main { min-height: 70vh;}
         /* --- Cards y proyectos --- */
-        .projects-section {padding: 0;}
+        .projects-section {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         .projects-grid {
             display: flex; flex-wrap: wrap; gap: 2.2rem; justify-content: center; align-items: stretch; margin-top:2rem;
+            width: 100%;
+            margin-bottom: 2.8rem;
         }
         .project-card {
             background: var(--white); border-radius: 1.6rem; box-shadow: 0 2px 16px rgba(44,62,80,0.10);
@@ -64,19 +83,26 @@
             box-shadow: 0 3px 15px rgba(44,62,80,0.11);
         }
         .cta-button:hover { background: var(--primary); color: var(--secondary); transform: scale(1.035);}
-        /* --- Footer mejorado --- */
+        /* --- Footer mejorado con franja azul --- */
         footer {
             background: var(--primary);
-            padding: 1.8rem 0 0.7rem 0;
-            color: var(--white);
+            padding: 0;
+            margin-top: 4.2rem;
             border-top-left-radius: 1.7rem; border-top-right-radius: 1.7rem;
+        }
+        .footer-franja {
+            width: 100%;
+            background: var(--primary);
+            padding: 1.7rem 0 0.4rem 0;
             text-align: center;
+            border-top-left-radius: 1.7rem; border-top-right-radius: 1.7rem;
         }
         .footer-legal {
-            color: var(--white); margin-top: 0.8rem; font-size: 1.08rem; font-weight: 600;
+            color: var(--white); font-size: 1.13rem; font-weight: 700; margin-bottom: 0.4rem;
+            letter-spacing: 0.01em;
         }
         .footer-contactos {
-            margin: 1.2rem 0 0 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.6rem;
+            margin: 1.1rem 0 0 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.6rem;
         }
         .footer-contactos a { color: var(--secondary); text-decoration: none; display:inline-flex; align-items:center; gap:0.45rem; font-size:1.09rem;}
         .footer-contactos a:hover {color: var(--white);}
@@ -87,11 +113,14 @@
             nav ul { flex-wrap: wrap; gap: 1rem;}
             .projects-grid { gap:1.1rem;}
         }
+        @media (max-width: 650px) {
+            .projects-grid { flex-direction: column; gap: 1.1rem; }
+            .project-card { min-width: 91vw; max-width: 97vw;}
+        }
         @media (max-width: 600px) {
             .nav-logo img { width: 40px; height: 40px;}
             .nav-logo span { font-size: 1rem;}
             .cta-button { font-size: 0.96rem; padding: 0.9rem 1.2rem;}
-            .project-card { max-width: 97vw; min-width: 91vw;}
             .footer-legal { font-size: 0.98rem;}
         }
     </style>
@@ -115,7 +144,7 @@
                     <li><a href="{{ url_for('healthcheck') }}">Health Checker</a></li>
                     <li><a href="{{ url_for('smartfilter') }}">Smart Filter</a></li>
                     <li><a href="{{ url_for('comparador') }}">Comparador Visual</a></li>
-                    <li><a href="https://antoniojfdez.github.io/dataviva/" target="_blank" style="color:var(--secondary);font-weight:600;">← Volver al Portfolio</a></li>
+                    <li><a href="https://antoniojfdez.github.io/dataviva/" target="_blank">← Volver al Portfolio</a></li>
                 </ul>
             </nav>
         </div>
@@ -124,37 +153,40 @@
         {% block content %}{% endblock %}
     </main>
     <footer>
-        <div class="footer-legal">
-            &copy; 2025 Data Viva. Todos los derechos reservados.
-        </div>
-        <div class="footer-contactos">
-            <a href="mailto:datavivalab@gmail.com">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                    <rect x="3" y="5" width="18" height="14" rx="2"/>
-                    <polyline points="3 7 12 13 21 7"/>
-                </svg>
-                datavivalab@gmail.com
-            </a>
-            <a href="tel:+34621003808">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                    <path d="M22 16.92V21a1 1 0 0 1-1.09 1A19.85 19.85 0 0 1 3 5.09 1 1 0 0 1 4 4h4.09a1 1 0 0 1 1 .75l1.13 4.45a1 1 0 0 1-.29 1l-2.2 2.2a16 16 0 0 0 7 7l2.2-2.2a1 1 0 0 1 1-.29l4.45 1.13a1 1 0 0 1 .75 1V20z"/>
-                </svg>
-                +34 621 00 38 08
-            </a>
-            <a href="https://www.linkedin.com/in/antonioj-fernández-científicodedatos-analistadedatos" target="_blank">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                    <rect x="2" y="2" width="20" height="20" rx="3"/>
-                    <line x1="8" y1="11" x2="8" y2="16"/>
-                    <line x1="8" y1="8" x2="8" y2="8"/>
-                    <line x1="12" y1="16" x2="12" y2="11"/>
-                    <path d="M16 16v-3a2 2 0 0 0-4 0"/>
-                </svg>
-                LinkedIn
-            </a>
+        <div class="footer-franja">
+            <div class="footer-legal">
+                &copy; 2025 Data Viva. Todos los derechos reservados.
+            </div>
+            <div class="footer-contactos">
+                <a href="mailto:datavivalab@gmail.com">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="14" rx="2"/>
+                        <polyline points="3 7 12 13 21 7"/>
+                    </svg>
+                    datavivalab@gmail.com
+                </a>
+                <a href="tel:+34621003808">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M22 16.92V21a1 1 0 0 1-1.09 1A19.85 19.85 0 0 1 3 5.09 1 1 0 0 1 4 4h4.09a1 1 0 0 1 1 .75l1.13 4.45a1 1 0 0 1-.29 1l-2.2 2.2a16 16 0 0 0 7 7l2.2-2.2a1 1 0 0 1 1-.29l4.45 1.13a1 1 0 0 1 .75 1V20z"/>
+                    </svg>
+                    +34 621 00 38 08
+                </a>
+                <a href="https://www.linkedin.com/in/antonioj-fernández-científicodedatos-analistadedatos" target="_blank">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="2" y="2" width="20" height="20" rx="3"/>
+                        <line x1="8" y1="11" x2="8" y2="16"/>
+                        <line x1="8" y1="8" x2="8" y2="8"/>
+                        <line x1="12" y1="16" x2="12" y2="11"/>
+                        <path d="M16 16v-3a2 2 0 0 0-4 0"/>
+                    </svg>
+                    LinkedIn
+                </a>
+            </div>
         </div>
     </footer>
 </body>
 </html>
+
 
 
 
