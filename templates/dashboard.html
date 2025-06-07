@@ -3,10 +3,10 @@
 
 {% block content %}
 <section class="dashboard-section container" style="max-width:860px; margin-top:3rem;">
-    <h2 class="section-title">Dashboard de Análisis Rápido</h2>
-    <p style="text-align:center; color:var(--primary); font-size:1.13rem;">
+    <h2 class="corp-title center"><b>Dashboard de Análisis Rápido</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
         Sube un <strong>CSV</strong> o <strong>Excel</strong> con tus datos y visualiza automáticamente histogramas de todas las variables numéricas.<br>
-        Perfecto para una exploración rápida y detectar tendencias de un vistazo.
+        <strong>Perfecto para una exploración rápida y detectar tendencias de un vistazo.</strong>
     </p>
     <form method="POST" enctype="multipart/form-data" style="margin:2.1rem auto 2.1rem auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
         <input type="file" name="dashboard_data" accept=".csv,.xlsx,.xls" required>
@@ -14,7 +14,7 @@
     </form>
     {% if graphs %}
         <div style="margin-top:2.1rem;">
-            <h3 style="text-align:center; color:var(--primary); font-size:1.18rem; margin-bottom:1.3rem;">Visualizaciones automáticas</h3>
+            <h3 class="center" style="color:var(--primary); font-size:1.18rem; margin-bottom:1.3rem;">Visualizaciones automáticas</h3>
             {% for graph in graphs %}
                 <div style="background:var(--white); border-radius:1.1rem; box-shadow:0 2px 16px rgba(44,62,80,0.07); padding:1.1rem; margin-bottom:2.2rem;">
                     {{ graph|safe }}
@@ -22,10 +22,11 @@
             {% endfor %}
         </div>
     {% endif %}
-    <div style="text-align:center;">
-        <a href="{{ url_for('home') }}" class="cta-button-home">← Volver al inicio</a>
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
     </div>
 </section>
 {% endblock %}
+
 
 
