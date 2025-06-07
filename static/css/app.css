@@ -45,27 +45,24 @@ main {
   align-items: center;
 }
 
-/* ==== HEADER Y NAV PERFECTO ==== */
+/* HEADER */
 header {
   position: sticky; top: 0; z-index: 1000;
   background: var(--primary);
   height: var(--header-height);
   box-shadow: var(--box-shadow);
-  width: 100vw;
-  min-width: 100vw;
-  display: flex;
-  align-items: center;
+  display: flex; align-items: center; width: 100%;
 }
+
 .nav-container {
-  width: 100%;
-  max-width: var(--content-maxwidth);
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: var(--header-height);
+  width: 100%;
+  max-width: var(--content-maxwidth);
+  margin: 0 auto;
   padding: 0 2rem;
-  gap: 0;
 }
 
 .nav-logo {
@@ -73,7 +70,6 @@ header {
   align-items: center;
   gap: 1rem;
   text-decoration: none;
-  flex-shrink: 0;
 }
 
 .nav-logo img {
@@ -91,43 +87,20 @@ header {
   white-space: nowrap;
 }
 
-nav {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-}
-
 nav ul {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  flex-wrap: wrap;
+  display: flex; gap: 2.1rem; list-style: none; align-items: center; margin: 0;
 }
 
 nav a {
-  color: var(--white);
-  text-decoration: none;
-  font-size: 1.09rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 0.39rem 0.93rem;
-  border-radius: 1.4rem;
+  color: var(--white); text-decoration: none; font-size: 1.09rem;
+  font-weight: 600; letter-spacing: 0.03em;
+  padding: 0.39rem 0.93rem; border-radius: 1.4rem;
   transition: background 0.2s, color 0.2s;
-  display: inline-block;
-  text-align: center;
+  display: inline-block; text-align: center;
   white-space: nowrap;
 }
 
-nav a:hover {
-  background: var(--secondary);
-  color: var(--primary);
-}
-
+nav a:hover { background: var(--secondary); color: var(--primary);}
 .cta-nav {
   background: var(--secondary);
   color: var(--primary) !important;
@@ -142,63 +115,16 @@ nav a:hover {
   align-self: center;
   text-decoration: none;
   line-height: 1.3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 44px;
-  min-width: 185px;
-  max-width: 100vw;
+  display: flex; align-items: center; justify-content: center; height: 44px;
+  min-width: 180px;
   white-space: nowrap;
-  overflow: visible;
-  flex-shrink: 0;
 }
-
 .cta-nav:hover {
   background: var(--primary);
   color: var(--secondary) !important;
   border: 2px solid var(--secondary);
   text-decoration: underline;
   transform: scale(1.03) translateY(-2px);
-}
-
-/* RESPONSIVE HEADER */
-@media (max-width: 1200px) {
-  .nav-container { padding: 0 1.2rem; }
-}
-@media (max-width: 900px) {
-  .nav-container {
-    flex-direction: column;
-    align-items: stretch;
-    height: auto;
-    gap: 0.3rem;
-    padding: 0 0.6rem;
-  }
-  nav {
-    width: 100%;
-    justify-content: center;
-    margin: 0.2rem 0 0.1rem 0;
-  }
-  .cta-nav {
-    margin-left: 0;
-    margin-top: 0.3rem;
-    width: 100%;
-    max-width: 98vw;
-    min-width: 120px;
-    align-self: center;
-    justify-content: center;
-  }
-}
-@media (max-width: 600px) {
-  .nav-logo img { width: 38px; height: 38px;}
-  .nav-logo span { font-size: 1rem;}
-  nav a { font-size: 0.98rem; }
-  .cta-nav {
-    font-size: 0.96rem;
-    padding: 0.7rem 1rem;
-    min-width: 100px;
-    max-width: 100vw;
-  }
-  nav ul { gap: 0.7rem; }
 }
 
 /* HERO CARD */
@@ -397,6 +323,11 @@ footer {
   .project-card { min-width: 89vw; max-width: 99vw;}
   .projects-grid { max-width: 99vw;}
 }
+
+
+
+
+
 
 
 
