@@ -13,7 +13,7 @@
             --secondary: #debfb0;
             --tertiary: #7f8c8d;
             --background: #f5f2ea;
-            --white: #ffffff;
+            --white: #fff;
             --text: #020202;
             --border-radius: 2rem;
             --box-shadow: 0 12px 40px rgba(0,0,0,0.08);
@@ -34,15 +34,18 @@
             padding: 3rem 0;
         }
         header {
-            position: sticky; top: 0; background: var(--primary); z-index: 1000; padding: 0.5rem 0; box-shadow: var(--box-shadow); height: var(--header-height);
+            position: sticky; top: 0; background: var(--primary); z-index: 1000;
+            box-shadow: var(--box-shadow);
+            height: var(--header-height);
         }
         .nav-container {
-            display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; height: var(--header-height);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 2rem; height: var(--header-height);
         }
         .nav-logo { display: flex; align-items: center; gap: 1rem; }
         .nav-logo a { display: flex; align-items: center; text-decoration: none; }
         .nav-logo img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--secondary);}
-        .nav-logo span { color: var(--secondary); font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; margin-left: 0.5rem; border-bottom: none; }
+        .nav-logo span { color: var(--secondary); font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; margin-left: 0.5rem; border-bottom: none;}
         nav ul { display: flex; gap: 2.2rem; list-style: none; }
         nav a {
             color: var(--white); text-decoration: none; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.03em;
@@ -70,27 +73,16 @@
             transform: scale(1.04) translateY(-3px);
         }
         main { min-height: 70vh; }
-        /* Tarjeta principal/hero */
-        .hero-info-card {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 16px rgba(44,62,80,0.11);
-            padding: 2.2rem 2rem 2.1rem 2rem;
-            max-width: 1230px;
-            margin: 2.7rem auto 2.5rem auto;
-            width: 100%;
-            text-align: center;
-            font-size: 1.21rem;
+        /* Títulos corporativos */
+        .corp-title {
             color: var(--primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            font-weight: 700;
+            font-size: 2.08rem;
+            letter-spacing: 0.03em;
+            margin-bottom: 1.6rem;
+            text-align: center;
         }
-        @media (max-width: 900px) {
-            .hero-info-card { padding: 1.2rem 0.7rem; }
-        }
-        /* --- Cards, resultados y plantillas --- */
+        /* --- Cards y plantillas --- */
         .projects-section, .section-centered {
             padding: 2.3rem 2rem;
             display: flex; flex-direction: column; align-items: center; width: 100%;
@@ -99,7 +91,8 @@
             display: flex; flex-wrap: wrap; gap: 2.1rem; justify-content: center; align-items: stretch; width: 100%;
         }
         .project-card, .card, .result-card, .template-box {
-            background: var(--background); border-radius: 1.7rem; box-shadow: 0 2px 16px rgba(44,62,80,0.10);
+            background: var(--white);
+            border-radius: 1.7rem; box-shadow: 0 2px 16px rgba(44,62,80,0.10);
             padding: 2.2rem 1.4rem; max-width: 470px; min-width: 260px; flex: 1 1 320px; 
             margin: 0 auto; transition: box-shadow 0.2s, transform 0.2s;
             display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
@@ -162,16 +155,7 @@
             outline: none;
             box-shadow: 0 0 0 2px rgba(222,191,176,0.17);
         }
-        /* Títulos corporativos */
-        .corp-title {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 2.08rem;
-            letter-spacing: 0.03em;
-            margin-bottom: 1.6rem;
-            text-align: center;
-        }
-        /* --- Footer igual que portfolio --- */
+        /* Footer igual que portfolio */
         footer {
             background: var(--primary); color: var(--white); text-align: center; padding: 2.2rem 0 1rem 0;
             margin-top: 2rem; font-size: 1rem; border-top-left-radius: 1.7rem; border-top-right-radius: 1.7rem;
@@ -181,7 +165,6 @@
         }
         .footer-contactos a { color: var(--secondary); text-decoration: none; display:inline-flex; align-items:center; gap:0.5rem; font-size:1.09rem;}
         .footer-contactos a:hover {color: var(--white);}
-        /* Responsive */
         @media (max-width: 900px) {
             .container { padding: 2rem 0; }
             .nav-container { flex-direction: column; gap: 1.1rem; }
@@ -194,7 +177,6 @@
             nav a { font-size: 1rem; }
             .cta-button, .button, button, input[type="submit"] { font-size: 1rem; padding: 1rem 2rem; min-width: 140px;}
         }
-        /* Cards full width on mobile */
         @media (max-width: 700px) {
             .project-card, .card, .result-card, .template-box { min-width: 88vw; max-width: 99vw;}
         }
@@ -229,20 +211,6 @@
         </div>
     </header>
     <main>
-        <!-- Tarjeta HERO PRINCIPAL (puedes editar o eliminar si ya lo tienes en otra plantilla) -->
-        <div class="hero-info-card">
-            <div style="font-size:2rem; font-weight:700; color:var(--primary); margin-bottom:1rem;">
-                Soluciones Automáticas para el Análisis y la Ciencia de Datos
-            </div>
-            <div style="max-width:780px; margin:0 auto;">
-                Optimiza tu análisis de datos, informes y toma de decisiones con herramientas automáticas y paneles de control inteligentes.<br>
-                Integra IA y visualización avanzada en tus procesos, sin curva de aprendizaje ni esperas.<br>
-                Automatiza informes, explora datos de un vistazo, valida la calidad y predice KPIs clave.<br>
-                <span style="color:var(--secondary); font-weight:600;">
-                    Prueba gratis las soluciones que usan líderes en agricultura, tecnología, seguros y más.
-                </span>
-            </div>
-        </div>
         {% block content %}{% endblock %}
     </main>
     <footer>
