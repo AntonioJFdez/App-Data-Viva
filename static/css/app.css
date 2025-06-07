@@ -58,6 +58,7 @@ header {
     font-weight: bold;
     letter-spacing: 2px;
     margin-left: 0.5rem;
+    white-space: nowrap;
 }
 nav ul {
     display: flex; gap: 2.1rem; list-style: none; align-items: center; margin: 0;
@@ -68,6 +69,7 @@ nav a {
     padding: 0.39rem 0.93rem; border-radius: 1.4rem;
     transition: background 0.2s, color 0.2s;
     display: inline-block; text-align: center;
+    white-space: nowrap;
 }
 nav a:hover { background: var(--secondary); color: var(--primary);}
 .cta-nav {
@@ -110,9 +112,11 @@ nav a:hover { background: var(--secondary); color: var(--primary);}
     font-weight: 700;
     letter-spacing: 0.03em;
     margin-bottom: 1.2rem;
+    text-align: center;
 }
 .hero-info-card > div {
     line-height: 1.65;
+    text-align: center;
 }
 .hero-info-card br {
     margin-bottom: 0.7em;
@@ -121,6 +125,8 @@ nav a:hover { background: var(--secondary); color: var(--primary);}
     display: inline-block;
     margin-top: 0.8em;
 }
+.bold, b, strong { font-weight: 700; color: var(--primary);}
+.center { text-align: center !important; }
 /* PROJECTS GRID */
 .projects-section {
     padding: 0;
@@ -190,12 +196,11 @@ nav a:hover { background: var(--secondary); color: var(--primary);}
     color: var(--secondary);
     transform: scale(1.04) translateY(-2px);
 }
-/* ENLACES "Volver al inicio" */
 .volver-inicio-link {
     display: inline-block;
     color: var(--primary);
     font-weight: 600;
-    text-decoration: underline;
+    text-decoration: none !important; /* Quita subrayado */
     font-size: 1.04rem;
     margin: 0.6rem 0 0.3rem 0;
     background: none;
@@ -203,6 +208,7 @@ nav a:hover { background: var(--secondary); color: var(--primary);}
     padding: 0;
     border-radius: 0;
     box-shadow: none;
+    text-align: center;
 }
 .volver-inicio-link:hover { color: var(--secondary);}
 input[type="file"], select {
@@ -277,3 +283,4 @@ footer {
     .project-card { min-width: 89vw; max-width: 99vw;}
     .projects-grid { max-width: 99vw;}
 }
+
