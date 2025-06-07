@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="container">
-        <!-- HERO SOLO EN INICIO -->
+        <!-- HERO SOLAMENTE EN INICIO -->
         <div class="hero-info-card" style="
             background: var(--white); 
             border-radius: var(--border-radius); 
@@ -31,49 +31,24 @@
             </div>
         </div>
 
-        <!-- 6 TARJETAS DE SOLUCIONES AUTOMÁTICAS -->
+        <!-- 6 TARJETAS DE SOLUCIONES AUTOMÁTICAS AQUÍ -->
         <section class="projects-section">
             <div class="projects-grid">
-                <!-- Card 1 -->
+                <!-- Ejemplo de tarjeta: repite 6 veces con los títulos/contenido que necesites -->
                 <div class="project-card">
-                    <div class="project-title" style="color: var(--primary); font-weight:700; font-size:1.19rem;">Perfilado Automático de Datos</div>
-                    <div class="project-desc" style="margin-bottom:1.3rem;">Sube tu dataset y obtén un informe de calidad profesional.</div>
-                    <a href="{{ url_for('perfilado') }}" class="cta-button">Probar ahora</a>
+                    <div class="project-title" style="color: var(--primary);">Perfilado Automático de Datos</div>
+                    <div class="project-desc">Descripción de la solución aquí.</div>
                 </div>
-                <!-- Card 2 -->
                 <div class="project-card">
-                    <div class="project-title" style="color: var(--primary); font-weight:700; font-size:1.19rem;">Dashboard Exploratorio</div>
-                    <div class="project-desc" style="margin-bottom:1.3rem;">Visualiza y explora datos subidos, con gráficos automáticos.</div>
-                    <a href="{{ url_for('dashboard') }}" class="cta-button">Explorar</a>
+                    <div class="project-title" style="color: var(--primary);">Dashboard de Análisis Rápido</div>
+                    <div class="project-desc">Descripción de la solución aquí.</div>
                 </div>
-                <!-- Card 3 -->
-                <div class="project-card">
-                    <div class="project-title" style="color: var(--primary); font-weight:700; font-size:1.19rem;">Predicción de KPIs</div>
-                    <div class="project-desc" style="margin-bottom:1.3rem;">Carga tus datos y predice variables clave con IA.</div>
-                    <a href="{{ url_for('prediccion') }}" class="cta-button">Predecir</a>
-                </div>
-                <!-- Card 4 -->
-                <div class="project-card">
-                    <div class="project-title" style="color: var(--primary); font-weight:700; font-size:1.19rem;">Health Checker</div>
-                    <div class="project-desc" style="margin-bottom:1.3rem;">Detecta problemas y calidad de tu dataset con un clic.</div>
-                    <a href="{{ url_for('healthcheck') }}" class="cta-button">Comprobar</a>
-                </div>
-                <!-- Card 5 -->
-                <div class="project-card">
-                    <div class="project-title" style="color: var(--primary); font-weight:700; font-size:1.19rem;">Smart Filter Recommender</div>
-                    <div class="project-desc" style="margin-bottom:1.3rem;">Obtén sugerencias de segmentación y filtros para tus datos.</div>
-                    <a href="{{ url_for('smartfilter') }}" class="cta-button">Probar filtro</a>
-                </div>
-                <!-- Card 6 -->
-                <div class="project-card">
-                    <div class="project-title" style="color: var(--primary); font-weight:700; font-size:1.19rem;">Comparador Visual</div>
-                    <div class="project-desc" style="margin-bottom:1.3rem;">Sube dos imágenes y compara visualmente.</div>
-                    <a href="{{ url_for('comparador') }}" class="cta-button">Comparar imágenes</a>
-                </div>
+                <!-- ...repite para las 6 cards... -->
             </div>
         </section>
     </div>
 {% endblock %}
+
 
 
 
