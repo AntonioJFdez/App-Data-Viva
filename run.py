@@ -88,6 +88,23 @@ def perfilado():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('perfilado.html')
 
+@app.route('/smartfilter', methods=['GET', 'POST'])
+def smartfilter():
+    """
+    Realiza el filtrado inteligente de los datos (ajusta esta funcionalidad).
+    """
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            # Filtrado inteligente aquí, ejemplo: filtrar columnas con NaN o valores bajos
+            df_clean = df.dropna()  # Simple ejemplo de eliminación de NaN
+            flash(resultado_mensaje("¡Filtrado inteligente realizado con éxito!"), "success")
+            return render_template('smartfilter.html', df=df_clean.head())
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('smartfilter.html')
+
 @app.route('/prediccion', methods=['GET', 'POST'])
 def prediccion():
     """
@@ -150,6 +167,7 @@ if __name__ == "__main__":
     # Usa el puerto proporcionado por Render o 5000 como valor predeterminado
     port = int(os.environ.get('PORT', 5000))  # Render automáticamente proporciona la variable PORT
     app.run(host="0.0.0.0", port=port)  # Escucha en todas las interfaces y en el puerto proporcionado
+
 
 
 
