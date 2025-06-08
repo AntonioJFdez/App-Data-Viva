@@ -1,10 +1,3 @@
-"""
-Script: ejecutar.py
-Autor: [Data Viva]
-Descripción: Script principal de ejecución para Data Viva - Soluciones Automáticas.
-Optimizado para UX/UI, robustez y valor comercial.
-"""
-
 import os
 import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
@@ -157,6 +150,7 @@ if __name__ == "__main__":
     # Usa el puerto proporcionado por Render o 5000 como valor predeterminado
     port = int(os.environ.get('PORT', 5000))  # Render automáticamente proporciona la variable PORT
     app.run(host="0.0.0.0", port=port)  # Escucha en todas las interfaces y en el puerto proporcionado
+
 
 
 
