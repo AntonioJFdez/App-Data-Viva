@@ -1,7 +1,7 @@
 
 """
 Script: ejecutar.py
-Autor: [Tu Nombre/Empresa]
+Autor: [Data Viva]
 Descripción: Script principal de ejecución para Data Viva - Soluciones Automáticas.
 Optimizado para UX/UI, robustez y valor comercial.
 """
