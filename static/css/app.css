@@ -70,7 +70,7 @@ nav a {
   white-space: nowrap;
 }
 
-nav a:hover { background: var(--secondary); color: var(--primary);}
+nav a:hover { background: var(--secondary); color: var(--primary); text-decoration: none; }
 
 .cta-nav {
   background: var(--secondary);
@@ -97,10 +97,6 @@ nav a:hover { background: var(--secondary); color: var(--primary);}
   border: 2px solid var(--secondary);
   text-decoration: underline;
   transform: scale(1.03) translateY(-2px);
-}
-
-nav a:hover {
-  text-decoration: none;  /* Se eliminó la línea que aparecía debajo al pasar el cursor */
 }
 
 /* ==== HERO ==== */
@@ -172,7 +168,6 @@ nav a:hover {
   margin-bottom: 1.2rem;
 }
 
-/* Añadir aire entre el texto y las tarjetas debajo */
 .hero-info-card + .projects-section {
   margin-top: 3rem;
 }
@@ -247,6 +242,7 @@ footer {
   .project-card { min-width: 89vw; max-width: 99vw;}
   .projects-grid { max-width: 99vw;}
 }
+
 
 
 
