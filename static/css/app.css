@@ -113,43 +113,6 @@ nav a:hover {
   background: var(--primary); color: var(--secondary); transform: scale(1.04) translateY(-3px); box-shadow: 0 6px 24px rgba(222,191,176,0.21);
 }
 
-/* ==== Soluciones Automáticas ==== */
-.soluciones-automaticas {
-  background: var(--white);
-  padding: 3rem 2rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin-bottom: 3rem;
-  text-align: center;
-  max-width: var(--content-maxwidth);
-}
-
-.soluciones-automaticas h2 {
-  color: var(--primary);
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.soluciones-automaticas p {
-  color: var(--text);
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-.soluciones-automaticas a.cta-button {
-  display: inline-block;
-  padding: 1.2rem 3rem;
-  font-size: 1.1rem;
-  background: var(--primary);
-  color: var(--white);
-  border-radius: 2.5rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  border: none;
-  box-shadow: 0 4px 20px rgba(44,62,80,0.13);
-}
-
 /* ==== Footer ==== */
 footer {
   background: var(--primary); color: var(--white); text-align: center; padding: 2.2rem 0 1rem 0;
@@ -191,11 +154,6 @@ footer {
   nav a { font-size: 0.98rem; }
   .cta-button, .button, button, input[type="submit"] { font-size: 0.98rem; padding: 0.9rem 1.5rem; min-width: 110px;}
   .project-card { max-width: 96vw;}
-}
-
-@media (max-width: 700px) {
-  .project-card { min-width: 89vw; max-width: 99vw;}
-  .projects-grid { max-width: 99vw;}
 }
 
 
