@@ -9,7 +9,7 @@
   --border-radius: 2rem;
   --box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --header-height: 80px;
+  --header-height: 82px;
   --content-maxwidth: 1200px;
   --card-maxwidth: 370px;
 }
@@ -23,6 +23,7 @@ body {
   background: var(--background);
   min-height: 100vh;
   width: 100vw;
+  overflow-x: hidden;
 }
 
 .container {
@@ -49,37 +50,52 @@ header {
 }
 
 .nav-logo img {
-  width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--secondary);
+  width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--secondary);
 }
 
 .nav-logo span {
-  color: var(--secondary); font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; margin-left: 0.5rem;
+  color: var(--secondary); font-size: 1.47rem; font-weight: bold; letter-spacing: 2px; margin-left: 0.5rem; white-space: nowrap;
 }
 
 nav ul {
-  display: flex; gap: 2.2rem; list-style: none; justify-content: center; align-items: center;
+  display: flex; gap: 2.1rem; list-style: none; align-items: center; margin: 0;
 }
 
 nav a {
-  color: var(--white); text-decoration: none; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.03em;
-  padding: 0.4rem 0.9rem; border-radius: 1.5rem; transition: background 0.2s;
+  color: var(--white); text-decoration: none; font-size: 1.09rem;
+  font-weight: 600; letter-spacing: 0.03em;
+  padding: 0.39rem 0.93rem; border-radius: 1.4rem;
+  transition: background 0.2s, color 0.2s;
+  display: inline-block; text-align: center;
+  white-space: nowrap;
 }
 
-nav a:hover {
-  background: var(--secondary); color: var(--primary);
-}
+nav a:hover { background: var(--secondary); color: var(--primary);}
 
-/* Botón Volver al Portfolio */
 .cta-nav {
-  background: var(--secondary); color: var(--primary); font-weight: 700;
-  border-radius: 2.3rem; padding: 1rem 2.2rem; margin-left: 1.3rem; font-size: 1.09rem;
-  border: none; box-shadow: 0 4px 20px rgba(44,62,80,0.13); transition: background 0.18s, color 0.18s, transform 0.18s;
-  display: flex; align-items: center; justify-content: center; height: 44px; min-width: 180px;
+  background: var(--secondary);
+  color: var(--primary) !important;
+  font-weight: 700;
+  border-radius: 2.3rem;
+  padding: 1rem 2.2rem;
+  margin-left: 1.3rem;
+  font-size: 1.09rem;
+  border: none;
+  box-shadow: 0 4px 20px rgba(44,62,80,0.13);
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+  align-self: center;
+  text-decoration: none;
+  line-height: 1.3;
+  display: flex; align-items: center; justify-content: center; height: 44px;
+  min-width: 180px;
   white-space: nowrap;
 }
 
 .cta-nav:hover {
-  background: var(--primary); color: var(--secondary); border: 2px solid var(--secondary); text-decoration: underline;
+  background: var(--primary);
+  color: var(--secondary) !important;
+  border: 2px solid var(--secondary);
+  text-decoration: underline;
   transform: scale(1.03) translateY(-2px);
 }
 
@@ -176,7 +192,7 @@ nav a:hover {
 }
 
 .project-title {
-  color: var(--secondary); font-weight: bold; font-size: 1.18rem; margin-bottom: 1rem;
+  color: var(--primary); font-weight: bold; font-size: 1.18rem; margin-bottom: 1rem;
 }
 
 .project-desc {
@@ -221,38 +237,48 @@ footer {
   margin-top: 2rem; font-size: 1rem; border-top-left-radius: 1.7rem; border-top-right-radius: 1.7rem;
 }
 
+.footer-contactos {
+  margin-top: 0.7rem;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 1.7rem;
+}
+
+.footer-contactos a {
+  color: var(--secondary); text-decoration: none; display:inline-flex; align-items:center; gap:0.48rem; font-size:1.07rem;
+}
+
+.footer-contactos a:hover { color: var(--white);}
+
+.footer-derechos {
+  margin-top: 1.4rem;
+  color: var(--white);
+  font-size: 1.08rem;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+}
+
 /* ==== RESPONSIVE ==== */
 @media (max-width: 900px) {
   .container { padding: 2rem 0; }
-  .nav-container { flex-direction: column; gap: 1.1rem; }
+  .nav-container { flex-direction: column; gap: 0.9rem; height: auto;}
   nav ul { flex-wrap: wrap; justify-content: center; gap: 1rem; }
-  .hero .container { padding: 3.2rem 1rem 2rem 1rem; }
-  .about-content { flex-direction: column; text-align: center; }
-  .download-grid { flex-direction: column; gap: 1.5rem; }
-  .skills-container { flex-direction: column; gap: 1.5rem; }
+  .projects-grid { gap: 1.15rem;}
+  .hero-info-card { max-width: 99vw;}
 }
 
 @media (max-width: 600px) {
-  .hero h1 { font-size: 2.1rem; }
-  .hero h2 { font-size: 1.13rem; }
-  .cta-button { font-size: 1rem; padding: 1rem 2rem; }
-  .download-card { padding: 1.2rem 0.7rem; }
-  .about-section { padding-left: 1.2rem; padding-right: 1.2rem; }
-  #about .bio { padding-left: 0.3rem; padding-right: 0.3rem; }
-  .skills-section .section-title { text-align: center; }
-  .skills-container { flex-direction: column; align-items: center; }
-  .skill-category { text-align: center; margin-left: 0; margin-right: 0; max-width: 100%; min-width: 0; padding-left: 0.5rem; padding-right: 0.5rem;}
-  .skills-grid { flex-direction: column; align-items: center; }
-  .skill { width: 100%; margin: 0.18rem 0; text-align: center; word-break: break-word;}
-  .contact-section { padding-left: 1.2rem; padding-right: 1.2rem; }
-  .contact-form input, .contact-form textarea { padding-left: 1rem; padding-right: 1rem;}
+  .nav-logo img { width: 38px; height: 38px;}
+  .nav-logo span { font-size: 1rem;}
+  nav a { font-size: 0.98rem; }
+  .cta-button, .button, button, input[type="submit"] { font-size: 0.98rem; padding: 0.9rem 1.5rem; min-width: 110px;}
+  .project-card { max-width: 96vw;}
 }
 
 @media (max-width: 700px) {
-  #cv .download-grid { margin-top: 0.7rem !important; margin-bottom: 0.7rem !important;}
-  #cv .download-card { margin-top: 0.8rem !important; margin-bottom: 0.8rem !important; padding-top: 1.2rem !important; padding-bottom: 1.2rem !important;}
-  .download-section { padding: 1.5rem 1.2rem 1.5rem 1.2rem !important; margin-left: 0.5rem !important; margin-right: 0.5rem !important; border-radius: 1.3rem;}
+  .project-card { min-width: 89vw; max-width: 99vw;}
+  .projects-grid { max-width: 99vw;}
 }
+
 
 
 
