@@ -1,6 +1,6 @@
 /* ==== Variables Globales ==== */
 :root {
-  --primary: #2c3e50;
+  --primary: #2c3e50; /* Azul corporativo */
   --secondary: #debfb0;
   --tertiary: #7f8c8d;
   --background: #f5f2ea;
@@ -80,7 +80,7 @@ nav a:hover {
 }
 
 .cta-nav:hover {
-  background: var(--primary); color: var(--secondary); border: 2px solid var(--secondary); text-decoration: underline;
+  background: var(--primary); color: var(--secondary); border: 2px solid var(--secondary); text-decoration: none;
   transform: scale(1.03) translateY(-2px);
 }
 
@@ -113,7 +113,7 @@ nav a:hover {
   background: var(--primary); color: var(--secondary); transform: scale(1.04) translateY(-3px); box-shadow: 0 6px 24px rgba(222,191,176,0.21);
 }
 
-/* ==== Sección de Soluciones Automáticas ==== */
+/* ==== Soluciones Automáticas ==== */
 .soluciones-automaticas {
   background: var(--white);
   padding: 3rem 2rem;
@@ -197,6 +197,7 @@ footer {
   .project-card { min-width: 89vw; max-width: 99vw;}
   .projects-grid { max-width: 99vw;}
 }
+
 
 
 
