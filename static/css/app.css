@@ -1,28 +1,41 @@
 /* ==== Variables Globales ==== */
 :root {
-  --primary: #2c3e50;
-  --secondary: #debfb0;
-  --tertiary: #7f8c8d;
-  --background: #f5f2ea;
-  --text: #020202;
-  --white: #ffffff;
-  --border-radius: 2rem;
-  --box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --header-height: 80px;
-  --content-maxwidth: 1200px;
-  --card-maxwidth: 370px;
+  --primary: #2c3e50; /* Azul Corporativo */
+  --secondary: #debfb0; /* Color complementario */
+  --background: #f5f2ea; /* Fondo suave */
+  --white: #fff; /* Blanco */
+  --text: #020202; /* Color de texto */
+  --border-radius: 2rem; /* Bordes redondeados */
+  --box-shadow: 0 12px 40px rgba(0,0,0,0.08); /* Sombra suave */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transición fluida */
+  --header-height: 80px; /* Altura del encabezado */
+  --content-maxwidth: 1200px; /* Ancho máximo del contenido */
+  --card-maxwidth: 370px; /* Máximo ancho de las tarjetas */
 }
 
-/* ==== Reset y General ==== */
+/* ==== Reset y Estilos Generales ==== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
+
+html, body {
+  height: 100%;
   font-family: 'Poppins', sans-serif;
-  line-height: 1.8;
   color: var(--text);
   background: var(--background);
   min-height: 100vh;
   width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
 }
 
 .container {
@@ -37,23 +50,44 @@ body {
 
 /* ==== HEADER ==== */
 header {
-  position: sticky; top: 0; background: var(--primary); z-index: 1000; padding: 0.5rem 0; box-shadow: var(--box-shadow);
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--primary);
+  height: var(--header-height);
+  box-shadow: var(--box-shadow);
+  display: flex; align-items: center; width: 100%;
 }
 
 .nav-container {
-  display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  width: 100%;
+  max-width: var(--content-maxwidth);
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .nav-logo {
-  display: flex; align-items: center; gap: 1rem; text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
 }
 
 .nav-logo img {
-  width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--secondary);
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 3px solid var(--secondary);
 }
 
 .nav-logo span {
-  color: var(--secondary); font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; margin-left: 0.5rem;
+  color: var(--secondary);
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-left: 0.5rem;
+  white-space: nowrap;
 }
 
 nav ul {
@@ -79,8 +113,9 @@ nav a:hover {
 }
 
 .cta-nav:hover {
-  background: var(--primary); color: var(--secondary); border: 2px solid var(--secondary); text-decoration: underline;
+  background: var(--primary); color: var(--secondary); border: 2px solid var(--secondary); text-decoration: none;
   transform: scale(1.03) translateY(-2px);
+  text-decoration: none;
 }
 
 /* ==== HERO ==== */
@@ -253,6 +288,7 @@ footer {
   #cv .download-card { margin-top: 0.8rem !important; margin-bottom: 0.8rem !important; padding-top: 1.2rem !important; padding-bottom: 1.2rem !important;}
   .download-section { padding: 1.5rem 1.2rem 1.5rem 1.2rem !important; margin-left: 0.5rem !important; margin-right: 0.5rem !important; border-radius: 1.3rem;}
 }
+
 
 
 
