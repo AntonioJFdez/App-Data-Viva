@@ -130,6 +130,13 @@ def dashboard():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('dashboard.html')
 
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    """
+    Endpoint de comprobación de salud para garantizar que la aplicación está funcionando.
+    """
+    return "OK", 200
+
 # -- OTRAS RUTAS --
 
 @app.route('/descargar', methods=['POST'])
@@ -150,6 +157,7 @@ if __name__ == "__main__":
     # Usa el puerto proporcionado por Render o 5000 como valor predeterminado
     port = int(os.environ.get('PORT', 5000))  # Render automáticamente proporciona la variable PORT
     app.run(host="0.0.0.0", port=port)  # Escucha en todas las interfaces y en el puerto proporcionado
+
 
 
 
