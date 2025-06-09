@@ -10,7 +10,7 @@ from modulos_modelos import prediccion_churn
 from modulos_modelos import panel_rendimiento_agentes
 from modulos_modelos import pricing_dinamico
 from modulos_modelos import marketing_personalizado
-
+from modulos_modelos import fidelizacion_clientes
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -324,6 +324,32 @@ def marketing_view():
         except Exception as e:
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('marketing.html')
+
+    @app.route('/fidelizacion', methods=['GET', 'POST'])
+def fidelizacion_view():
+    """
+    Calcula el programa de fidelidad y segmenta los clientes.
+    """
+    tabla_html = None
+    output_path = None
+
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            # Convertir fecha_alta si no está en formato datetime
+            df['fecha_alta'] = pd.to_datetime(df['fecha_alta'], errors='coerce')
+            df_resultado, output_path = fidelizacion_clientes(df)
+            flash(resultado_mensaje("Programa de fidelidad calculado y clientes segmentados correctamente."), "success")
+            tabla_html = df_resultado.head(10).to_html(classes="table table-striped", index=False)
+            return render_template(
+                'fidelizacion.html',
+                tabla_html=tabla_html,
+                output_path=output_path
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('fidelizacion.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
