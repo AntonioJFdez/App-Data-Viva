@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Segmentación intra-parcela (NDVI + KMeans)</h2>
+<form method="post" enctype="multipart/form-data" class="form-segmentacion">
+    <div>
+        <label>Imagen NDVI (.tif):</label>
+        <input type="file" name="archivo_ndvi" required>
+    </div>
+    <div>
+        <label>Archivo de parcela (.geojson):</label>
+        <input type="file" name="archivo_parcela" required>
+    </div>
+    <div>
+        <label>Número de zonas:</label>
+        <input type="number" name="n_clusters" value="4" min="2" max="12" required>
+    </div>
+    <button type="submit">Segmentar</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if mapa %}
+    <h3>Mapa interactivo de zonas</h3>
+    <iframe src="{{ '/' + mapa }}" width="100%" height="450" style="border-radius:1rem; border:1px solid #bbb"></iframe>
+    <br>
+{% endif %}
+{% if recomendaciones %}
+    <a href="{{ '/' + recomendaciones }}" class="btn btn-secondary">Descargar recomendaciones por zona</a>
+{% endif %}
+{% if geojson %}
+    <a href="{{ '/' + geojson }}" class="btn btn-secondary">Descargar GeoJSON de zonas</a>
+{% endif %}
+{% if csv %}
+    <a href="{{ '/' + csv }}" class="btn btn-secondary">Descargar CSV de zonas</a>
+{% endif %}
+{% endblock %}
