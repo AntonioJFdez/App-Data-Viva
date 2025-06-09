@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Análisis de Salud de Cultivos (Índices Vegetativos + ML)</h2>
+<form method="post" enctype="multipart/form-data" class="form-salud-cultivo">
+    <div>
+        <label>Archivo de datos (CSV):</label>
+        <input type="file" name="archivo_csv" required>
+    </div>
+    <button type="submit">Analizar salud</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if boxplot %}
+    <h3>Distribución NDVI según Estrés</h3>
+    <img src="{{ '/' + boxplot }}" style="max-width: 90%;">
+{% endif %}
+{% if resumen %}
+    <div>
+        <a href="{{ '/' + resumen }}" class="btn btn-secondary">Descargar resumen por grupo</a>
+    </div>
+{% endif %}
+{% endblock %}
