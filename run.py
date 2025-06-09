@@ -193,7 +193,7 @@ def descargar():
         flash(resultado_mensaje("El archivo no existe o no se puede descargar.", exito=False), "danger")
         return redirect(url_for('home'))
 
-    @app.route('/segmentacion', methods=['GET', 'POST'])
+@app.route('/segmentacion', methods=['GET', 'POST'])
 def segmentacion():
     """
     Segmentación avanzada de clientes (K-Means)
