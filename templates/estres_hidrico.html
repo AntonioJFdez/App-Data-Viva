@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Detección de Estrés Hídrico (imagen térmica)</h2>
+<form method="post" style="margin-bottom:2rem;">
+    <label>Ruta imagen térmica (.tif):</label>
+    <input type="text" name="ruta_termica" value="imagenes_termicas/parcela1_2024-05-20.tif" required>
+    <br>
+    <label>Ruta parcelas (GeoJSON):</label>
+    <input type="text" name="ruta_parcelas" value="parcelas.geojson" required>
+    <br>
+    <label>Límite crítico temperatura (°C):</label>
+    <input type="number" name="limite_critico" step="0.1" value="30.0">
+    <br>
+    <label>CWSI crítico:</label>
+    <input type="number" name="cwsi_critico" step="0.01" value="0.7">
+    <br>
+    <button type="submit">Analizar Estrés</button>
+</form>
+
+{% if resultado %}
+  <div class="alert alert-info">
+    Porcentaje de área crítica: <strong>{{ resultado['porcentaje_critico'] }}%</strong>
+  </div>
+  <ul>
+    <li><a href="/{{ resultado['alertas_csv'] }}" download>Descargar CSV de puntos críticos</a></li>
+    <li><a href="/{{ resultado['resumen_csv'] }}" download>Descargar resumen por parcela</a></li>
+    <li><a href="/{{ resultado['mapa_html'] }}" target="_blank">Ver mapa interactivo</a></li>
+  </ul>
+{% endif %}
+{% endblock %}
