@@ -430,3 +430,39 @@ def digitalizar_renovaciones(df, dias_ventana=30, output_dir="static/graficos"):
     logging.info(f"Recordatorios de renovación exportados a {filename}")
     return renovaciones[['email', 'nombre', 'mensaje']], filename
 
+    import pandas as pd
+import logging
+
+def calcular_panel_kpis(df, output_dir="static/graficos"):
+    """
+    Calcula los principales KPIs aseguradores y exporta un panel resumen a CSV.
+    """
+    columnas = ['prima_emitida', 'poliza_id', 'cliente_id', 'estado', 'renovada', 'es_renovable',
+                'nps', 'siniestros_pagados', 'producto', 'comision']
+    if not all(col in df.columns for col in columnas):
+        raise ValueError(f"El dataset debe contener las columnas: {columnas}")
+
+    resumen = {}
+    resumen['ventas_totales'] = df['prima_emitida'].sum()
+    resumen['numero_polizas'] = df['poliza_id'].nunique()
+    resumen['clientes_activos'] = df[df['estado'] == 'activa']['cliente_id'].nunique()
+    resumen['tasa_renovacion'] = round(
+        df[df['renovada'] == 1].shape[0] / max(1, df[df['es_renovable'] == 1].shape[0]) * 100, 2
+    )
+    resumen['nps_promedio'] = df['nps'].mean().round(2)
+    resumen['siniestralidad'] = round(
+        df['siniestros_pagados'].sum() / max(1, df['prima_emitida'].sum()) * 100, 2
+    )
+    resumen['productos_por_cliente'] = round(
+        df.groupby('cliente_id')['producto'].nunique().mean(), 2
+    )
+    resumen['comision_media'] = round(df['comision'].mean(), 2)
+
+    panel_kpi = pd.DataFrame([resumen])
+    filename = f"{output_dir}/panel_kpis_integral.csv"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    panel_kpi.to_csv(filename, index=False)
+    logging.info(f"Panel de KPIs exportado a {filename}")
+    return panel_kpi, filename
+
