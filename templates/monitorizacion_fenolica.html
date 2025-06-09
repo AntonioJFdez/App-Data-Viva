@@ -1,39 +1,61 @@
 {% extends 'base.html' %}
+{% block title %}Monitorización Fenológica · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Monitorización Fenológica y Detección de Brotes</h2>
-<form method="post" style="margin-bottom:2rem;">
-    <div>
-        <label>Carpeta con imágenes NDVI temporales:</label>
-        <input type="text" name="carpeta_ndvi" value="imagenes_ndvi_temporal" required>
-    </div>
-    <div>
-        <label>Umbral de brote NDVI (&Delta;):</label>
-        <input type="number" step="0.01" name="umbral_brote" value="0.08" required>
-    </div>
-    <button type="submit">Analizar evolución fenológica</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if resumen %}
-  <h4>Resumen NDVI temporal (primeras filas):</h4>
-  <div style="overflow-x:auto;">{{ resumen|safe }}</div>
-{% endif %}
-{% if brotes %}
-  <h4>Brotes detectados:</h4>
-  <div style="overflow-x:auto;">{{ brotes|safe }}</div>
-{% endif %}
-{% if imagenes %}
-  <h4>Gráficos por parcela:</h4>
-  <div style="display:flex;flex-wrap:wrap;gap:2rem;">
-    {% for parcela, ruta in imagenes %}
-      <div>
-        <b>{{ parcela }}</b><br>
-        <img src="/{{ ruta }}" style="max-width:340px; border-radius:1rem; margin-top:1rem;">
+<section class="dashboard-section container" style="max-width:800px; margin-top:2.2rem;">
+    <h2 class="corp-title center"><b>Monitorización Fenológica y Detección de Brotes</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Detecta brotes y fases fenológicas clave en tus cultivos a partir de imágenes NDVI temporales.<br>
+        <span style="color:var(--tertiary);">Identifica automáticamente el inicio de crecimiento y mejora la gestión del ciclo del cultivo.<br>
+        Ahorra hasta un <b>20% de tiempo en scouting</b> y anticipa riesgos de manejo.</span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Sube una carpeta de imágenes NDVI generadas en diferentes fechas para las mismas parcelas.</li>
+        <li>Define el <b>umbral de brote NDVI</b>: Diferencia mínima de NDVI que define el inicio de brotación (valor por defecto: <code>0.08</code>).</li>
+        <li>Las imágenes deben estar en formato compatible (ejemplo: .tif, .png o .jpg, según tu pipeline).</li>
+    </ul>
+    <form method="post" style="margin-bottom:2rem;">
+        <div>
+            <label>Carpeta con imágenes NDVI temporales:</label>
+            <input type="text" name="carpeta_ndvi" value="imagenes_ndvi_temporal" required>
+        </div>
+        <div>
+            <label>Umbral de brote NDVI (&Delta;):</label>
+            <input type="number" step="0.01" name="umbral_brote" value="0.08" required>
+        </div>
+        <button type="submit" class="cta-button" style="margin-top:1.1rem;">Analizar evolución fenológica</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% if resumen %}
+      <h4>Resumen NDVI temporal (primeras filas):</h4>
+      <div style="overflow-x:auto;">{{ resumen|safe }}</div>
+    {% endif %}
+    {% if brotes %}
+      <h4>Brotes detectados:</h4>
+      <div style="overflow-x:auto;">{{ brotes|safe }}</div>
+    {% endif %}
+    {% if imagenes %}
+      <h4>Gráficos por parcela:</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:2rem;">
+        {% for parcela, ruta in imagenes %}
+          <div>
+            <b>{{ parcela }}</b><br>
+            <img src="/{{ ruta }}" style="max-width:340px; border-radius:1rem; margin-top:1rem;">
+          </div>
+        {% endfor %}
       </div>
-    {% endfor %}
-  </div>
-{% endif %}
+    {% endif %}
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-top:2rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        • El resumen muestra el cambio de NDVI entre fechas clave.<br>
+        • El panel de brotes indica en qué fecha y parcela se detecta un inicio de brotación.<br>
+        • Usa los gráficos para ajustar riego, fertilización y fechas de intervención.<br>
+        <b>¿Te gustaría informes personalizados?</b> <span style="color:var(--secondary);">Solicita tu demo gratuita</span>.
+    </div>
+</section>
 {% endblock %}
+
