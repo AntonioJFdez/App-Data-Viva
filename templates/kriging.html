@@ -1,24 +1,54 @@
 {% extends 'base.html' %}
+
+{% block title %}Mapa de Variabilidad Kriging · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Interpolación Kriging (Mapa de Variabilidad Intra-Parcela)</h2>
-<form method="post" enctype="multipart/form-data" class="form-kriging">
-    <div>
-        <label>Sube tu archivo CSV de muestras:</label>
-        <input type="file" name="dataset" required>
+<section class="dashboard-section container" style="max-width:860px; margin-top:2.2rem;">
+    <h2 class="corp-title center"><b>Interpolación Kriging (Mapa de Variabilidad Intra-Parcela)</b></h2>
+    <p style="color:var(--primary);font-size:1.11rem;text-align:center;margin-bottom:1.2rem;">
+        <b>Descubre las zonas clave de tu parcela con un solo clic.</b><br>
+        Sube tus muestras de campo y genera un mapa continuo de NDVI, humedad, SAVI u otras variables. Localiza áreas de alto/ bajo rendimiento, optimiza insumos y <b>aumenta tu rentabilidad entre un 10% y 18%</b> por campaña.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Recomendado para explotaciones agrícolas, viticultura, empresas de drones y asesorías agrarias.
+        </span>
+    </p>
+    <ul style="margin:1rem 0 2rem 0;color:var(--tertiary);font-size:1.01rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Sube un archivo <code>.csv</code> con columnas: <b>x</b>, <b>y</b> (coordenadas), y al menos una variable numérica a interpolar (ejemplo: <b>ndvi</b>, <b>savi</b>, <b>humedad</b>).</li>
+        <li>Puedes usar datos de NDVI de dron, sensores de humedad o cualquier indicador espacial.</li>
+        <li>Introduce el nombre exacto de la columna de la variable a mapear.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data" class="form-kriging" style="margin-bottom:2rem;">
+        <div>
+            <label><b>Archivo CSV de muestras:</b></label>
+            <input type="file" name="dataset" accept=".csv" required>
+        </div>
+        <div>
+            <label><b>Variable a interpolar</b> (ej. <i>ndvi, savi, humedad</i>):</label>
+            <input type="text" name="variable" value="ndvi" required>
+        </div>
+        <button type="submit" class="cta-button" style="margin-top:1.1rem;">Generar mapa</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    {% if grafico %}
+        <h3 style="margin-top:2.1rem;">Resultado: Mapa de Variabilidad</h3>
+        <img src="{{ '/' + grafico }}" style="max-width:90%;border-radius:1.1rem;box-shadow:0 2px 16px rgba(44,62,80,0.10);margin-top:1.2rem;">
+        <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-top:2.1rem;">
+            <b>¿Cómo interpretar tu mapa?</b><br>
+            • <b>Zonas rojas</b> indican menor valor de la variable (bajo vigor, poca humedad, etc).<br>
+            • <b>Zonas verdes</b> muestran áreas de mayor rendimiento o potencial.<br>
+            • Utiliza este mapa para <b>dirigir muestreos, fertilización y riego</b>, y así maximizar producción y reducir costes.<br>
+            <span style="color:var(--secondary);">Exporta la imagen para incluirla en informes o compartirla con tus clientes.</span>
+        </div>
+    {% endif %}
+    <div class="center" style="margin-top:2.2rem;">
+        <a href="{{ url_for('contacto') }}" class="cta-button" style="background:var(--primary);color:var(--secondary);font-size:1.08rem;">
+            ¿Quieres mapear todas tus fincas de forma automática? Solicita una demo personalizada
+        </a>
     </div>
-    <div>
-        <label>Variable a interpolar (ej. ndvi, savi, humedad):</label>
-        <input type="text" name="variable" value="ndvi">
-    </div>
-    <button type="submit">Generar mapa</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if grafico %}
-    <h3>Resultado</h3>
-    <img src="{{ '/' + grafico }}" style="max-width:90%">
-{% endif %}
+</section>
 {% endblock %}
