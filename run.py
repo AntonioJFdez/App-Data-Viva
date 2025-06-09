@@ -16,6 +16,25 @@ from modulos_modelos import analizar_siniestros
 from modulos_modelos import priorizar_clientes_dormidos
 from modulos_modelos import digitalizar_renovaciones
 from modulos_modelos import calcular_panel_kpis
+from flask import Flask, render_template, request, flash
+from modulos_agricolas.kriging import ejecutar_kriging
+import os
+from modulos_agricolas.biomasa3d import analizar_biomasa_las
+import os
+from modulos_agricolas.salud_cultivo import analizar_salud_cultivo
+import os
+from modulos_agricolas.segmentacion_ndvi import segmentar_parcela_ndvi
+from modulos_agricolas.visor_parcelas import generar_visor_parcelas
+from modulos_agricolas.optimizacion_riego import entrenar_modelo_riego, predecir_riego
+from modulos_agricolas.deteccion_plagas import cargar_modelo_pytorch, predecir_imagen, entrenar_red_plagas, NOMBRES_CLASES
+from modulos_agricolas.monitorizacion_fenologica import analizar_evolucion_fenologica
+from modulos_agricolas.indices_vegetacion import calcular_indices_vegetacion
+from modulos_agricolas.estres_hidrico_termico import detectar_estres_hidrico
+from modulos_agricolas.prediccion_rendimiento import predecir_rendimiento
+from modulos_agricolas.prescripcion_manejo import prescribir_manejo
+from modulos_agricolas.water_stress_ml import predecir_estres_hidrico
+from modulos_agricolas.yield_prediction_analytics import predecir_rendimiento_parcelas
+
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -564,7 +583,239 @@ def ltv_clientes():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('ltv_clientes.html', archivo=archivo_generado)
 
+    @app.route('/kriging', methods=['GET', 'POST'])
+def kriging():
+    grafico_path = None
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        variable = request.form.get('variable', 'ndvi')
+        if archivo:
+            ruta = os.path.join('uploads', archivo.filename)
+            archivo.save(ruta)
+            try:
+                grafico_path = ejecutar_kriging(ruta, variable)
+                flash("Mapa generado correctamente.", "success")
+            except Exception as e:
+                flash(f"Error: {e}", "danger")
+        else:
+            flash("No se ha subido ningún archivo.", "danger")
+    return render_template('kriging.html', grafico=grafico_path)
 
+    @app.route('/biomasa3d', methods=['GET', 'POST'])
+def biomasa3d():
+    dsm_path = dtm_path = None
+    volumen_biomasa = None
+    if request.method == 'POST':
+        archivo = request.files.get('archivo_las')
+        grid_size = request.form.get('grid_size', 1, type=float)
+        if archivo:
+            ruta = os.path.join('uploads', archivo.filename)
+            archivo.save(ruta)
+            try:
+                dsm_path, dtm_path, volumen_biomasa = analizar_biomasa_las(ruta, grid_size)
+                flash(f"Biomasa analizada correctamente. Volumen estimado: {volumen_biomasa:.2f} m³", "success")
+            except Exception as e:
+                flash(f"Error: {e}", "danger")
+        else:
+            flash("No se ha subido ningún archivo LAS.", "danger")
+    return render_template('biomasa3d.html', dsm=dsm_path, dtm=dtm_path, volumen=volumen_biomasa)
+
+    @app.route('/salud_cultivo', methods=['GET', 'POST'])
+def salud_cultivo():
+    boxplot_path = resumen_path = None
+    if request.method == 'POST':
+        archivo = request.files.get('archivo_csv')
+        if archivo:
+            ruta = os.path.join('uploads', archivo.filename)
+            archivo.save(ruta)
+            try:
+                boxplot_path, resumen_path, _ = analizar_salud_cultivo(ruta)
+                flash("Análisis de salud de cultivos realizado correctamente.", "success")
+            except Exception as e:
+                flash(f"Error: {e}", "danger")
+        else:
+            flash("Debes subir un archivo CSV con los datos de índices.", "danger")
+    return render_template('salud_cultivo.html', boxplot=boxplot_path, resumen=resumen_path)
+
+    @app.route('/segmentacion_ndvi', methods=['GET', 'POST'])
+def segmentacion_ndvi():
+    mapa_html = recomendaciones = geojson = csv = None
+    if request.method == 'POST':
+        archivo_ndvi = request.files.get('archivo_ndvi')
+        archivo_parcela = request.files.get('archivo_parcela')
+        n_clusters = int(request.form.get('n_clusters', 4))
+        if archivo_ndvi and archivo_parcela:
+            ruta_ndvi = os.path.join('uploads', archivo_ndvi.filename)
+            ruta_parcela = os.path.join('uploads', archivo_parcela.filename)
+            archivo_ndvi.save(ruta_ndvi)
+            archivo_parcela.save(ruta_parcela)
+            try:
+                mapa_html, recomendaciones, geojson, csv = segmentar_parcela_ndvi(
+                    ruta_ndvi, ruta_parcela, n_clusters)
+                flash("Segmentación realizada con éxito.", "success")
+            except Exception as e:
+                flash(f"Error: {e}", "danger")
+        else:
+            flash("Debes subir ambos archivos (NDVI y GeoJSON).", "danger")
+    return render_template(
+        'segmentacion_ndvi.html',
+        mapa=mapa_html,
+        recomendaciones=recomendaciones,
+        geojson=geojson,
+        csv=csv
+    )
+
+    @app.route('/visor_parcelas', methods=['GET', 'POST'])
+def visor_parcelas():
+    mapa = None
+    if request.method == 'POST':
+        archivo_parcelas = request.files.get('archivo_parcelas')
+        if archivo_parcelas:
+            ruta_parcelas = os.path.join('uploads', archivo_parcelas.filename)
+            archivo_parcelas.save(ruta_parcelas)
+            try:
+                mapa = generar_visor_parcelas(ruta_parcelas)
+                flash("Visor generado correctamente.", "success")
+            except Exception as e:
+                flash(f"Error: {e}", "danger")
+        else:
+            flash("Debes subir un archivo GeoJSON o SHP.", "danger")
+    return render_template('visor_parcelas.html', mapa=mapa)
+
+    @app.route('/optimizacion_riego', methods=['GET', 'POST'])
+def optimizacion_riego():
+    grafico = None
+    prediccion = None
+    modelo_path = os.path.join('static/graficos', 'modelo_recomendacion_riego.pkl')
+    if request.method == 'POST':
+        # Si se sube dataset y se pide entrenar modelo
+        archivo_datos = request.files.get('datos_riego')
+        if archivo_datos:
+            ruta = os.path.join('uploads', archivo_datos.filename)
+            archivo_datos.save(ruta)
+            try:
+                modelo_path, grafico = entrenar_modelo_riego(ruta)
+                flash("Modelo de riego entrenado correctamente. Ya puedes hacer predicciones.", "success")
+            except Exception as e:
+                flash(f"Error al entrenar: {e}", "danger")
+        # Si se introduce un formulario para predecir
+        elif request.form.get('humedad_suelo'):
+            try:
+                humedad = float(request.form['humedad_suelo'])
+                temperatura = float(request.form['temperatura'])
+                precipitacion = float(request.form['precipitacion'])
+                evapotranspiracion = float(request.form['evapotranspiracion'])
+                prediccion = predecir_riego(modelo_path, humedad, temperatura, precipitacion, evapotranspiracion)
+                flash("Predicción de riego generada.", "success")
+            except Exception as e:
+                flash(f"Error al predecir: {e}", "danger")
+    return render_template('optimizacion_riego.html', grafico=grafico, prediccion=prediccion)
+
+    @app.route('/deteccion_plagas', methods=['GET', 'POST'])
+def deteccion_plagas():
+    prediccion = None
+    imagen_cargada = None
+    if request.method == 'POST':
+        # Entrenamiento (opcional, subir carpeta de imagenes y CSV)
+        if 'labels_csv' in request.files and request.files['labels_csv']:
+            labels_csv = request.files['labels_csv']
+            carpeta_imgs = request.form.get('carpeta_imgs', 'imagenes_dron') # default
+            ruta_labels = os.path.join('uploads', labels_csv.filename)
+            labels_csv.save(ruta_labels)
+            pesos_path = entrenar_red_plagas(carpeta_imgs, ruta_labels)
+            flash("Modelo de plagas entrenado y guardado.", "success")
+        # Predicción (subida de imagen individual)
+        elif 'imagen_prediccion' in request.files and request.files['imagen_prediccion']:
+            imagen = request.files['imagen_prediccion']
+            ruta_img = os.path.join('uploads', imagen.filename)
+            imagen.save(ruta_img)
+            pesos_modelo = 'static/graficos/modelo_plagas_enfermedades.pth'
+            try:
+                modelo = cargar_modelo_pytorch(pesos_modelo)
+                resultado = predecir_imagen(modelo, ruta_img)
+                prediccion = resultado
+                imagen_cargada = '/' + ruta_img
+                flash("Predicción realizada correctamente.", "success")
+            except Exception as e:
+                flash(f"Error al predecir: {e}", "danger")
+    return render_template('deteccion_plagas.html', prediccion=prediccion, imagen_cargada=imagen_cargada)
+
+    @app.route('/monitorizacion_fenologica', methods=['GET', 'POST'])
+def monitorizacion_fenologica():
+    brotes = None
+    imagenes = []
+    resumen = None
+    if request.method == 'POST':
+        carpeta_ndvi = request.form.get('carpeta_ndvi', 'imagenes_ndvi_temporal')
+        umbral = float(request.form.get('umbral_brote', 0.08))
+        df, df_brotes, img_paths = analizar_evolucion_fenologica(carpeta_ndvi, umbral_brote=umbral)
+        if df is not None:
+            resumen = df.head(10).to_html(classes="table table-striped", index=False)
+            brotes = df_brotes[['fecha','parcela','ndvi_delta']].to_html(classes="table table-bordered", index=False)
+            imagenes = img_paths
+        else:
+            flash("No se encontraron datos para analizar.", "warning")
+    return render_template('monitorizacion_fenologica.html', brotes=brotes, imagenes=imagenes, resumen=resumen)
+
+    @app.route('/indices_vegetacion', methods=['GET', 'POST'])
+def indices_vegetacion():
+    resumen = None
+    imagenes = []
+    if request.method == 'POST':
+        carpeta_datos = request.form.get('carpeta_datos', 'imagenes_multiespectrales/')
+        df_indices, img_indices = calcular_indices_vegetacion(carpeta_datos)
+        if df_indices is not None:
+            resumen = df_indices.to_html(classes="table table-striped", index=False)
+            imagenes = img_indices
+        else:
+            flash("No se encontraron datos de índices vegetativos en la ruta indicada.", "warning")
+    return render_template('indices_vegetacion.html', resumen=resumen, imagenes=imagenes)
+
+    @app.route('/estres_hidrico', methods=['GET', 'POST'])
+def estres_hidrico():
+    resultado = None
+    if request.method == 'POST':
+        ruta_termica = request.form.get('ruta_termica', 'imagenes_termicas/parcela1_2024-05-20.tif')
+        ruta_parcelas = request.form.get('ruta_parcelas', 'parcelas.geojson')
+        limite_critico = float(request.form.get('limite_critico', 30.0))
+        cwsi_critico = float(request.form.get('cwsi_critico', 0.7))
+        resultado = detectar_estres_hidrico(
+            ruta_termica, ruta_parcelas, limite_critico, cwsi_critico
+        )
+    return render_template('estres_hidrico.html', resultado=resultado)
+
+    @app.route('/prediccion_rendimiento', methods=['GET', 'POST'])
+def prediccion_rendimiento():
+    resultado = None
+    if request.method == 'POST':
+        archivo = request.form.get('archivo_datos', 'datos_rendimiento_parcelas.csv')
+        # Aquí podrías dejar que el usuario elija features/objetivo en el formulario avanzado.
+        resultado = predecir_rendimiento(archivo)
+    return render_template('prediccion_rendimiento.html', resultado=resultado)
+
+    @app.route('/prescripcion_manejo', methods=['GET', 'POST'])
+def prescripcion_manejo():
+    resultado = None
+    if request.method == 'POST':
+        archivo = request.form.get('archivo_csv', 'zonas_analizadas.csv')
+        resultado = prescribir_manejo(archivo_csv=archivo)
+    return render_template('prescripcion_manejo.html', resultado=resultado)
+
+    @app.route('/water_stress_ml', methods=['GET', 'POST'])
+def water_stress_ml():
+    resultado = None
+    if request.method == 'POST':
+        archivo = request.form.get('archivo_csv', 'dataset_estres_hidrico_multianual.csv')
+        resultado = predecir_estres_hidrico(archivo_csv=archivo)
+    return render_template('water_stress_ml.html', resultado=resultado)
+
+    @app.route('/yield_prediction_analytics', methods=['GET', 'POST'])
+def yield_prediction_analytics():
+    resultado = None
+    if request.method == 'POST':
+        archivo = request.form.get('archivo_csv', 'datos_rendimiento_parcelas.csv')
+        resultado = predecir_rendimiento_parcelas(archivo_csv=archivo)
+    return render_template('yield_prediction_analytics.html', resultado=resultado)
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
