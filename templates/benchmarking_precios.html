@@ -1,16 +1,72 @@
 {% extends "base.html" %}
+{% block title %}Benchmarking de Precios | Data Viva Analytics{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Benchmarking de Precios</h2>
-  <form method="post" enctype="multipart/form-data">
-    <label>Archivo de Precios Propios (.csv):</label>
+<section class="download-section container" style="max-width:750px; margin-top:3rem;">
+  <h2 class="section-title">Benchmarking de Precios</h2>
+  
+  <!-- EXPLICACIÓN Y BENEFICIO -->
+  <div style="margin-bottom: 1.4rem; color:var(--primary); font-size:1.15rem;">
+    <p>
+      <b>¿Quieres saber si tus precios son competitivos en el mercado?</b><br>
+      Este módulo compara tus precios con los de la competencia, ayudándote a:
+    </p>
+    <ul style="margin-left:1.5rem; margin-bottom:0.6rem;">
+      <li>Detectar oportunidades para <b>subir márgenes</b> o ajustar precios al alza/baja.</li>
+      <li>Justificar tus precios en negociaciones o ante la dirección.</li>
+      <li>Visualizar, en euros y porcentaje, cuánto podrías ganar <b>optimizando tu estrategia de precios</b>.</li>
+    </ul>
+    <p style="color:#3a764a; font-weight:600;">
+      <i>Resultados típicos: Mejorar tu margen neto entre un 3% y un 12% anual solo ajustando precios a la media de tu sector.</i>
+    </p>
+  </div>
+  
+  <!-- REQUISITOS Y CARGA DE ARCHIVOS -->
+  <form method="post" enctype="multipart/form-data" style="margin-bottom:1.8rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.13); padding:1.7rem 1.2rem;">
+    <h4 style="margin-bottom:0.7rem;">¿Qué archivos necesitas?</h4>
+    <ul style="margin-left:1.3rem; color:#444;">
+      <li><b>Archivo de Precios Propios (.csv):</b> Debe tener al menos estas columnas:<br>
+        <span style="color:var(--secondary);font-size:0.98em;">
+          <code>producto</code> | <code>precio</code>
+        </span>
+      </li>
+      <li><b>Archivo de Precios Competencia (.csv):</b> Mismo formato: 
+        <span style="color:var(--secondary);font-size:0.98em;">
+          <code>producto</code> | <code>precio</code>
+        </span>
+      </li>
+    </ul>
+    <p style="color:#b9453c; font-size:1.01em;">
+      <b>Asegúrate de que los nombres de producto coinciden exactamente</b> en ambos archivos para una comparación fiable. Si tienes dudas, consulta el <a href="{{ url_for('contacto') }}">contacto</a> o revisa la demo.
+    </p>
+    <label style="font-weight:600;">Archivo de Precios Propios (.csv):</label>
     <input type="file" name="archivo_propio" accept=".csv" required>
     <br><br>
-    <label>Archivo de Precios Competencia (.csv):</label>
+    <label style="font-weight:600;">Archivo de Precios Competencia (.csv):</label>
     <input type="file" name="archivo_competencia" accept=".csv" required>
     <br><br>
-    <button type="submit">Comparar</button>
+    <button type="submit" class="cta-button" style="width:100%;">Comparar precios y descargar informe</button>
   </form>
+
+  <!-- INSTRUCCIONES DE RESULTADO -->
+  <div style="background:#fff7e6; border-radius:1rem; box-shadow:0 1px 8px rgba(44,62,80,0.10); padding:1rem 1.3rem; margin-bottom:1.2rem; color:#46452d;">
+    <h4>¿Cómo interpretar el informe?</h4>
+    <ul style="margin-left:1.3rem;">
+      <li><b>Columna “Diferencia (€)”</b>: positivo si puedes subir precio, negativo si vendes por debajo del mercado.</li>
+      <li><b>Columna “% sobre competencia”</b>: te ayuda a ver tu posición. <br>
+        <span style="color:#22671b;"><b>Por encima del 0%</b></span>: tus precios son más altos; <span style="color:#b94c1b;"><b>por debajo</b></span>: más bajos.</li>
+      <li><b>“Oportunidad de mejora”</b>: te señala productos donde puedes ganar más solo igualando la media de tu sector.</li>
+    </ul>
+    <p>El informe está listo para compartir con tu equipo, usar en Power BI o presentar en reuniones.</p>
+  </div>
+  
+  <!-- MENSAJE DE DEMO Y CTA DE CONTACTO -->
+  <div style="margin-bottom:1rem;">
+    <span style="color:#8a6338;">¿Quieres probar una demo gratis? Sube tus archivos y descarga un ejemplo. <br>
+    ¿Quieres un análisis avanzado o integrado en tu ERP? <a href="{{ url_for('contacto') }}" style="color:#b9843c;">Contáctanos</a> para una consultoría sin compromiso.</span>
+  </div>
+  
+  <!-- FLASH MESSAGES -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul class="flashes">
@@ -20,11 +76,18 @@
       </ul>
     {% endif %}
   {% endwith %}
+
+  <!-- DESCARGA DE RESULTADO -->
   {% if archivo %}
-    <div style="margin-top: 1.2rem;">
-      <h3>Descarga tu comparativa de precios:</h3>
-      <a href="{{ url_for('static', filename=archivo.split('static/')[1]) }}" download>Descargar Excel</a>
+    <div style="margin-top: 1.2rem; background:#eafce9; border-radius:1rem; padding:1rem;">
+      <h3 style="color:var(--primary);">¡Informe generado!</h3>
+      <a href="{{ url_for('static', filename=archivo.split('static/')[1]) }}" download class="cta-button" style="width:100%;">Descargar informe Excel</a>
+      <p style="font-size:0.96em; color:#3a764a;">Abre el informe y revisa producto a producto tus oportunidades. <br> 
+        ¿Necesitas ayuda interpretando el informe? <a href="{{ url_for('contacto') }}">Escríbenos</a>.
+      </p>
     </div>
   {% endif %}
-</div>
+
+</section>
 {% endblock %}
+
