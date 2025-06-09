@@ -1,23 +1,45 @@
 {% extends 'base.html' %}
-{% block content %}
-<h2>Predicción y Alerta de Estrés Hídrico (ML)</h2>
-<form method="post" style="margin-bottom:2rem;">
-    <label>Ruta archivo de datos (CSV):</label>
-    <input type="text" name="archivo_csv" value="dataset_estres_hidrico_multianual.csv" required>
-    <br>
-    <button type="submit">Predecir y Generar Alertas</button>
-</form>
+{% block title %}Predicción y Alerta de Estrés Hídrico · Data Viva{% endblock %}
 
-{% if resultado %}
-  <div class="alert alert-info">
-    {% if resultado['num_alertas'] > 0 %}
-      <b>{{ resultado['num_alertas'] }}</b> zonas o parcelas presentan riesgo de estrés hídrico.<br>
-      <a href="/{{ resultado['output_csv'] }}" download>
-        Descargar CSV con zonas/parcelas en alerta
-      </a>
-    {% else %}
-      ¡No se detectaron zonas críticas de estrés hídrico!
+{% block content %}
+<section class="dashboard-section container" style="max-width:700px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Predicción y Alerta de Estrés Hídrico (ML)</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.12rem;">
+        Sube tus datos históricos (<strong>CSV</strong>) y detecta <strong>zonas en riesgo de estrés hídrico</strong> antes de que se traduzcan en pérdidas.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Anticípate y ahorra hasta un <b>25%</b> en pérdidas por sequía y riego ineficiente.<br>
+            Ideal para técnicos de campo, ingenierías agrarias, cooperativas, bodegas y grandes fincas.
+        </span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.01rem;">
+        <li><b>Requisitos:</b> Archivo <code>.csv</code> con columnas de <b>parcela, fecha, humedad, temperatura, NDVI</b> u otras variables climáticas/hídricas.</li>
+        <li><b>Recomendación:</b> Incluye el mayor historial temporal posible para mejores resultados.</li>
+    </ul>
+    <form method="post" style="margin-bottom:2rem;max-width:420px;background:var(--background);border-radius:1.2rem;box-shadow:0 2px 12px rgba(222,191,176,0.09);padding:2rem 1.2rem;">
+        <label>Ruta archivo de datos (CSV):</label>
+        <input type="text" name="archivo_csv" value="dataset_estres_hidrico_multianual.csv" required>
+        <button type="submit" class="cta-button btn-details" style="margin-top:1.2rem;width:100%;">Predecir y Generar Alertas</button>
+    </form>
+    {% if resultado %}
+      <div class="alert alert-info" style="font-size:1.07rem;">
+        {% if resultado['num_alertas'] > 0 %}
+          <b>{{ resultado['num_alertas'] }}</b> zonas o parcelas presentan <b>riesgo de estrés hídrico</b>.<br>
+          <a href="/{{ resultado['output_csv'] }}" download>
+            Descargar CSV con zonas/parcelas en alerta
+          </a>
+        {% else %}
+          ¡No se detectaron zonas críticas de estrés hídrico!
+        {% endif %}
+      </div>
+      <div class="info-panel" style="background:var(--background);border-radius:1rem;box-shadow:0 2px 8px rgba(44,62,80,0.06);padding:1rem 1.2rem;font-size:1.01rem;color:var(--primary);margin-bottom:1.6rem;">
+          <b>¿Cómo interpretar el resultado?</b><br>
+          - Las zonas identificadas requieren revisión urgente de riego y posible actuación.<br>
+          - Puedes exportar el CSV y compartirlo con el equipo técnico.<br>
+          - Aplica la alerta en sistemas de gestión o mapeo para visualización.
+      </div>
     {% endif %}
-  </div>
-{% endif %}
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
+    </div>
+</section>
 {% endblock %}
