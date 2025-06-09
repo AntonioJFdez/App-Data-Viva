@@ -1,14 +1,35 @@
 {% extends "base.html" %}
+{% block title %}Fidelización y Segmentación de Clientes · Data Viva{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Fidelización y Segmentos de Clientes</h2>
-  <form method="post" enctype="multipart/form-data">
-    <div>
-      <label>Sube tu dataset (nombre, fecha_alta, num_pólizas, siniestros_12m):</label>
+<section class="dashboard-section container" style="max-width:750px; margin-top:3rem;">
+  <h2 class="corp-title center"><b>Fidelización y Segmentos de Clientes</b></h2>
+  <p class="center" style="color:var(--primary); font-size:1.13rem;">
+    Calcula automáticamente <b>segmentos de fidelización</b> para tu cartera y detecta clientes con mayor valor, potencial de crecimiento y riesgo de abandono.<br>
+    <span style="color:var(--tertiary);font-size:1rem;">
+      Utiliza estos insights para personalizar campañas, anticipar bajas y <b>mejorar tu retención hasta un 18-22%</b>.
+    </span>
+  </p>
+  <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+    <li><b>Requisitos:</b> Sube un archivo <code>.csv</code> con las columnas: <b>nombre</b>, <b>fecha_alta</b>, <b>num_pólizas</b>, <b>siniestros_12m</b> (puedes añadir más columnas para enriquecer el análisis).</li>
+    <li>El formato de fecha debe ser estándar (ej. <code>2021-05-21</code>).</li>
+    <li>Puedes cargar cualquier tamaño de dataset; los resultados se muestran y pueden exportarse.</li>
+  </ul>
+  <form method="post" enctype="multipart/form-data" style="margin-bottom:2.1rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 12px rgba(44,62,80,0.08); padding:2rem 1.2rem;">
+    <div style="margin-bottom:1.1rem;">
+      <label><b>Sube tu dataset:</b> <span style="color:var(--tertiary);font-size:0.97rem;">(nombre, fecha_alta, num_pólizas, siniestros_12m)</span></label>
       <input type="file" name="dataset" required>
     </div>
-    <button type="submit">Calcular Segmentos</button>
+    <button type="submit" class="cta-button" style="width:100%;">Calcular Segmentos</button>
   </form>
+  
+  <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+      <b>¿Cómo interpretar los resultados?</b><br>
+      - Cada cliente queda clasificado por nivel de fidelización y riesgo de abandono.<br>
+      - Utiliza los segmentos para diseñar campañas personalizadas o activar acciones de retención.<br>
+      - El CSV descargable contiene todos los segmentos y recomendaciones para tu equipo.
+  </div>
+
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul class="flashes">
@@ -20,11 +41,12 @@
   {% endwith %}
 
   {% if output_path %}
-    <a href="{{ url_for('static', filename='graficos/clientes_segmentados.csv') }}" download class="cta-button">Descargar CSV Segmentado</a>
+    <a href="{{ url_for('static', filename='graficos/clientes_segmentados.csv') }}" download class="cta-button" style="margin-bottom:1.3rem;">Descargar CSV Segmentado</a>
   {% endif %}
   {% if tabla_html %}
     <h4>Primeros Clientes Segmentados</h4>
-    {{ tabla_html|safe }}
+    <div style="overflow-x:auto;">{{ tabla_html|safe }}</div>
   {% endif %}
-</div>
+</section>
 {% endblock %}
+
