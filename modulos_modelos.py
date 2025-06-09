@@ -6,20 +6,26 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, roc_auc_score
+import joblib
+from datetime import datetime
+import logging
 import os
+from textblob import TextBlob
+from lifelines import KaplanMeierFitter
 
+# --------- Segmentación de Clientes ----------
 def segmentacion_clientes(df, columnas_segmento, n_clusters=4, output_dir="static/graficos"):
-    # Preprocesamiento
     df_segmento = df[columnas_segmento].copy()
     df_segmento.fillna(df_segmento.mean(), inplace=True)
     scaler = StandardScaler()
     datos_normalizados = scaler.fit_transform(df_segmento)
 
-    # KMeans clustering
     modelo = KMeans(n_clusters=n_clusters, random_state=42)
     etiquetas = modelo.fit_predict(datos_normalizados)
 
-    # Visualización con PCA
     pca = PCA(n_components=2)
     componentes = pca.fit_transform(datos_normalizados)
     if not os.path.exists(output_dir):
@@ -35,19 +41,10 @@ def segmentacion_clientes(df, columnas_segmento, n_clusters=4, output_dir="stati
     plt.savefig(grafico_path)
     plt.close()
 
-    # Devuelve el DataFrame original con segmento y la ruta del gráfico generado
     df['segmento'] = etiquetas
     return df, grafico_path
 
-# modulos_modelos.py (scoring_leads)
-
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report
-import joblib
-import os
-
+# --------- Scoring Leads ----------
 def scoring_leads(df, target_col='convertido', output_dir="static/graficos"):
     X = df.drop(columns=[target_col])
     y = df[target_col].astype(int)
@@ -56,12 +53,9 @@ def scoring_leads(df, target_col='convertido', output_dir="static/graficos"):
     modelo.fit(X_train, y_train)
     y_pred = modelo.predict(X_test)
     reporte = classification_report(y_test, y_pred, output_dict=True)
-
-    # Aplicar scoring a todo el DataFrame
     df['score'] = modelo.predict_proba(X)[:, 1]
     df_ordenado = df.sort_values(by='score', ascending=False)
 
-    # Exportar resultados
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     output_csv = os.path.join(output_dir, "leads_score.csv")
@@ -72,45 +66,27 @@ def scoring_leads(df, target_col='convertido', output_dir="static/graficos"):
     except Exception as e:
         pass
 
-    # Guardar modelo
     modelo_path = os.path.join(output_dir, "modelo_scoring_leads.pkl")
     joblib.dump(modelo, modelo_path)
     return output_csv, output_xlsx, reporte
 
-    # modulos_modelos.py (añade después del scoring_leads)
-
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, roc_auc_score
-import joblib
-import os
-
+# --------- Predicción Churn ----------
 def prediccion_churn(df, columnas=None, target_col='churned', output_dir="static/graficos"):
-    """
-    Entrena un modelo para predecir churn de clientes, exporta reporte y resultados.
-    """
     if columnas is None:
-        # Por defecto columnas típicas para churn
         columnas = ['edad', 'prima_anual', 'num_pólizas', 'score_interacción']
     if target_col not in df.columns:
         raise ValueError(f"Falta la columna objetivo '{target_col}'.")
-
     X = df[columnas]
     y = df[target_col].astype(int)
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, stratify=y, test_size=0.2, random_state=42
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
     modelo = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
     modelo.fit(X_train, y_train)
-
     preds = modelo.predict(X_test)
     probas = modelo.predict_proba(X_test)[:, 1]
     reporte_dict = classification_report(y_test, preds, output_dict=True)
     roc_auc = roc_auc_score(y_test, probas)
     reporte_dict['roc_auc'] = {'f1-score': roc_auc}
 
-    # Guardar reporte y scoring
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     reporte_csv = os.path.join(output_dir, "reporte_churn.csv")
@@ -122,30 +98,18 @@ def prediccion_churn(df, columnas=None, target_col='churned', output_dir="static
     except Exception as e:
         pass
 
-    # Añade score de churn a todo el DataFrame
     df['score_churn'] = modelo.predict_proba(df[columnas])[:, 1]
     df.to_csv(predicciones_csv, index=False)
 
-    # Guardar modelo
     modelo_path = os.path.join(output_dir, "modelo_churn.pkl")
     joblib.dump(modelo, modelo_path)
 
     return reporte_csv, reporte_xlsx, predicciones_csv, reporte_dict
 
-    # modulos_modelos.py (añadir después de prediccion_churn)
-
-import pandas as pd
-import os
-import logging
-
+# --------- Panel de Rendimiento de Agentes ----------
 def panel_rendimiento_agentes(df, output_dir="static/graficos"):
-    """
-    Calcula KPIs y genera el panel de rendimiento de agentes.
-    Devuelve el path del panel exportado.
-    """
     if 'agente' not in df.columns:
         raise ValueError("El dataset debe tener una columna 'agente'.")
-
     resumen = df.groupby('agente').agg({
         'clientes_contactados': 'sum',
         'ventas_cerradas': 'sum',
@@ -153,11 +117,8 @@ def panel_rendimiento_agentes(df, output_dir="static/graficos"):
         'satisfaccion_cliente': 'mean',
         'tiempo_respuesta_horas': 'mean'
     }).reset_index()
-
     resumen['conversion_rate'] = (resumen['ventas_cerradas'] / resumen['clientes_contactados']).round(2)
-    resumen['cross_sell_ratio'] = (
-        resumen['ventas_cruzadas'] / resumen['ventas_cerradas']
-    ).replace([float('inf'), float('nan')], 0).round(2)
+    resumen['cross_sell_ratio'] = (resumen['ventas_cruzadas'] / resumen['ventas_cerradas']).replace([float('inf'), float('nan')], 0).round(2)
     resumen['tiempo_respuesta_horas'] = resumen['tiempo_respuesta_horas'].round(1)
     resumen['nps_aproximado'] = (resumen['satisfaccion_cliente'] * 10).clip(upper=100).round(0)
 
@@ -165,29 +126,16 @@ def panel_rendimiento_agentes(df, output_dir="static/graficos"):
         os.makedirs(output_dir)
     panel_csv = os.path.join(output_dir, "panel_agentes.csv")
     resumen.to_csv(panel_csv, index=False)
-
     return panel_csv, resumen
 
-    # modulos_modelos.py (añadir después del panel de agentes)
-import pandas as pd
-import os
-import logging
-import matplotlib.pyplot as plt
-
+# --------- Pricing Dinámico ----------
 def pricing_dinamico(df, margen_deseado=0.25, output_dir="static/graficos"):
-    """
-    Calcula precios óptimos y simula impacto de márgenes sobre la ganancia total.
-    Devuelve path del CSV y path de la gráfica generada.
-    """
     if not all(col in df.columns for col in ['coste', 'elasticidad', 'volumen_estimado']):
         raise ValueError("El dataset debe incluir las columnas: 'coste', 'elasticidad', 'volumen_estimado'.")
-
     df['precio_objetivo'] = df['coste'] * (1 + margen_deseado)
     df['precio_ajustado'] = df['precio_objetivo'] * (1 - df['elasticidad'] * 0.1)
     df['precio_ajustado'] = df['precio_ajustado'].round(2)
     df['ganancia_estimada'] = (df['precio_ajustado'] - df['coste']) * df['volumen_estimado']
-
-    # Simulación de distintos márgenes
     simulacion = []
     for margen in [0.10, 0.20, 0.30, 0.40]:
         temp = df.copy()
@@ -197,13 +145,10 @@ def pricing_dinamico(df, margen_deseado=0.25, output_dir="static/graficos"):
         simulacion.append((margen, round(total, 2)))
     sim_df = pd.DataFrame(simulacion, columns=['margen', 'ganancia_total'])
 
-    # Crear carpeta de salida si no existe
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-
     csv_path = os.path.join(output_dir, "precios_optimos.csv")
     graf_path = os.path.join(output_dir, "simulacion_ganancias.png")
-
     df.to_csv(csv_path, index=False)
     sim_df.plot(x='margen', y='ganancia_total', kind='line', marker='o', title='Simulación de Ganancia por Margen')
     plt.xlabel('Margen (%)')
@@ -215,22 +160,12 @@ def pricing_dinamico(df, margen_deseado=0.25, output_dir="static/graficos"):
 
     return csv_path, graf_path, df, sim_df
 
-    # modulos_modelos.py (añadir después de pricing_dinamico)
-import pandas as pd
-from datetime import datetime
-import logging
-import os
-
+# --------- Marketing Personalizado ----------
 def marketing_personalizado(df, output_dir="static/graficos"):
-    """
-    Segmenta clientes y genera mensajes personalizados para campañas de cumpleaños, renovación y siniestros recientes.
-    Devuelve el DataFrame de mensajes y el path al archivo CSV exportado.
-    """
     hoy = datetime.today()
     df['dias_para_renovar'] = (df['fecha_renovacion'] - hoy).dt.days
     df['es_cumple'] = df['fecha_nacimiento'].apply(lambda x: x.day == hoy.day and x.month == hoy.month)
     df['siniestro_reciente'] = (hoy - df['fecha_siniestro']).dt.days <= 30
-
     campañas = []
     for _, row in df.iterrows():
         if row['es_cumple']:
@@ -254,7 +189,6 @@ def marketing_personalizado(df, output_dir="static/graficos"):
                 "asunto": "¿Cómo estás tras tu siniestro?",
                 "mensaje": f"{row['nombre']}, queremos saber cómo estás y ayudarte en lo que necesites tras tu siniestro reciente."
             })
-
     df_mensajes = pd.DataFrame(campañas)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -263,16 +197,8 @@ def marketing_personalizado(df, output_dir="static/graficos"):
     logging.info(f"Mensajes exportados en: {output_path}")
     return df_mensajes, output_path
 
-    import pandas as pd
-from datetime import datetime
-import logging
-import os
-
+# --------- Fidelización Clientes ----------
 def fidelizacion_clientes(df, output_dir="static/graficos"):
-    """
-    Calcula puntos de fidelización y segmenta clientes en Bronce, Plata, Oro.
-    Devuelve el DataFrame con segmentos y el path al archivo CSV exportado.
-    """
     hoy = datetime.today()
     df['antiguedad_años'] = (hoy - df['fecha_alta']).dt.days // 365
     df['puntos'] = (
@@ -298,29 +224,18 @@ def fidelizacion_clientes(df, output_dir="static/graficos"):
     logging.info(f"Clientes exportados a: {output_path}")
     return df, output_path
 
-    import pandas as pd
-import logging
-from textblob import TextBlob
-
+# --------- Análisis Sentimiento y NPS ----------
 def analisis_sentimiento_nps(df, output_dir="static/graficos"):
-    """
-    Analiza el sentimiento de los comentarios y calcula NPS.
-    Exporta resultados CSV y score NPS.
-    """
     if 'comentario' not in df.columns or 'nps' not in df.columns:
         raise ValueError("El dataset debe contener las columnas 'comentario' y 'nps'.")
-
-    # Sentimiento
     df['sentimiento'] = df['comentario'].apply(lambda x: TextBlob(str(x)).sentiment.polarity)
     df['estado'] = df['sentimiento'].apply(lambda x: 'Negativo' if x < -0.1 else ('Positivo' if x > 0.1 else 'Neutral'))
 
-    # NPS
     promotores = df[df['nps'] >= 9].shape[0]
     detractores = df[df['nps'] <= 6].shape[0]
     total = df.shape[0]
     nps_score = ((promotores - detractores) / total) * 100 if total > 0 else 0
 
-    # Exportar
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     csv_out = os.path.join(output_dir, "feedback_sentimiento.csv")
@@ -331,64 +246,40 @@ def analisis_sentimiento_nps(df, output_dir="static/graficos"):
     logging.info(f"Feedback exportado: {csv_out} | NPS: {nps_score}")
     return df, nps_score, csv_out, txt_out
 
-    import pandas as pd
-import logging
-
+# --------- Análisis de Siniestros ----------
 def analizar_siniestros(df, output_dir="static/graficos"):
-    """
-    Analiza tiempos de gestión de siniestros, detecta cuellos de botella y sugiere automatización.
-    """
     if not {'recepcion_dias', 'revision_dias', 'resolucion_dias'} <= set(df.columns):
         raise ValueError("El dataset debe contener las columnas: 'recepcion_dias', 'revision_dias', 'resolucion_dias'.")
-    
-    # Sumar los tiempos de gestión
     df['total_dias'] = df[['recepcion_dias', 'revision_dias', 'resolucion_dias']].sum(axis=1)
-    
-    # Calcular cuellos de botella (promedio por etapa)
     cuellos = df[['recepcion_dias', 'revision_dias', 'resolucion_dias']].mean().sort_values(ascending=False)
     logging.info(f"Cuellos de botella: {cuellos}")
 
-    # Generar recomendaciones (umbral de tiempo 5 días)
     recomendaciones = {}
     for etapa, tiempo_medio in cuellos.items():
         if tiempo_medio > 5:
             recomendaciones[etapa] = "Automatizar con RPA (ej. correos, formularios, alertas)"
         else:
             recomendaciones[etapa] = "Mantener gestión manual actual"
-    
-    # Exportar resultados
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    
-    # Exportar cuellos de botella
     cuellos_out = os.path.join(output_dir, "cuellos_de_botella.csv")
     cuellos.to_csv(cuellos_out)
-    
-    # Exportar recomendaciones
     recomendaciones_out = os.path.join(output_dir, "recomendaciones_rpa.csv")
     pd.DataFrame(list(recomendaciones.items()), columns=["Etapa", "Recomendacion"]).to_csv(recomendaciones_out, index=False)
 
     logging.info(f"Resultados exportados a: {cuellos_out} y {recomendaciones_out}")
-    
     return df, cuellos, recomendaciones
 
-    import pandas as pd
-import logging
-from datetime import datetime
-
+# --------- Priorizar Clientes Dormidos ----------
 def priorizar_clientes_dormidos(df, output_dir="static/graficos"):
-    """
-    Calcula un score de reactivación para clientes inactivos según inactividad y valor potencial.
-    """
     columnas = ['cliente_id', 'nombre', 'meses_ultimo_contacto', 'prima_media', 'num_productos']
     if not all(col in df.columns for col in columnas):
         raise ValueError(f"El dataset debe tener las columnas: {columnas}")
-
     df['meses_inactivos'] = df['meses_ultimo_contacto']
     df['valor'] = df['prima_media'] * df['num_productos']
     df['score_reactivacion'] = df['meses_inactivos'] * df['valor']
     df_ordenado = df.sort_values(by='score_reactivacion', ascending=False)
-
     fecha = datetime.now().strftime('%Y%m%d')
     filename = f"{output_dir}/clientes_priorizados_{fecha}.xlsx"
     try:
@@ -400,17 +291,10 @@ def priorizar_clientes_dormidos(df, output_dir="static/graficos"):
     except Exception as e:
         logging.error(f"Error al exportar archivo: {e}")
         raise
-
     return df_ordenado, filename
 
-    import pandas as pd
-import logging
-from datetime import datetime
-
+# --------- Digitalizar Renovaciones ----------
 def digitalizar_renovaciones(df, dias_ventana=30, output_dir="static/graficos"):
-    """
-    Detecta pólizas próximas a vencer y genera mensajes recordatorio personalizados.
-    """
     if 'fecha_vencimiento' not in df.columns or 'nombre' not in df.columns or 'numero_poliza' not in df.columns or 'email' not in df.columns:
         raise ValueError("El dataset debe tener las columnas: fecha_vencimiento, nombre, numero_poliza, email")
     df['fecha_vencimiento'] = pd.to_datetime(df['fecha_vencimiento'])
@@ -430,13 +314,8 @@ def digitalizar_renovaciones(df, dias_ventana=30, output_dir="static/graficos"):
     logging.info(f"Recordatorios de renovación exportados a {filename}")
     return renovaciones[['email', 'nombre', 'mensaje']], filename
 
-    import pandas as pd
-import logging
-
+# --------- Panel Integral KPIs ----------
 def calcular_panel_kpis(df, output_dir="static/graficos"):
-    """
-    Calcula los principales KPIs aseguradores y exporta un panel resumen a CSV.
-    """
     columnas = ['prima_emitida', 'poliza_id', 'cliente_id', 'estado', 'renovada', 'es_renovable',
                 'nps', 'siniestros_pagados', 'producto', 'comision']
     if not all(col in df.columns for col in columnas):
@@ -466,15 +345,10 @@ def calcular_panel_kpis(df, output_dir="static/graficos"):
     logging.info(f"Panel de KPIs exportado a {filename}")
     return panel_kpi, filename
 
-    import pandas as pd
-import logging
-from datetime import datetime
-
+# --------- Matriz Perfil-Producto y Correlaciones ----------
 def analizar_perfiles_productos(df):
-    """Genera la matriz de frecuencia y matriz de correlación entre productos."""
     matriz = pd.crosstab(index=df['perfil_cliente'], columns=df['producto'])
     correlaciones = matriz.corr()
-    # Nombres de archivos con timestamp para no sobrescribir
     fecha = datetime.now().strftime('%Y%m%d_%H%M%S')
     archivo_matriz = f"static/graficos/matriz_perfil_producto_{fecha}.xlsx"
     archivo_corr = f"static/graficos/correlaciones_producto_{fecha}.xlsx"
@@ -482,10 +356,7 @@ def analizar_perfiles_productos(df):
     correlaciones.to_excel(archivo_corr)
     return archivo_matriz, archivo_corr
 
-    import pandas as pd
-import logging
-from datetime import datetime
-
+# --------- Detectar Cross-Sell ----------
 def detectar_cross_sell(df):
     matriz = df.pivot_table(index='cliente_id', columns='producto', aggfunc='size', fill_value=0)
     matriz['num_productos'] = matriz.sum(axis=1)
@@ -496,8 +367,9 @@ def detectar_cross_sell(df):
     candidatos.to_excel(nombre_archivo, index=False)
     return nombre_archivo, len(candidatos)
 
-    def comparar_precios(coare, competencia):
-    df = coare.merge(competencia, on='producto', suffixes=('_propio', '_competencia'))
+# --------- Comparar Precios Benchmarking (GENÉRICO) ----------
+def comparar_precios(df_propios, df_competencia):
+    df = df_propios.merge(df_competencia, on='producto', suffixes=('_propio', '_competencia'))
     df['diferencia_absoluta'] = df['precio_propio'] - df['precio_competencia']
     df['diferencia_relativa'] = ((df['precio_propio'] - df['precio_competencia']) / df['precio_competencia']).round(3)
     fecha = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -505,9 +377,7 @@ def detectar_cross_sell(df):
     df.to_excel(nombre_archivo, index=False)
     return nombre_archivo, len(df)
 
-    from lifelines import KaplanMeierFitter
-import numpy as np
-
+# --------- Calcular LTV Clientes ----------
 def calcular_ltv(df):
     df['fecha_compra'] = pd.to_datetime(df['fecha_compra'])
     ultimo_dia = df['fecha_compra'].max()
@@ -530,3 +400,4 @@ def calcular_ltv(df):
     nombre_archivo = f"static/graficos/ltv_clientes_{fecha}.xlsx"
     agrupado.reset_index().to_excel(nombre_archivo, index=False)
     return nombre_archivo, agrupado.shape[0]
+
