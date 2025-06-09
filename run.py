@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from modulos_modelos import segmentacion_clientes
 import os
+from modulos_modelos import scoring_leads
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -189,6 +190,28 @@ def segmentacion():
         except Exception as e:
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('segmentacion.html')
+
+    @app.route('/scoring-leads', methods=['GET', 'POST'])
+def scoring_leads_view():
+    """
+    Scoring y priorización de leads con Random Forest.
+    """
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        target_col = request.form.get('target_col', 'convertido')
+        try:
+            df = cargar_dataset(archivo)
+            output_csv, output_xlsx, reporte = scoring_leads(df, target_col=target_col)
+            flash(resultado_mensaje("¡Scoring de leads realizado con éxito! Descarga el ranking y consulta el reporte."), "success")
+            return render_template(
+                'scoring_leads.html',
+                descargar_csv=output_csv,
+                descargar_xlsx=output_xlsx,
+                reporte=reporte
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('scoring_leads.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
