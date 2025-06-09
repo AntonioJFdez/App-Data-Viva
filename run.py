@@ -7,6 +7,7 @@ from modulos_modelos import segmentacion_clientes
 import os
 from modulos_modelos import scoring_leads
 from modulos_modelos import prediccion_churn
+from modulos_modelos import panel_rendimiento_agentes
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
