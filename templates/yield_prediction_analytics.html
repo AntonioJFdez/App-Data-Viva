@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Predicción de Rendimiento por Parcela</h2>
+<form method="post" style="margin-bottom:2rem;">
+    <label>Ruta archivo de datos (CSV):</label>
+    <input type="text" name="archivo_csv" value="datos_rendimiento_parcelas.csv" required>
+    <br>
+    <button type="submit">Predecir y Exportar Informe</button>
+</form>
+
+{% if resultado %}
+  <div class="alert alert-info">
+    Informe generado con <b>{{ resultado['num_registros'] }}</b> registros.<br>
+    <a href="/{{ resultado['output_excel'] }}" download>
+      Descargar informe de rendimiento (Excel)
+    </a>
+    <br>
+    <small>
+      Modelo entrenado y guardado en: <code>{{ resultado['modelo_pkl'] }}</code>
+    </small>
+  </div>
+{% endif %}
+{% endblock %}
