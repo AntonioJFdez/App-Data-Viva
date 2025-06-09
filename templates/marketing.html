@@ -1,30 +1,58 @@
 {% extends "base.html" %}
-{% block content %}
-<div class="container">
-  <h2>Marketing Personalizado 1:1</h2>
-  <form method="post" enctype="multipart/form-data">
-    <div>
-      <label>Sube tu dataset de clientes (debe tener nombre, email, fecha_nacimiento, fecha_renovacion, fecha_siniestro):</label>
-      <input type="file" name="dataset" required>
-    </div>
-    <button type="submit">Generar Mensajes</button>
-  </form>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class="flashes">
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message|safe }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
+{% block title %}Marketing Personalizado 1:1 · Data Viva{% endblock %}
 
-  {% if output_path %}
-    <a href="{{ url_for('static', filename='graficos/campaña_email.csv') }}" download class="cta-button">Descargar Mensajes CSV</a>
-  {% endif %}
-  {% if mensajes_html %}
-    <h4>Primeros Mensajes Generados</h4>
-    {{ mensajes_html|safe }}
-  {% endif %}
-</div>
+{% block content %}
+<section class="dashboard-section container" style="max-width:720px; margin-top:2.2rem;">
+    <h2 class="corp-title center"><b>Marketing Personalizado 1:1</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        <b>Genera campañas automáticas y personalizadas para cada cliente con IA.</b><br>
+        Incrementa la <b>efectividad de tus emails y renovaciones</b> hasta un 29% solo personalizando el mensaje y el momento del envío.<br>
+        <span style="color:var(--tertiary);">Optimizado para seguros, servicios y cualquier sector con relación directa cliente-empresa.</span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Sube un archivo <code>.csv</code> con las columnas mínimas:
+            <ul>
+                <li><b>nombre</b></li>
+                <li><b>email</b></li>
+                <li><b>fecha_nacimiento</b> (formato fecha)</li>
+                <li><b>fecha_renovacion</b> (formato fecha)</li>
+                <li><b>fecha_siniestro</b> (formato fecha, si aplica)</li>
+            </ul>
+        </li>
+        <li>Puedes añadir columnas extra (ej. póliza, producto, teléfono) para segmentar más aún el mensaje.</li>
+        <li>El formato de fecha puede ser <code>2024-06-10</code>, <code>10/06/2024</code> o similar.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data" style="margin-bottom:2.1rem;">
+        <label><b>Sube tu dataset de clientes:</b></label>
+        <input type="file" name="dataset" required>
+        <button type="submit" class="cta-button" style="margin-top:1.1rem;">Generar Mensajes</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message|safe }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% if output_path %}
+      <div style="margin:1.2rem 0 1.2rem 0;">
+        <a href="{{ url_for('static', filename='graficos/campaña_email.csv') }}" download class="cta-button">
+            Descargar Mensajes CSV
+        </a>
+      </div>
+    {% endif %}
+    {% if mensajes_html %}
+        <h4>Primeros Mensajes Generados</h4>
+        {{ mensajes_html|safe }}
+    {% endif %}
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-top:1.4rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        • Cada mensaje está adaptado al perfil y situación de cada cliente.<br>
+        • Puedes usar el CSV para importar los mensajes en tu plataforma de emailing o CRM.<br>
+        <b>Recomendación:</b> Lanza una campaña piloto y compara el ratio de apertura y respuesta.<br>
+        <span style="color:var(--secondary);">¿Quieres estrategias más avanzadas? Solicita consultoría personalizada.</span>
+    </div>
+</section>
 {% endblock %}
