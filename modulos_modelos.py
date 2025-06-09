@@ -263,4 +263,38 @@ def marketing_personalizado(df, output_dir="static/graficos"):
     logging.info(f"Mensajes exportados en: {output_path}")
     return df_mensajes, output_path
 
+    import pandas as pd
+from datetime import datetime
+import logging
+import os
+
+def fidelizacion_clientes(df, output_dir="static/graficos"):
+    """
+    Calcula puntos de fidelización y segmenta clientes en Bronce, Plata, Oro.
+    Devuelve el DataFrame con segmentos y el path al archivo CSV exportado.
+    """
+    hoy = datetime.today()
+    df['antiguedad_años'] = (hoy - df['fecha_alta']).dt.days // 365
+    df['puntos'] = (
+        df['antiguedad_años'] * 10 +
+        df['num_pólizas'] * 15 -
+        df['siniestros_12m'] * 5
+    )
+    df['puntos'] = df['puntos'].apply(lambda x: max(x, 0))  # No negativos
+
+    def asignar_segmento(puntos):
+        if puntos >= 100:
+            return 'Oro'
+        elif puntos >= 60:
+            return 'Plata'
+        else:
+            return 'Bronce'
+
+    df['segmento'] = df['puntos'].apply(asignar_segmento)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    output_path = os.path.join(output_dir, "clientes_segmentados.csv")
+    df.to_csv(output_path, index=False)
+    logging.info(f"Clientes exportados a: {output_path}")
+    return df, output_path
 
