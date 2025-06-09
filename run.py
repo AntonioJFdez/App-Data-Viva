@@ -429,6 +429,28 @@ def clientes_dormidos_view():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('clientes_dormidos.html')
 
+    @app.route('/renovaciones', methods=['GET', 'POST'])
+def renovaciones_view():
+    """
+    Detecta pólizas próximas a vencer y genera recordatorios para el equipo comercial o email.
+    """
+    resultado = None
+    file_export = None
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            resultado, file_export = digitalizar_renovaciones(df)
+            flash(resultado_mensaje("¡Recordatorios generados con éxito! Descarga el archivo CSV abajo."), "success")
+            return render_template(
+                'renovaciones.html',
+                resultado=resultado.head(10).to_html(classes="table table-striped", index=False),
+                file_export=file_export
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('renovaciones.html')
+
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
 if __name__ == "__main__":
