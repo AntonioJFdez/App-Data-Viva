@@ -1,19 +1,66 @@
 {% extends "base.html" %}
+{% block title %}Predicción de Churn de Clientes · Data Viva Analytics{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Predicción de Churn de Clientes</h2>
-  <form method="post" enctype="multipart/form-data">
-    <div>
-      <label>Sube tu dataset (CSV o Excel):</label>
-      <input type="file" name="dataset" required>
-    </div>
-    <div>
-      <label>Columnas predictoras (opcional, separadas por coma):</label>
-      <input type="text" name="columnas" placeholder="edad,prima_anual,num_pólizas,score_interacción">
-    </div>
-    <button type="submit">Predecir Churn</button>
+<section class="download-section container" style="max-width:800px; margin-top:2.2rem;">
+  <h2 class="section-title">Predicción de Churn (Baja de Clientes)</h2>
+
+  <!-- VALOR Y BENEFICIO -->
+  <div style="color:var(--primary); font-size:1.14rem; margin-bottom:1.2rem;">
+    <p>
+      <b>¿Por qué predecir el churn?</b> Detectar con antelación qué clientes tienen mayor probabilidad de causar baja te permite:
+    </p>
+    <ul style="margin-left:1.3rem;">
+      <li>Reducir la pérdida de clientes hasta un 25-35% anual si actúas a tiempo.</li>
+      <li>Priorizar campañas de retención personalizadas.</li>
+      <li>Optimizar tus recursos comerciales (menos llamadas, más eficacia).</li>
+      <li>Impacto típico: cada 1% de reducción en churn supone un aumento de hasta 3-6% en beneficio neto anual, según sector.</li>
+    </ul>
+    <span style="color:#388e3c; font-weight:600;">
+      *Relevante en seguros, banca, telecom, SaaS, energía y cualquier sector de contratos o recurrencia.*
+    </span>
+  </div>
+
+  <!-- FORMULARIO DE SUBIDA -->
+  <form method="post" enctype="multipart/form-data"
+        style="margin-bottom:1.6rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.13); padding:1.6rem 1.2rem;">
+    <h4 style="margin-bottom:0.6rem;">¿Qué necesitas subir?</h4>
+    <ul style="margin-left:1.1rem; color:#444; font-size:1em;">
+      <li><b>Archivo de datos de clientes:</b> Formato .csv, .xlsx o .xls.</li>
+      <li>Mínimo: <b>columna de salida/objetivo</b> (ej. <code>churn</code>, <code>baja</code>, <code>abandono</code>... 1=baja, 0=sigue).</li>
+      <li>Sugerencia: columnas predictoras como edad, prima, número de productos, historial, engagement, etc.</li>
+    </ul>
+    <label style="font-weight:600;">Sube tu dataset (CSV o Excel):</label>
+    <input type="file" name="dataset" required>
+    <br><br>
+    <label style="font-weight:600;">Columnas predictoras (opcional, separadas por coma):</label>
+    <input type="text" name="columnas" placeholder="edad,prima_anual,num_pólizas,score_interacción">
+    <br><br>
+    <button type="submit" class="cta-button" style="width:100%;">Predecir Churn y Descargar Reporte</button>
   </form>
 
+  <!-- EXPLICACIÓN DE RESULTADOS -->
+  <div style="background:#f7f9e6; border-radius:1rem; box-shadow:0 1px 8px rgba(44,62,80,0.08); padding:1rem 1.2rem; margin-bottom:1.1rem; color:#545210;">
+    <h4>¿Cómo interpretar los resultados?</h4>
+    <ul style="margin-left:1.2rem;">
+      <li><b>Reporte de Clasificación:</b> Precisión del modelo, sensibilidad (recall) y ROC AUC.</li>
+      <li><b>Archivo de predicciones:</b> Listado de clientes con probabilidad de baja (0 a 1). Filtra los de score &gt; 0.7 para priorizar retención.</li>
+      <li><b>Archivos descargables:</b> Reporte en CSV y/o Excel para analizar o presentar en comité.</li>
+    </ul>
+    <p>
+      Utiliza los resultados para segmentar clientes, lanzar campañas automáticas o diseñar ofertas personalizadas solo a quienes más riesgo tienen.
+    </p>
+  </div>
+
+  <!-- CTA EXTRA -->
+  <div style="margin-bottom:1.2rem;">
+    <span style="color:#b17019;">
+      ¿Quieres integrar la predicción de churn en tu CRM, Power BI o enviar alertas automáticas? 
+      <a href="{{ url_for('contacto') }}" style="color:#a04a00;">Contacta aquí y te ayudamos.</a>
+    </span>
+  </div>
+
+  <!-- MENSAJES DE ESTADO -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul class="flashes">
@@ -24,19 +71,23 @@
     {% endif %}
   {% endwith %}
 
-  {% if reporte_csv %}
-    <a href="{{ url_for('static', filename='graficos/reporte_churn.csv') }}" class="cta-button" download>Descargar reporte CSV</a>
-  {% endif %}
-  {% if reporte_xlsx %}
-    <a href="{{ url_for('static', filename='graficos/reporte_churn.xlsx') }}" class="cta-button" download>Descargar reporte Excel</a>
-  {% endif %}
-  {% if predicciones_csv %}
-    <a href="{{ url_for('static', filename='graficos/clientes_churn_score.csv') }}" class="cta-button" download>Descargar predicciones</a>
-  {% endif %}
+  <!-- ENLACES DE DESCARGA Y REPORTE -->
+  <div style="margin-bottom:1.6rem;">
+    {% if reporte_csv %}
+      <a href="{{ url_for('static', filename='graficos/reporte_churn.csv') }}" class="cta-button" download>Descargar reporte CSV</a>
+    {% endif %}
+    {% if reporte_xlsx %}
+      <a href="{{ url_for('static', filename='graficos/reporte_churn.xlsx') }}" class="cta-button" download>Descargar reporte Excel</a>
+    {% endif %}
+    {% if predicciones_csv %}
+      <a href="{{ url_for('static', filename='graficos/clientes_churn_score.csv') }}" class="cta-button" download>Descargar predicciones</a>
+    {% endif %}
+  </div>
 
   {% if reporte %}
     <h4>Reporte de Clasificación y ROC AUC</h4>
     <pre style="background:#f8f8f8;border-radius:1rem;padding:1rem;">{{ reporte }}</pre>
   {% endif %}
-</div>
+</section>
 {% endblock %}
+
