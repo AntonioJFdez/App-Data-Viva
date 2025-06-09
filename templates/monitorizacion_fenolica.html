@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Monitorización Fenológica y Detección de Brotes</h2>
+<form method="post" style="margin-bottom:2rem;">
+    <div>
+        <label>Carpeta con imágenes NDVI temporales:</label>
+        <input type="text" name="carpeta_ndvi" value="imagenes_ndvi_temporal" required>
+    </div>
+    <div>
+        <label>Umbral de brote NDVI (&Delta;):</label>
+        <input type="number" step="0.01" name="umbral_brote" value="0.08" required>
+    </div>
+    <button type="submit">Analizar evolución fenológica</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if resumen %}
+  <h4>Resumen NDVI temporal (primeras filas):</h4>
+  <div style="overflow-x:auto;">{{ resumen|safe }}</div>
+{% endif %}
+{% if brotes %}
+  <h4>Brotes detectados:</h4>
+  <div style="overflow-x:auto;">{{ brotes|safe }}</div>
+{% endif %}
+{% if imagenes %}
+  <h4>Gráficos por parcela:</h4>
+  <div style="display:flex;flex-wrap:wrap;gap:2rem;">
+    {% for parcela, ruta in imagenes %}
+      <div>
+        <b>{{ parcela }}</b><br>
+        <img src="/{{ ruta }}" style="max-width:340px; border-radius:1rem; margin-top:1rem;">
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}
