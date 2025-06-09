@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Panel 360° de Rendimiento de Agentes</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Sube tu dataset de agentes (CSV o Excel):</label>
+      <input type="file" name="dataset" required>
+    </div>
+    <button type="submit">Generar Panel</button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if panel_csv %}
+    <a href="{{ url_for('static', filename='graficos/panel_agentes.csv') }}" class="cta-button" download>Descargar Panel CSV</a>
+  {% endif %}
+
+  {% if resumen_html %}
+    <h4>Resumen de KPIs por agente</h4>
+    {{ resumen_html|safe }}
+  {% endif %}
+</div>
+{% endblock %}
