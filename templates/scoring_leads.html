@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Scoring y Priorización de Leads</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Sube tu dataset de leads (CSV o Excel):</label>
+      <input type="file" name="dataset" required>
+    </div>
+    <div>
+      <label>Columna objetivo (target):</label>
+      <input type="text" name="target_col" value="convertido">
+    </div>
+    <button type="submit">Calcular Scoring</button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if descargar_csv %}
+    <a href="{{ url_for('static', filename='graficos/leads_score.csv') }}" class="cta-button" download>Descargar ranking CSV</a>
+  {% endif %}
+  {% if descargar_xlsx %}
+    <a href="{{ url_for('static', filename='graficos/leads_score.xlsx') }}" class="cta-button" download>Descargar ranking Excel</a>
+  {% endif %}
+
+  {% if reporte %}
+    <h4>Reporte de Clasificación</h4>
+    <pre style="background:#f8f8f8;border-radius:1rem;padding:1rem;">{{ reporte }}</pre>
+  {% endif %}
+</div>
+{% endblock %}
