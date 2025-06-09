@@ -545,6 +545,26 @@ def benchmarking_precios():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('benchmarking_precios.html', archivo=archivo_generado)
 
+    @app.route('/ltv_clientes', methods=['GET', 'POST'])
+def ltv_clientes():
+    archivo_generado = None
+    num_clientes = None
+    if request.method == 'POST':
+        archivo = request.files.get('archivo_ltv')
+        if not archivo:
+            flash(resultado_mensaje("Debes subir un archivo CSV.", exito=False), "danger")
+            return render_template('ltv_clientes.html')
+        try:
+            df = pd.read_csv(archivo)
+            if not {'cliente_id', 'fecha_compra', 'importe'}.issubset(df.columns):
+                raise ValueError("El archivo debe tener las columnas: cliente_id, fecha_compra, importe.")
+            archivo_generado, num_clientes = calcular_ltv(df)
+            flash(resultado_mensaje(f"LTV calculado para {num_clientes} clientes. Descarga el Excel."), "success")
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('ltv_clientes.html', archivo=archivo_generado)
+
+
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
