@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Digitalización de Renovaciones</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Sube tu dataset de pólizas:</label>
+      <input type="file" name="dataset" required>
+    </div>
+    <button type="submit">Detectar renovaciones</button>
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% if resultado %}
+    <h4>Top 10 Recordatorios Generados</h4>
+    {{ resultado|safe }}
+  {% endif %}
+  {% if file_export %}
+    <a class="cta-button" href="/static/graficos/{{ file_export.split('/')[-1] }}" download>
+      Descargar Recordatorios CSV
+    </a>
+  {% endif %}
+</div>
+{% endblock %}
