@@ -14,6 +14,7 @@ from modulos_modelos import fidelizacion_clientes
 from modulos_modelos import analisis_sentimiento_nps
 from modulos_modelos import analizar_siniestros
 from modulos_modelos import priorizar_clientes_dormidos
+from modulos_modelos import digitalizar_renovaciones
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
