@@ -4,17 +4,29 @@
 {% block content %}
 <section class="download-section container" style="max-width: 600px; margin-top:3rem;">
     <h2 class="corp-title center"><b>Smart Filter Recommender</b></h2>
-    <p class="center" style="color:var(--primary); font-size:1.13rem; margin-bottom:1.4rem;">
-        Sube tu dataset <strong>(CSV/Excel)</strong> y recibe <strong>sugerencias de filtros y segmentaciones</strong> para análisis avanzados.<br>
-        Mejora tus análisis sin esfuerzo manual.
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Sube tu dataset (<strong>CSV</strong> o <strong>Excel</strong>) y recibe <strong>sugerencias automáticas de filtros y segmentaciones</strong> para análisis avanzados.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Ahorra horas de trabajo, descubre segmentos rentables y reduce errores en reporting. Mejora la personalización de campañas, pricing y la toma de decisiones.
+        </span>
     </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Archivo <code>.csv</code>, <code>.xlsx</code> o <code>.xls</code> con columnas bien definidas (edad, segmento, canal, ventas, etc).</li>
+        <li>No requiere formato específico: se adapta a datos de clientes, ventas, campañas, productos, pólizas, etc.</li>
+    </ul>
     <form method="POST" enctype="multipart/form-data" style="margin:0 auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
         <input type="file" name="smart_data" accept=".csv,.xlsx,.xls" required>
         <button type="submit" class="cta-button btn-details" style="width:100%;">Obtener sugerencias</button>
     </form>
     {% if resultado %}
-        <div style="background:var(--secondary); color:var(--primary); border-radius:1.2rem; margin-top:2rem; text-align:center; padding:1.4rem 1rem; font-size:1.14rem; font-weight:600;">
-            {{ resultado }}
+        <div class="info-panel" style="background:var(--background); color:var(--primary); border-radius:1.2rem; margin-top:2rem; text-align:left; padding:1.1rem 1.3rem; font-size:1.09rem;">
+            <b>Sugerencias generadas:</b><br>
+            {{ resultado|safe }}
+            <br>
+            <b>¿Cómo interpretar?</b> <br>
+            - Usa los filtros sugeridos en dashboards o CRM.<br>
+            - Aplica segmentaciones para campañas personalizadas.<br>
+            - Identifica grupos de alto valor y automatiza acciones comerciales.
         </div>
     {% endif %}
     <div class="center">
@@ -22,6 +34,5 @@
     </div>
 </section>
 {% endblock %}
-
 
 
