@@ -1,38 +1,66 @@
 {% extends 'base.html' %}
+{% block title %}Detección de Plagas y Enfermedades · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Detección de Plagas y Enfermedades (Deep Learning)</h2>
-<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
-    <div>
-        <label>Sube imagen de cultivo para predicción (jpg/png):</label>
-        <input type="file" name="imagen_prediccion" required>
+<section class="dashboard-section container" style="max-width:860px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Detección de Plagas y Enfermedades (Deep Learning)</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Analiza automáticamente imágenes de tus cultivos tomadas por dron o móvil para <b>detectar enfermedades y plagas</b> en segundos.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Evita pérdidas de hasta un <b>25-40%</b> en cosecha mediante la <b>detección precoz</b> y tratamiento rápido.<br>
+            Perfecto para cualquier cultivo y aplicable en agricultura de precisión, consultorías, cooperativas o seguros agrarios.
+        </span>
+    </p>
+
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos de predicción:</b> Sube una <code>imagen .jpg</code> o <code>.png</code> clara de la hoja, planta o zona afectada (mejor si es de dron o smartphone).</li>
+        <li>El modelo detecta clases según el último entrenamiento (puedes personalizar las clases entrenando el modelo con tus imágenes y etiquetas).</li>
+    </ul>
+
+    <form method="post" enctype="multipart/form-data" style="margin-bottom:2rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 12px rgba(44,62,80,0.08); padding:2rem 1.2rem;">
+        <div>
+            <label><b>Sube imagen de cultivo para predicción (JPG/PNG):</b></label>
+            <input type="file" name="imagen_prediccion" required>
+        </div>
+        <button type="submit" class="cta-button" style="margin-top:1.2rem;">Analizar imagen</button>
+    </form>
+    <hr>
+    <form method="post" enctype="multipart/form-data" style="margin-bottom:2rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 12px rgba(44,62,80,0.08); padding:2rem 1.2rem;">
+        <h3>¿Tienes tus propios datos? <span style="color:var(--secondary);font-weight:normal;">Entrena el modelo</span></h3>
+        <div>
+            <label>Sube el <b>CSV de etiquetas</b> (ejemplo: <code>imagen,clase</code>):</label>
+            <input type="file" name="labels_csv">
+        </div>
+        <div>
+            <label>Carpeta con imágenes (por defecto <code>imagenes_dron</code>):</label>
+            <input type="text" name="carpeta_imgs" placeholder="imagenes_dron">
+        </div>
+        <button type="submit" class="cta-button" style="margin-top:1.2rem;">Entrenar modelo (tarda minutos)</button>
+    </form>
+
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        - Si el modelo predice una plaga o enfermedad, actúa inmediatamente para evitar daños mayores.<br>
+        - Usa imágenes de diferentes zonas de la parcela para un diagnóstico más robusto.<br>
+        - Si entrenas tu propio modelo, asegúrate de que las clases estén bien balanceadas y las imágenes sean representativas.<br>
+        <b>Requisito de entrenamiento:</b> El CSV debe tener dos columnas: <code>imagen,clase</code>, y la carpeta debe contener todas las imágenes indicadas.
     </div>
-    <button type="submit">Analizar imagen</button>
-</form>
-<hr>
-<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
-    <h3>Entrenamiento (opcional)</h3>
-    <div>
-        <label>Sube el CSV de etiquetas:</label>
-        <input type="file" name="labels_csv">
-    </div>
-    <div>
-        <label>Carpeta con imágenes (por defecto 'imagenes_dron'):</label>
-        <input type="text" name="carpeta_imgs" placeholder="imagenes_dron">
-    </div>
-    <button type="submit">Entrenar modelo (tarda minutos)</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if imagen_cargada %}
-    <h4>Imagen analizada:</h4>
-    <img src="{{ imagen_cargada }}" alt="Imagen de cultivo" style="max-width:400px; margin-bottom:1rem; border-radius:1rem;">
-{% endif %}
-{% if prediccion %}
-    <div class="resultado" style="margin:1.5rem 0; padding:1rem; border-radius:1rem; background:#fcf8e3;">
-        <b>Resultado:</b> {{ prediccion }}
-    </div>
-{% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    {% if imagen_cargada %}
+        <h4>Imagen analizada:</h4>
+        <img src="{{ imagen_cargada }}" alt="Imagen de cultivo" style="max-width:400px; margin-bottom:1rem; border-radius:1rem;">
+    {% endif %}
+    {% if prediccion %}
+        <div class="resultado" style="margin:1.5rem 0; padding:1rem; border-radius:1rem; background:#fcf8e3;">
+            <b>Resultado:</b> {{ prediccion }}
+        </div>
+    {% endif %}
+</section>
 {% endblock %}
+
