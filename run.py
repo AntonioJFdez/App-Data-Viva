@@ -8,6 +8,7 @@ import os
 from modulos_modelos import scoring_leads
 from modulos_modelos import prediccion_churn
 from modulos_modelos import panel_rendimiento_agentes
+from modulos_modelos import pricing_dinamico
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -264,6 +265,36 @@ def panel_agentes_view():
         except Exception as e:
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('panel_agentes.html')
+
+    @app.route('/pricing', methods=['GET', 'POST'])
+def pricing_view():
+    """
+    Pricing dinámico y simulación de escenarios.
+    """
+    resultados = None
+    sim_df = None
+    csv_path = None
+    graf_path = None
+
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        margen = float(request.form.get('margen', 0.25))
+        try:
+            df = cargar_dataset(archivo)
+            csv_path, graf_path, resultados, sim_df = pricing_dinamico(df, margen_deseado=margen)
+            flash(resultado_mensaje("Cálculo de precios y simulación realizados con éxito. Descarga los resultados o revisa la gráfica."), "success")
+            resultados_html = resultados.head().to_html(classes="table table-striped", index=False)
+            sim_html = sim_df.to_html(classes="table table-bordered", index=False)
+            return render_template(
+                'pricing.html',
+                resultados_html=resultados_html,
+                sim_html=sim_html,
+                csv_path=csv_path,
+                graf_path=graf_path
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('pricing.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
