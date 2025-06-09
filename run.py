@@ -3,6 +3,8 @@ import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 import matplotlib.pyplot as plt
 import seaborn as sns
+from modulos_modelos import segmentacion_clientes
+import os
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -160,6 +162,33 @@ def descargar():
     else:
         flash(resultado_mensaje("El archivo no existe o no se puede descargar.", exito=False), "danger")
         return redirect(url_for('home'))
+
+    @app.route('/segmentacion', methods=['GET', 'POST'])
+def segmentacion():
+    """
+    Segmentación avanzada de clientes (K-Means)
+    """
+    columnas_por_defecto = ['edad', 'num_pólizas', 'prima_anual', 'siniestros_12m']
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        columnas = request.form.get('columnas')  # Esto será un string tipo 'edad,num_pólizas'
+        n_clusters = int(request.form.get('n_clusters', 4))
+        try:
+            df = cargar_dataset(archivo)
+            columnas = [c.strip() for c in (columnas.split(',') if columnas else columnas_por_defecto)]
+            df_segmentado, grafico_path = segmentacion_clientes(df, columnas, n_clusters)
+            # Exporta resultados
+            output_csv = os.path.join('static', 'graficos', 'clientes_segmentados.csv')
+            df_segmentado.to_csv(output_csv, index=False)
+            flash(resultado_mensaje("¡Segmentación realizada con éxito! Descarga el resultado y visualiza el gráfico."), "success")
+            return render_template(
+                'segmentacion.html',
+                grafico=grafico_path,
+                descargar_csv=output_csv
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('segmentacion.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
