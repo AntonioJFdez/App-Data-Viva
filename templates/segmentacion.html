@@ -1,40 +1,66 @@
 {% extends "base.html" %}
+{% block title %}Segmentación Avanzada de Clientes · Data Viva{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Segmentación Avanzada de Clientes (K-Means)</h2>
-  <form method="post" enctype="multipart/form-data">
-    <div>
-      <label>Sube tu dataset (CSV o Excel):</label>
-      <input type="file" name="dataset" required>
-    </div>
-    <div>
-      <label>Columnas a usar (separadas por coma, opcional):</label>
-      <input type="text" name="columnas" placeholder="edad,num_pólizas,prima_anual,siniestros_12m">
-    </div>
-    <div>
-      <label>Número de clusters:</label>
-      <input type="number" name="n_clusters" value="4" min="2" max="10">
-    </div>
-    <button type="submit">Segmentar</button>
-  </form>
+<section class="dashboard-section container" style="max-width:750px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Segmentación Avanzada de Clientes (K-Means)</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Divide tu base de clientes en segmentos <b>automáticamente con IA</b> y detecta oportunidades comerciales o de riesgo.<br>
+        <span style="color:var(--tertiary); font-size:1rem;">
+            <b>Aumenta la conversión</b> de campañas segmentadas hasta un <b>18-29%</b> y reduce el esfuerzo comercial.
+        </span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Archivo <code>.csv</code> o Excel con columnas relevantes (edad, nº pólizas, prima_anual, siniestros, etc).</li>
+        <li>Puedes seleccionar las columnas a usar (separadas por coma). Si no, se usan todas las numéricas.</li>
+        <li>Configura el número de clusters (2-10) según el tamaño de tu base y la granularidad deseada.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data">
+        <div>
+            <label>Sube tu dataset (CSV o Excel):</label>
+            <input type="file" name="dataset" required>
+        </div>
+        <div>
+            <label>Columnas a usar (separadas por coma, opcional):</label>
+            <input type="text" name="columnas" placeholder="edad,num_pólizas,prima_anual,siniestros_12m">
+        </div>
+        <div>
+            <label>Número de clusters:</label>
+            <input type="number" name="n_clusters" value="4" min="2" max="10">
+        </div>
+        <button type="submit" class="cta-button btn-details" style="width:100%;margin-top:1rem;">Segmentar</button>
+    </form>
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class="flashes">
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message|safe }}</li>
-        {% endfor %}
-      </ul>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message|safe }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if grafico %}
+        <h4 class="center" style="margin-top:1.3rem;">Visualización de Clusters</h4>
+        <img src="{{ url_for('static', filename='graficos/segmentacion_clientes.png') }}" style="max-width:600px;border-radius:1rem;">
     {% endif %}
-  {% endwith %}
 
-  {% if grafico %}
-    <h4>Visualización de Clusters</h4>
-    <img src="{{ url_for('static', filename='graficos/segmentacion_clientes.png') }}" style="max-width:600px;">
-  {% endif %}
+    {% if descargar_csv %}
+        <a href="{{ url_for('static', filename='graficos/clientes_segmentados.csv') }}" class="cta-button" download style="margin-top:1.3rem;">Descargar CSV Segmentado</a>
+    {% endif %}
 
-  {% if descargar_csv %}
-    <a href="{{ url_for('static', filename='graficos/clientes_segmentados.csv') }}" class="cta-button" download>Descargar CSV Segmentado</a>
-  {% endif %}
-</div>
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        - Cada cluster corresponde a un segmento distinto de clientes (por valor, riesgo, potencial…).<br>
+        - Utiliza estos segmentos para personalizar ofertas, priorizar retención o identificar grupos de alto valor.<br>
+        <span style="color:var(--secondary);">
+            Compatible para seguros, retail, banca, energía, agricultura, educación y más.
+        </span>
+    </div>
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
+    </div>
+</section>
 {% endblock %}
+
