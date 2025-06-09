@@ -1,27 +1,57 @@
 {% extends "base.html" %}
+{% block title %}Modelo de Valor de Cliente (LTV) · Data Viva{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Modelo de Valor de Cliente (LTV)</h2>
-  <form method="post" enctype="multipart/form-data">
-    <label>Archivo de compras de clientes (.csv):</label>
-    <input type="file" name="archivo_ltv" accept=".csv" required>
-    <br><br>
-    <button type="submit">Calcular LTV</button>
-  </form>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class="flashes">
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message|safe }}</li>
-        {% endfor %}
-      </ul>
+<section class="dashboard-section container" style="max-width:720px; margin-top:2.2rem;">
+    <h2 class="corp-title center"><b>Modelo de Valor de Cliente (LTV)</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        <b>Descubre el valor real de cada cliente y maximiza tu rentabilidad.</b><br>
+        Calcula el <strong>Lifetime Value</strong> (LTV) de tus clientes para priorizar campañas, retención y ventas cruzadas. Las empresas que aplican LTV aumentan sus beneficios hasta un <b>23% el primer año</b>.
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Sube un archivo <code>.csv</code> de compras/clientes. Debe tener al menos estas columnas:
+            <ul>
+                <li><b>cliente_id</b> (o identificador de cliente)</li>
+                <li><b>fecha_compra</b> (en formato fecha: 2024-06-10, 10/06/2024, etc.)</li>
+                <li><b>importe</b> (valor de la compra, en euros)</li>
+            </ul>
+        </li>
+        <li>Puedes incluir más columnas (producto, canal, etc.), pero no es obligatorio.</li>
+        <li>Si tu archivo tiene otro nombre de columna, puedes adaptarlo en el backend o consultarnos.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data" style="margin-bottom:2.1rem;">
+        <label><b>Archivo de compras de clientes (.csv):</b></label>
+        <input type="file" name="archivo_ltv" accept=".csv" required>
+        <button type="submit" class="cta-button" style="margin-top:1.1rem;">Calcular LTV</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message|safe }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if archivo %}
+        <div style="margin-top: 1.2rem;">
+          <h3>Descarga tus resultados:</h3>
+          <a href="{{ url_for('static', filename=archivo.split('static/')[1]) }}" download class="cta-button">Descargar Excel</a>
+        </div>
+        <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-top:1.4rem;">
+            <b>¿Cómo interpretar los resultados?</b><br>
+            • El <b>LTV</b> (Lifetime Value) te indica cuánto vale cada cliente a lo largo del tiempo.<br>
+            • <b>Prioriza acciones de retención</b> en los clientes con LTV más alto.<br>
+            • Detecta clientes con bajo LTV y diseña campañas específicas para aumentar su valor.<br>
+            <span style="color:var(--secondary);">Exporta la tabla para tus informes de dirección o marketing.</span>
+        </div>
     {% endif %}
-  {% endwith %}
-  {% if archivo %}
-    <div style="margin-top: 1.2rem;">
-      <h3>Descarga tus resultados:</h3>
-      <a href="{{ url_for('static', filename=archivo.split('static/')[1]) }}" download>Descargar Excel</a>
+    <div class="center" style="margin-top:2.2rem;">
+        <a href="{{ url_for('contacto') }}" class="cta-button" style="background:var(--primary);color:var(--secondary);font-size:1.08rem;">
+            ¿Quieres segmentar y automatizar el LTV de toda tu cartera? Solicita una demo personalizada
+        </a>
     </div>
-  {% endif %}
-</div>
+</section>
 {% endblock %}
+
