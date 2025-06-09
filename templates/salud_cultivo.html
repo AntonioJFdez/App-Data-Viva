@@ -1,25 +1,55 @@
 {% extends 'base.html' %}
+{% block title %}Análisis Salud Cultivos · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Análisis de Salud de Cultivos (Índices Vegetativos + ML)</h2>
-<form method="post" enctype="multipart/form-data" class="form-salud-cultivo">
-    <div>
-        <label>Archivo de datos (CSV):</label>
-        <input type="file" name="archivo_csv" required>
+<section class="dashboard-section container" style="max-width:750px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Análisis de Salud de Cultivos</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Analiza la salud de tus cultivos <b>usando índices vegetativos y modelos de Machine Learning</b>.<br>
+        Sube tu <strong>CSV</strong> con datos NDVI/GNDVI/SAVI y clasifica las parcelas según su estrés.<br>
+        <span style="color:var(--tertiary); font-size:1rem;">
+            Reduce las pérdidas por estrés o plaga en un <b>8-25%</b> y prioriza tus recursos de campo de forma automática.
+        </span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Archivo <code>.csv</code> con columnas como: <b>parcela, ndvi, fecha, (opcional: grupo, plaga, estrés)</b>.</li>
+        <li>Puedes adaptar el modelo para cualquier tipo de cultivo, sector agrícola, jardines urbanos o incluso parques.</li>
+        <li>El resultado te muestra la <b>distribución del estrés</b> y descarga un informe resumen por grupo.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data" class="form-salud-cultivo">
+        <div>
+            <label>Archivo de datos (CSV):</label>
+            <input type="file" name="archivo_csv" required>
+        </div>
+        <button type="submit" class="cta-button btn-details" style="width:100%;margin-top:1rem;">Analizar salud</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% if boxplot %}
+        <h3 class="center" style="margin-top:2rem;">Distribución NDVI según Estrés</h3>
+        <img src="{{ '/' + boxplot }}" style="max-width: 90%;border-radius:1rem;">
+    {% endif %}
+    {% if resumen %}
+        <div style="margin-top:1.2rem;">
+            <a href="{{ '/' + resumen }}" class="cta-button btn-details" download>
+                Descargar resumen por grupo
+            </a>
+        </div>
+    {% endif %}
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+        <b>¿Cómo interpretar el resultado?</b><br>
+        - El boxplot muestra qué parcelas o zonas tienen mayor estrés.<br>
+        - El informe descargable te ayuda a priorizar inspecciones o tratamientos.<br>
+        <span style="color:var(--secondary);">
+            Puedes aplicar el modelo en huertos urbanos, parques industriales, invernaderos, etc.
+        </span>
     </div>
-    <button type="submit">Analizar salud</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if boxplot %}
-    <h3>Distribución NDVI según Estrés</h3>
-    <img src="{{ '/' + boxplot }}" style="max-width: 90%;">
-{% endif %}
-{% if resumen %}
-    <div>
-        <a href="{{ '/' + resumen }}" class="btn btn-secondary">Descargar resumen por grupo</a>
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
     </div>
-{% endif %}
+</section>
 {% endblock %}
+
