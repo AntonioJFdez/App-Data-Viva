@@ -15,6 +15,7 @@ from modulos_modelos import analisis_sentimiento_nps
 from modulos_modelos import analizar_siniestros
 from modulos_modelos import priorizar_clientes_dormidos
 from modulos_modelos import digitalizar_renovaciones
+from modulos_modelos import calcular_panel_kpis
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
