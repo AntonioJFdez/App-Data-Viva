@@ -6,6 +6,7 @@ import seaborn as sns
 from modulos_modelos import segmentacion_clientes
 import os
 from modulos_modelos import scoring_leads
+from modulos_modelos import prediccion_churn
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -212,6 +213,32 @@ def scoring_leads_view():
         except Exception as e:
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('scoring_leads.html')
+
+    @app.route('/churn', methods=['GET', 'POST'])
+def churn_view():
+    """
+    Predicción de churn de clientes (cancelación) usando Random Forest.
+    """
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            columnas = request.form.get('columnas')
+            # Puedes permitir que el usuario indique las columnas, por defecto las que indica la función
+            if columnas:
+                columnas = [c.strip() for c in columnas.split(',')]
+            reporte_csv, reporte_xlsx, predicciones_csv, reporte_dict = prediccion_churn(df, columnas=columnas)
+            flash(resultado_mensaje("Predicción de churn realizada con éxito. Descarga los resultados y revisa el reporte."), "success")
+            return render_template(
+                'churn.html',
+                reporte_csv=reporte_csv,
+                reporte_xlsx=reporte_xlsx,
+                predicciones_csv=predicciones_csv,
+                reporte=reporte_dict
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('churn.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
