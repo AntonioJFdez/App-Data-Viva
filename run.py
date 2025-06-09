@@ -12,6 +12,7 @@ from modulos_modelos import pricing_dinamico
 from modulos_modelos import marketing_personalizado
 from modulos_modelos import fidelizacion_clientes
 from modulos_modelos import analisis_sentimiento_nps
+from modulos_modelos import analizar_siniestros
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -377,6 +378,31 @@ def sentimiento_view():
         except Exception as e:
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('sentimiento.html')
+
+    @app.route('/siniestros', methods=['GET', 'POST'])
+def siniestros_view():
+    """
+    Analiza los tiempos de gestión de siniestros, detecta cuellos de botella y sugiere optimización.
+    """
+    df_resultado = None
+    cuellos = None
+    recomendaciones = None
+
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            df_resultado, cuellos, recomendaciones = analizar_siniestros(df)
+            flash(resultado_mensaje("Análisis de siniestros completado."), "success")
+            return render_template(
+                'siniestros.html',
+                df_resultado=df_resultado.head(10).to_html(classes="table table-striped", index=False),
+                cuellos=cuellos.to_html(classes="table table-striped", index=True),
+                recomendaciones=recomendaciones
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('siniestros.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
