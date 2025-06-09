@@ -1,39 +1,63 @@
 {% extends "base.html" %}
+{% block title %}Scoring Leads · Data Viva{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Scoring y Priorización de Leads</h2>
-  <form method="post" enctype="multipart/form-data">
-    <div>
-      <label>Sube tu dataset de leads (CSV o Excel):</label>
-      <input type="file" name="dataset" required>
-    </div>
-    <div>
-      <label>Columna objetivo (target):</label>
-      <input type="text" name="target_col" value="convertido">
-    </div>
-    <button type="submit">Calcular Scoring</button>
-  </form>
+<section class="dashboard-section container" style="max-width:700px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Scoring y Priorización de Leads</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Prioriza tus leads automáticamente según su probabilidad de conversión usando <b>Machine Learning</b>.<br>
+        Sube un archivo <strong>CSV/Excel</strong> y genera un ranking objetivo de leads o clientes potenciales.<br>
+        <span style="color:var(--tertiary); font-size:1rem;">
+            Aumenta la tasa de cierre hasta un <b>15-22%</b> y enfoca tus recursos comerciales donde más impacto tendrás.
+        </span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Dataset en <code>.csv</code> o Excel con variables predictoras (edad, sector, canal, fecha_contacto…) y una columna objetivo (ej: <b>convertido</b>).</li>
+        <li>La columna objetivo debe indicar si el lead se convirtió o no (por ejemplo: 1/0, Sí/No).</li>
+        <li>Puedes usarlo en ventas, seguros, educación, inmobiliaria, salud y cualquier proceso de captación.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data">
+        <div>
+            <label>Sube tu dataset de leads (CSV o Excel):</label>
+            <input type="file" name="dataset" required>
+        </div>
+        <div>
+            <label>Columna objetivo (target):</label>
+            <input type="text" name="target_col" value="convertido">
+        </div>
+        <button type="submit" class="cta-button btn-details" style="width:100%;margin-top:1rem;">Calcular Scoring</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message|safe }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class="flashes">
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message|safe }}</li>
-        {% endfor %}
-      </ul>
+    {% if descargar_csv %}
+        <a href="{{ url_for('static', filename='graficos/leads_score.csv') }}" class="cta-button" download style="margin-top:1.3rem;">Descargar ranking CSV</a>
     {% endif %}
-  {% endwith %}
-
-  {% if descargar_csv %}
-    <a href="{{ url_for('static', filename='graficos/leads_score.csv') }}" class="cta-button" download>Descargar ranking CSV</a>
-  {% endif %}
-  {% if descargar_xlsx %}
-    <a href="{{ url_for('static', filename='graficos/leads_score.xlsx') }}" class="cta-button" download>Descargar ranking Excel</a>
-  {% endif %}
-
-  {% if reporte %}
-    <h4>Reporte de Clasificación</h4>
-    <pre style="background:#f8f8f8;border-radius:1rem;padding:1rem;">{{ reporte }}</pre>
-  {% endif %}
-</div>
+    {% if descargar_xlsx %}
+        <a href="{{ url_for('static', filename='graficos/leads_score.xlsx') }}" class="cta-button" download>Descargar ranking Excel</a>
+    {% endif %}
+    {% if reporte %}
+        <h4>Reporte de Clasificación</h4>
+        <pre style="background:#f8f8f8;border-radius:1rem;padding:1rem;">{{ reporte }}</pre>
+    {% endif %}
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+        <b>¿Cómo interpretar el resultado?</b><br>
+        - El ranking muestra qué leads tienen mayor probabilidad de cierre.<br>
+        - El reporte indica la precisión y calidad del modelo.<br>
+        <span style="color:var(--secondary);">
+            Exporta el ranking y úsalo directamente en tu CRM o campañas.
+        </span>
+    </div>
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
+    </div>
+</section>
 {% endblock %}
+
