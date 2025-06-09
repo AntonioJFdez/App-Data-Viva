@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Pricing Dinámico y Personalizado</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Sube tu dataset de productos (CSV o Excel):</label>
+      <input type="file" name="dataset" required>
+    </div>
+    <div>
+      <label>Margen deseado (por defecto 0.25):</label>
+      <input type="number" name="margen" min="0.01" max="1" step="0.01" value="0.25">
+    </div>
+    <button type="submit">Calcular Pricing</button>
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if csv_path %}
+    <a href="{{ url_for('static', filename='graficos/precios_optimos.csv') }}" download class="cta-button">Descargar Resultados CSV</a>
+  {% endif %}
+  {% if graf_path %}
+    <img src="{{ url_for('static', filename='graficos/simulacion_ganancias.png') }}" alt="Simulación de Ganancia" style="width:100%;max-width:600px;margin:1.2rem 0;">
+  {% endif %}
+  {% if resultados_html %}
+    <h4>Resultados Principales</h4>
+    {{ resultados_html|safe }}
+  {% endif %}
+  {% if sim_html %}
+    <h4>Simulación de Ganancias por Margen</h4>
+    {{ sim_html|safe }}
+  {% endif %}
+</div>
+{% endblock %}
