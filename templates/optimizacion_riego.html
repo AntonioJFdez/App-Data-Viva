@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Optimización del Riego de Cultivos (ML)</h2>
+<form method="post" enctype="multipart/form-data" class="form-riego" style="margin-bottom:2rem;">
+    <div>
+        <label>Sube tu archivo CSV de históricos de riego:</label>
+        <input type="file" name="datos_riego" required>
+    </div>
+    <button type="submit">Entrenar modelo</button>
+</form>
+<hr>
+<form method="post" class="form-prediccion">
+    <h3>Predicción de riego recomendado</h3>
+    <div>
+        <label>Humedad suelo (%)</label>
+        <input type="number" step="any" name="humedad_suelo" required>
+    </div>
+    <div>
+        <label>Temperatura (&deg;C)</label>
+        <input type="number" step="any" name="temperatura" required>
+    </div>
+    <div>
+        <label>Precipitación (mm)</label>
+        <input type="number" step="any" name="precipitacion" required>
+    </div>
+    <div>
+        <label>Evapotranspiración (mm)</label>
+        <input type="number" step="any" name="evapotranspiracion" required>
+    </div>
+    <button type="submit">Calcular riego recomendado</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if prediccion %}
+    <div class="resultado" style="margin:1.5rem 0; padding:1rem; border-radius:1rem; background:#e9f7ef;">
+        <b>Riego recomendado:</b> {{ prediccion|round(2) }} litros
+    </div>
+{% endif %}
+{% if grafico %}
+    <h3>Evolución histórica de la humedad del suelo</h3>
+    <img src="{{ '/' + grafico }}" alt="Panel humedad" style="max-width:480px; border-radius:1rem; margin-top:1rem;">
+{% endif %}
+{% endblock %}
