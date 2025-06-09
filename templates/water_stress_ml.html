@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Predicción y Alerta de Estrés Hídrico (ML)</h2>
+<form method="post" style="margin-bottom:2rem;">
+    <label>Ruta archivo de datos (CSV):</label>
+    <input type="text" name="archivo_csv" value="dataset_estres_hidrico_multianual.csv" required>
+    <br>
+    <button type="submit">Predecir y Generar Alertas</button>
+</form>
+
+{% if resultado %}
+  <div class="alert alert-info">
+    {% if resultado['num_alertas'] > 0 %}
+      <b>{{ resultado['num_alertas'] }}</b> zonas o parcelas presentan riesgo de estrés hídrico.<br>
+      <a href="/{{ resultado['output_csv'] }}" download>
+        Descargar CSV con zonas/parcelas en alerta
+      </a>
+    {% else %}
+      ¡No se detectaron zonas críticas de estrés hídrico!
+    {% endif %}
+  </div>
+{% endif %}
+{% endblock %}
