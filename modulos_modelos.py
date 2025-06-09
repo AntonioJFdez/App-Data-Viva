@@ -403,3 +403,30 @@ def priorizar_clientes_dormidos(df, output_dir="static/graficos"):
 
     return df_ordenado, filename
 
+    import pandas as pd
+import logging
+from datetime import datetime
+
+def digitalizar_renovaciones(df, dias_ventana=30, output_dir="static/graficos"):
+    """
+    Detecta pólizas próximas a vencer y genera mensajes recordatorio personalizados.
+    """
+    if 'fecha_vencimiento' not in df.columns or 'nombre' not in df.columns or 'numero_poliza' not in df.columns or 'email' not in df.columns:
+        raise ValueError("El dataset debe tener las columnas: fecha_vencimiento, nombre, numero_poliza, email")
+    df['fecha_vencimiento'] = pd.to_datetime(df['fecha_vencimiento'])
+    hoy = datetime.today()
+    df['dias_para_vencer'] = (df['fecha_vencimiento'] - hoy).dt.days
+    renovaciones = df[(df['dias_para_vencer'] >= 0) & (df['dias_para_vencer'] <= dias_ventana)].copy()
+    renovaciones['mensaje'] = (
+        "Hola " + renovaciones['nombre'] +
+        ", tu póliza con número " + renovaciones['numero_poliza'].astype(str) +
+        " vence el " + renovaciones['fecha_vencimiento'].dt.strftime('%d/%m/%Y') +
+        ". Por favor contáctanos para renovarla a tiempo."
+    )
+    filename = f"{output_dir}/recordatorios_renovacion_{datetime.now().strftime('%Y%m%d')}.csv"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    renovaciones[['email', 'nombre', 'mensaje']].to_csv(filename, index=False)
+    logging.info(f"Recordatorios de renovación exportados a {filename}")
+    return renovaciones[['email', 'nombre', 'mensaje']], filename
+
