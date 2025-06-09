@@ -1,38 +1,107 @@
 {% extends 'base.html' %}
+{% block title %}Análisis de Biomasa 3D (LIDAR) · Data Viva Analytics{% endblock %}
+
 {% block content %}
-<h2>Análisis de Biomasa 3D (LIDAR)</h2>
-<form method="post" enctype="multipart/form-data" class="form-biomasa3d">
-    <div>
-        <label>Archivo LIDAR (.las):</label>
-        <input type="file" name="archivo_las" required>
-    </div>
-    <div>
-        <label>Tamaño de celda para grid (m):</label>
-        <input type="number" name="grid_size" value="1" min="0.1" step="0.1">
-    </div>
-    <button type="submit">Analizar biomasa</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if dsm %}
-    <h3>Resultados</h3>
-    <div>
+<section class="download-section container" style="max-width:750px; margin-top:3rem;">
+  <h2 class="section-title">Análisis de Biomasa 3D (LIDAR)</h2>
+  
+  <!-- EXPLICACIÓN Y VALOR -->
+  <div style="margin-bottom: 1.2rem; color:var(--primary); font-size:1.12rem;">
+    <p>
+      <b>¿Quieres conocer el volumen real de biomasa y estructura de tus cultivos o parcelas?</b>
+      Este módulo transforma tus datos LIDAR en modelos 3D y te da:
+    </p>
+    <ul style="margin-left:1.3rem;">
+      <li>Modelos visuales del terreno (DTM) y de la vegetación/estructura (DSM).</li>
+      <li>Volumen de biomasa estimado en metros cúbicos <b>(m³)</b>, ideal para:</li>
+      <ul>
+        <li>Optimizar cosechas y tratamientos (viticultura, fruticultura, forestal...)</li>
+        <li>Calcular potencial de producción y comparar campañas</li>
+        <li>Demostrar mejoras en gestión sostenible o innovación agrícola</li>
+      </ul>
+    </ul>
+    <p style="color:#3a764a; font-weight:600;">
+      <i>Impacto típico: identificar diferencias de biomasa de hasta el 18% entre parcelas, lo que se traduce en ahorros de hasta 600 €/ha en insumos y mejores rendimientos.</i>
+    </p>
+  </div>
+  
+  <!-- REQUISITOS DE USO -->
+  <form method="post" enctype="multipart/form-data" class="form-biomasa3d"
+        style="margin-bottom:1.8rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.13); padding:1.6rem 1.2rem;">
+    <h4 style="margin-bottom:0.7rem;">¿Qué necesitas?</h4>
+    <ul style="margin-left:1.1rem; color:#444;">
+      <li><b>Archivo LIDAR (.las):</b> 
+        <span style="font-size:0.98em;">Exporta tu nube de puntos de dron o escáner. El archivo debe estar georreferenciado. </span>
+      </li>
+      <li><b>Tamaño de celda para grid:</b> 
+        <span style="font-size:0.98em;">Por defecto 1 metro (ajusta para mayor detalle o rapidez).</span>
+      </li>
+    </ul>
+    <label style="font-weight:600;">Archivo LIDAR (.las):</label>
+    <input type="file" name="archivo_las" required>
+    <br><br>
+    <label style="font-weight:600;">Tamaño de celda para grid (metros):</label>
+    <input type="number" name="grid_size" value="1" min="0.1" step="0.1">
+    <br><br>
+    <button type="submit" class="cta-button" style="width:100%;">Analizar biomasa y descargar modelos</button>
+  </form>
+
+  <!-- CÓMO INTERPRETAR LOS RESULTADOS -->
+  <div style="background:#e3f6e3; border-radius:1rem; box-shadow:0 1px 8px rgba(44,62,80,0.10); padding:1rem 1.3rem; margin-bottom:1.2rem; color:#255d2a;">
+    <h4>¿Cómo interpretar los resultados?</h4>
+    <ul style="margin-left:1.3rem;">
+      <li><b>DSM (Superficie):</b> Muestra la altura máxima detectada (árboles, viñedos, estructuras).</li>
+      <li><b>DTM (Terreno):</b> Refleja la altura del suelo (sin vegetación).</li>
+      <li><b>Volumen estimado de biomasa:</b> Diferencia entre DSM y DTM, estimada en m³.</li>
+    </ul>
+    <p>Si el volumen baja respecto a campañas anteriores, puede indicar estrés o pérdida de producción.<br>
+      Si sube, refleja vigor y éxito en tu manejo agrícola.</p>
+  </div>
+
+  <!-- CTA Y CONTACTO -->
+  <div style="margin-bottom:1rem;">
+    <span style="color:#7c6326;">
+      ¿Tienes dudas sobre el uso del archivo .las o necesitas un informe profesional certificado?<br>
+      <a href="{{ url_for('contacto') }}" style="color:#b9843c;">Contáctanos</a> y te asesoramos gratis.
+    </span>
+  </div>
+
+  <!-- FLASH MESSAGES -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <!-- RESULTADOS -->
+  {% if dsm or dtm or volumen %}
+    <h3 style="margin-top:1.6rem;">Resultados del análisis</h3>
+    {% if dsm %}
+      <div>
         <strong>DSM (superficie):</strong><br>
-        <img src="{{ '/' + dsm }}" style="max-width: 90%;">
-    </div>
-{% endif %}
-{% if dtm %}
-    <div>
+        <img src="{{ '/' + dsm }}" style="max-width: 94%; border-radius:1rem; box-shadow:0 2px 14px rgba(44,62,80,0.13); margin-bottom:1.2rem;">
+      </div>
+    {% endif %}
+    {% if dtm %}
+      <div>
         <strong>DTM (terreno):</strong><br>
-        <img src="{{ '/' + dtm }}" style="max-width: 90%;">
-    </div>
-{% endif %}
-{% if volumen %}
-    <div>
-        <strong>Volumen estimado de biomasa:</strong> {{ volumen | round(2) }} m³
-    </div>
-{% endif %}
+        <img src="{{ '/' + dtm }}" style="max-width: 94%; border-radius:1rem; box-shadow:0 2px 14px rgba(44,62,80,0.13); margin-bottom:1.2rem;">
+      </div>
+    {% endif %}
+    {% if volumen %}
+      <div>
+        <strong>Volumen estimado de biomasa:</strong>
+        <span style="color:var(--secondary); font-size:1.19rem;">{{ volumen | round(2) }} m³</span>
+        <br>
+        <span style="font-size:0.98em;color:#478036;">¿Qué significa?</span>
+        <ul style="margin-left:1.2rem;">
+          <li>Compara este valor con tus datos históricos.</li>
+          <li>Úsalo para justificar inversiones, seguros agrícolas, y validar prácticas de manejo sostenible.</li>
+        </ul>
+      </div>
+    {% endif %}
+  {% endif %}
+
+</section>
 {% endblock %}
+
