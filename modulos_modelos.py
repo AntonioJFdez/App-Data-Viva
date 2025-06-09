@@ -38,3 +38,42 @@ def segmentacion_clientes(df, columnas_segmento, n_clusters=4, output_dir="stati
     # Devuelve el DataFrame original con segmento y la ruta del gráfico generado
     df['segmento'] = etiquetas
     return df, grafico_path
+
+# modulos_modelos.py (scoring_leads)
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+import joblib
+import os
+
+def scoring_leads(df, target_col='convertido', output_dir="static/graficos"):
+    X = df.drop(columns=[target_col])
+    y = df[target_col].astype(int)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
+    modelo = RandomForestClassifier(n_estimators=100, random_state=42)
+    modelo.fit(X_train, y_train)
+    y_pred = modelo.predict(X_test)
+    reporte = classification_report(y_test, y_pred, output_dict=True)
+
+    # Aplicar scoring a todo el DataFrame
+    df['score'] = modelo.predict_proba(X)[:, 1]
+    df_ordenado = df.sort_values(by='score', ascending=False)
+
+    # Exportar resultados
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    output_csv = os.path.join(output_dir, "leads_score.csv")
+    output_xlsx = os.path.join(output_dir, "leads_score.xlsx")
+    df_ordenado.to_csv(output_csv, index=False)
+    try:
+        df_ordenado.to_excel(output_xlsx, index=False)
+    except Exception as e:
+        pass
+
+    # Guardar modelo
+    modelo_path = os.path.join(output_dir, "modelo_scoring_leads.pkl")
+    joblib.dump(modelo, modelo_path)
+    return output_csv, output_xlsx, reporte
+
