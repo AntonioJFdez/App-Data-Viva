@@ -1,35 +1,62 @@
 {% extends 'base.html' %}
-{% block content %}
-<h2>Prescripción de Manejo Agrícola (Fertilización y Riego)</h2>
-<form method="post" style="margin-bottom:2rem;">
-    <label>Ruta archivo de datos (CSV):</label>
-    <input type="text" name="archivo_csv" value="zonas_analizadas.csv" required>
-    <br>
-    <button type="submit">Generar prescripción y mapa</button>
-</form>
+{% block title %}Prescripción Agronómica · Data Viva{% endblock %}
 
-{% if resultado %}
-  <div class="alert alert-success">
-    Prescripciones y mapa generados.<br>
-    <ul>
-      <li>
-        <a href="/{{ resultado['output_csv'] }}" download>
-            Descargar prescripciones en CSV
-        </a>
-      </li>
-      {% if resultado['output_geojson'] %}
-      <li>
-        <a href="/{{ resultado['output_geojson'] }}" download>
-            Descargar prescripción GeoJSON
-        </a>
-      </li>
-      {% endif %}
-      <li>
-        <a href="/{{ resultado['output_mapa'] }}" target="_blank">
-            Ver mapa interactivo de prescripción
-        </a>
-      </li>
+{% block content %}
+<section class="dashboard-section container" style="max-width:760px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Prescripción de Manejo Agrícola</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Genera recomendaciones automáticas y mapas para <b>fertilización y riego por zonas</b>.<br>
+        Carga tu <strong>CSV</strong> de datos zonales y obtén un informe práctico para distribuir insumos de forma eficiente.
+        <br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Reduce costes hasta un <b>18%</b> y mejora la sostenibilidad, cumpliendo normativas y maximizando el rendimiento.
+        </span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0; color:var(--tertiary); font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> El CSV debe tener columnas de <b>zona, NDVI, área (ha), fertilización actual, riego actual, etc.</b></li>
+        <li>Si quieres mapa georreferenciado, incluye una columna <b>GeoJSON</b> de polígonos de parcela (puede solicitarse por email).</li>
     </ul>
-  </div>
-{% endif %}
+    <form method="post" style="margin-bottom:2rem;">
+        <label>Ruta archivo de datos (CSV):</label>
+        <input type="text" name="archivo_csv" value="zonas_analizadas.csv" required>
+        <button type="submit" class="cta-button btn-details" style="margin-top:1rem;">Generar prescripción y mapa</button>
+    </form>
+    {% if resultado %}
+      <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+          <b>¿Cómo interpretar la prescripción?</b><br>
+          - El CSV contiene dosis recomendadas por zona.<br>
+          - El <b>GeoJSON</b> permite cargar el mapa en QGIS o Google Earth.<br>
+          - El mapa interactivo visualiza áreas y cantidades recomendadas.<br>
+          <span style="color:var(--secondary);">
+            Estas prescripciones optimizan el uso de agua y fertilizante, lo que puede suponer <b>hasta 350 €/ha de ahorro</b>.
+          </span>
+      </div>
+      <div class="alert alert-success">
+        Prescripciones y mapa generados.<br>
+        <ul>
+          <li>
+            <a href="/{{ resultado['output_csv'] }}" download>
+                Descargar prescripciones en CSV
+            </a>
+          </li>
+          {% if resultado['output_geojson'] %}
+          <li>
+            <a href="/{{ resultado['output_geojson'] }}" download>
+                Descargar prescripción GeoJSON
+            </a>
+          </li>
+          {% endif %}
+          <li>
+            <a href="/{{ resultado['output_mapa'] }}" target="_blank">
+                Ver mapa interactivo de prescripción
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endif %}
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
+    </div>
+</section>
 {% endblock %}
+
