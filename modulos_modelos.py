@@ -331,3 +331,43 @@ def analisis_sentimiento_nps(df, output_dir="static/graficos"):
     logging.info(f"Feedback exportado: {csv_out} | NPS: {nps_score}")
     return df, nps_score, csv_out, txt_out
 
+    import pandas as pd
+import logging
+
+def analizar_siniestros(df, output_dir="static/graficos"):
+    """
+    Analiza tiempos de gestión de siniestros, detecta cuellos de botella y sugiere automatización.
+    """
+    if not {'recepcion_dias', 'revision_dias', 'resolucion_dias'} <= set(df.columns):
+        raise ValueError("El dataset debe contener las columnas: 'recepcion_dias', 'revision_dias', 'resolucion_dias'.")
+    
+    # Sumar los tiempos de gestión
+    df['total_dias'] = df[['recepcion_dias', 'revision_dias', 'resolucion_dias']].sum(axis=1)
+    
+    # Calcular cuellos de botella (promedio por etapa)
+    cuellos = df[['recepcion_dias', 'revision_dias', 'resolucion_dias']].mean().sort_values(ascending=False)
+    logging.info(f"Cuellos de botella: {cuellos}")
+
+    # Generar recomendaciones (umbral de tiempo 5 días)
+    recomendaciones = {}
+    for etapa, tiempo_medio in cuellos.items():
+        if tiempo_medio > 5:
+            recomendaciones[etapa] = "Automatizar con RPA (ej. correos, formularios, alertas)"
+        else:
+            recomendaciones[etapa] = "Mantener gestión manual actual"
+    
+    # Exportar resultados
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
+    # Exportar cuellos de botella
+    cuellos_out = os.path.join(output_dir, "cuellos_de_botella.csv")
+    cuellos.to_csv(cuellos_out)
+    
+    # Exportar recomendaciones
+    recomendaciones_out = os.path.join(output_dir, "recomendaciones_rpa.csv")
+    pd.DataFrame(list(recomendaciones.items()), columns=["Etapa", "Recomendacion"]).to_csv(recomendaciones_out, index=False)
+
+    logging.info(f"Resultados exportados a: {cuellos_out} y {recomendaciones_out}")
+    
+    return df, cuellos, recomendaciones
