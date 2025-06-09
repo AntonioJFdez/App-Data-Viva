@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Marketing Personalizado 1:1</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Sube tu dataset de clientes (debe tener nombre, email, fecha_nacimiento, fecha_renovacion, fecha_siniestro):</label>
+      <input type="file" name="dataset" required>
+    </div>
+    <button type="submit">Generar Mensajes</button>
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if output_path %}
+    <a href="{{ url_for('static', filename='graficos/campaña_email.csv') }}" download class="cta-button">Descargar Mensajes CSV</a>
+  {% endif %}
+  {% if mensajes_html %}
+    <h4>Primeros Mensajes Generados</h4>
+    {{ mensajes_html|safe }}
+  {% endif %}
+</div>
+{% endblock %}
