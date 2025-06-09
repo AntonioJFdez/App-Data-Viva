@@ -499,6 +499,29 @@ def correlacion_perfil_producto():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('correlacion_perfil_producto.html', archivos=archivos_generados)
 
+    @app.route('/cross_sell', methods=['GET', 'POST'])
+def cross_sell():
+    """
+    Sube un archivo CSV y detecta oportunidades de cross-sell.
+    """
+    archivo_generado = None
+    num_candidatos = None
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        if not archivo:
+            flash(resultado_mensaje("Debes subir un archivo CSV.", exito=False), "danger")
+            return render_template('cross_sell.html')
+        try:
+            df = pd.read_csv(archivo)
+            if 'cliente_id' not in df.columns or 'producto' not in df.columns:
+                raise ValueError("El archivo debe tener las columnas 'cliente_id' y 'producto'.")
+            archivo_generado, num_candidatos = detectar_cross_sell(df)
+            flash(resultado_mensaje(f"{num_candidatos} clientes detectados con potencial de cross-sell."), "success")
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('cross_sell.html', archivo=archivo_generado)
+
+
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
