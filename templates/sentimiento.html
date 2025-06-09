@@ -1,13 +1,25 @@
 {% extends "base.html" %}
+{% block title %}Análisis de Sentimiento y NPS · Data Viva{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Análisis de Sentimiento y NPS</h2>
+<section class="dashboard-section container" style="max-width:700px; margin-top:3rem;">
+  <h2 class="corp-title center"><b>Análisis de Sentimiento y NPS</b></h2>
+  <p class="center" style="color:var(--primary); font-size:1.13rem;">
+      Analiza de forma automática el <b>sentimiento de tus clientes y su NPS</b> a partir de sus comentarios.<br>
+      <span style="color:var(--tertiary); font-size:1rem;">
+        Detecta riesgos de abandono y aumenta la retención hasta un <b>11-20%</b> actuando sobre clientes insatisfechos.
+      </span>
+  </p>
+  <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+    <li><b>Requisitos:</b> Archivo <code>.csv</code> o Excel con al menos dos columnas: <b>comentario</b> (texto) y <b>nps</b> (escala 0-10).</li>
+    <li>Incluye comentarios de clientes tras una compra, renovación, siniestro o interacción comercial.</li>
+  </ul>
   <form method="post" enctype="multipart/form-data">
     <div>
       <label>Sube tu dataset (comentario, nps):</label>
       <input type="file" name="dataset" required>
     </div>
-    <button type="submit">Analizar</button>
+    <button type="submit" class="cta-button btn-details" style="width:100%;margin-top:1rem;">Analizar</button>
   </form>
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -18,17 +30,27 @@
       </ul>
     {% endif %}
   {% endwith %}
+
   {% if nps_score %}
-    <div style="margin: 1.5rem 0; font-size:1.2rem;">
-      <strong>NPS Calculado:</strong> {{ nps_score }}
+    <div class="info-panel" style="margin:1.5rem 0; font-size:1.15rem; background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.08);padding:1rem 1.3rem;">
+      <strong>NPS Calculado:</strong> {{ nps_score }}<br>
+      <span style="color:var(--secondary);">¿Cómo interpretarlo?</span><br>
+      - <b>&lt; 0:</b> Riesgo alto de fuga.<br>
+      - <b>0 - 30:</b> Necesitas mejorar satisfacción.<br>
+      - <b>31 - 70:</b> Buen nivel, pero hay margen.<br>
+      - <b>71 - 100:</b> Excelente, ¡potencia recomendaciones!
     </div>
   {% endif %}
+
   {% if csv_out %}
-    <a href="{{ url_for('static', filename='graficos/feedback_sentimiento.csv') }}" download class="cta-button">Descargar Resultados</a>
+    <a href="{{ url_for('static', filename='graficos/feedback_sentimiento.csv') }}" download class="cta-button">Descargar Resultados CSV</a>
   {% endif %}
   {% if tabla_html %}
     <h4>Primeros Comentarios Analizados</h4>
     {{ tabla_html|safe }}
   {% endif %}
-</div>
+  <div class="center">
+      <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
+  </div>
+</section>
 {% endblock %}
