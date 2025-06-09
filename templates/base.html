@@ -67,17 +67,38 @@
                     <li><a href="{{ url_for('leads_web') }}">Leads Web & WhatsApp</a></li>
                 </ul>
             </li>
-            <!-- Módulo Drones (expandible) -->
-            <li class="dropdown">
-                <a href="#">Drones <span class="icon">&#9660;</span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{{ url_for('analisis_drones') }}">Análisis NDVI</a></li>
-                    <li><a href="{{ url_for('predictivo_drones') }}">Predicción Rendimiento</a></li>
-                    <!-- Añadir aquí futuros scripts de drones -->
-                </ul>
-            </li>
-            <li><a href="{{ url_for('contacto') }}">Contacto</a></li>
-        </ul>
+            <!-- Módulo Drones (Megamenú, expandible, completo) -->
+<li class="dropdown">
+    <a href="#">Drones <span class="icon">&#9660;</span></a>
+    <ul class="dropdown-menu">
+        <!-- NDVI y Variabilidad -->
+        <li><a href="{{ url_for('crop_variability_kriging') }}">Interpolación Kriging NDVI</a></li>
+        <li><a href="{{ url_for('crop_variability_mapping') }}">Segmentación Variabilidad NDVI</a></li>
+        <li><a href="{{ url_for('vegetation_index_analytics') }}">Índices Vegetativos (NDVI, GNDVI, SAVI)</a></li>
+        <li><a href="{{ url_for('phenological_monitoring') }}">Monitorización Fenológica</a></li>
+
+        <!-- Biomasa y 3D -->
+        <li><a href="{{ url_for('biomass_3d_analysis') }}">Análisis 3D y Biomasa (LIDAR)</a></li>
+
+        <!-- Salud de Cultivo y Plagas -->
+        <li><a href="{{ url_for('crop_health_analytics') }}">Salud de Cultivo (ML)</a></li>
+        <li><a href="{{ url_for('pest_disease_detection') }}">Detección de Plagas (Deep Learning)</a></li>
+
+        <!-- Estrés Hídrico y Riego -->
+        <li><a href="{{ url_for('water_stress_detection') }}">Detección Estrés Hídrico (CWSI)</a></li>
+        <li><a href="{{ url_for('water_stress_ml') }}">Predicción Estrés Hídrico (ML)</a></li>
+        <li><a href="{{ url_for('irrigation_optimization') }}">Optimización de Riego (ML)</a></li>
+
+        <!-- Predicción y Prescripción -->
+        <li><a href="{{ url_for('yield_prediction_analytics') }}">Predicción de Rendimiento</a></li>
+        <li><a href="{{ url_for('prescription_fertilization_unified') }}">Prescripción Fertilización y Riego</a></li>
+
+        <!-- Visores y Mapas -->
+        <li><a href="{{ url_for('field_mapping_analytics') }}">Visor Interactivo de Parcelas</a></li>
+    </ul>
+</li>
+<li><a href="{{ url_for('contacto') }}">Contacto</a></li>
+
         <!-- Hamburguesa solo móvil -->
         <div class="navbar-hamburger" id="hamburger-btn">
             <span></span><span></span><span></span>
