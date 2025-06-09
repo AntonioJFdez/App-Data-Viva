@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Optimización de Gestión de Siniestros</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Sube tu dataset (tiempos de gestión de siniestros):</label>
+      <input type="file" name="dataset" required>
+    </div>
+    <button type="submit">Analizar</button>
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% if df_resultado %}
+    <h4>Primeros Resultados de Siniestros Analizados</h4>
+    {{ df_resultado|safe }}
+  {% endif %}
+  {% if cuellos %}
+    <h4>Cuellos de Botella</h4>
+    {{ cuellos|safe }}
+  {% endif %}
+  {% if recomendaciones %}
+    <h4>Recomendaciones para Optimización</h4>
+    <ul>
+      {% for etapa, recomendacion in recomendaciones.items() %}
+        <li><strong>{{ etapa }}:</strong> {{ recomendacion }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}
