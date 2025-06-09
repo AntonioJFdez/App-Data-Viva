@@ -1,28 +1,65 @@
 {% extends 'base.html' %}
+
+{% block title %}Análisis NDVI/GNDVI/SAVI · Detección Vegetativa Automática{% endblock %}
+
 {% block content %}
-<h2>Análisis de Índices Vegetativos (NDVI, GNDVI, SAVI)</h2>
-<form method="post" style="margin-bottom:2rem;">
-    <div>
-        <label>Carpeta con imágenes multiespectrales:</label>
-        <input type="text" name="carpeta_datos" value="imagenes_multiespectrales/" required>
+<section class="dashboard-section container" style="max-width:860px; margin-top:2.2rem;">
+    <h2 class="corp-title center"><b>Análisis de Índices Vegetativos (NDVI, GNDVI, SAVI)</b></h2>
+    <p style="color:var(--primary);font-size:1.11rem;text-align:center;margin-bottom:1.2rem;">
+        <b>Evalúa el vigor y la salud de tus cultivos en segundos.</b><br>
+        Sube una carpeta con imágenes multiespectrales y obtén los principales índices (NDVI, GNDVI, SAVI) para cada campaña.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Detecta zonas problemáticas, optimiza insumos y mejora el rendimiento hasta un <b>15-20% anual</b>.<br>
+            Ideal para explotaciones agrícolas, consultoras agrarias y empresas de drones.
+        </span>
+    </p>
+    <ul style="margin:1rem 0 2rem 0;color:var(--tertiary);font-size:1.01rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Carpeta con imágenes multiespectrales en formatos admitidos (.tif, .jpg, .png).</li>
+        <li>El nombre de la carpeta debe coincidir con la estructura que uses en tu flujo de trabajo.</li>
+        <li>Cada imagen debe corresponder a una parcela, fecha o campaña.</li>
+    </ul>
+    <form method="post" style="margin-bottom:2rem;">
+        <div>
+            <label><b>Carpeta con imágenes multiespectrales:</b></label>
+            <input type="text" name="carpeta_datos" value="imagenes_multiespectrales/" required style="width:99%;">
+        </div>
+        <button type="submit" class="cta-button" style="margin-top:1.1rem;">Analizar índices</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    {% if resumen %}
+      <h4 style="margin-top:2.1rem;">Resumen de índices por campaña:</h4>
+      <div style="overflow-x:auto;">{{ resumen|safe }}</div>
+    {% endif %}
+    {% if imagenes %}
+      <h4 style="margin-top:1.8rem;">Gráficos de evolución de los índices:</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:2rem;">
+        {% for ruta in imagenes %}
+          <img src="/{{ ruta }}" style="max-width:340px; border-radius:1rem; margin-top:1rem;">
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if resumen or imagenes %}
+      <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-top:2.1rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        • El <b>NDVI</b> identifica zonas de bajo vigor y posibles estrés hídrico o plagas.<br>
+        • <b>GNDVI</b> es sensible al contenido de clorofila y al estrés nutricional.<br>
+        • <b>SAVI</b> es ideal para suelos desnudos o con poca cobertura vegetal.<br>
+        <span style="color:var(--secondary);">
+          Utiliza los gráficos para focalizar tratamientos, optimizar fertilización y anticipar pérdidas.
+        </span>
+      </div>
+    {% endif %}
+    <div class="center" style="margin-top:2.2rem;">
+        <a href="{{ url_for('contacto') }}" class="cta-button" style="background:var(--primary);color:var(--secondary);font-size:1.08rem;">
+            ¿Quieres automatizar este análisis en tu negocio? Solicita integración
+        </a>
     </div>
-    <button type="submit">Analizar índices</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if resumen %}
-  <h4>Resumen de índices por campaña:</h4>
-  <div style="overflow-x:auto;">{{ resumen|safe }}</div>
-{% endif %}
-{% if imagenes %}
-  <h4>Gráficos de evolución:</h4>
-  <div>
-    {% for ruta in imagenes %}
-      <img src="/{{ ruta }}" style="max-width:600px; border-radius:1rem; margin-top:1rem;">
-    {% endfor %}
-  </div>
-{% endif %}
+</section>
 {% endblock %}
+
