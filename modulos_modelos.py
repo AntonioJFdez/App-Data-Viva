@@ -466,3 +466,19 @@ def calcular_panel_kpis(df, output_dir="static/graficos"):
     logging.info(f"Panel de KPIs exportado a {filename}")
     return panel_kpi, filename
 
+    import pandas as pd
+import logging
+from datetime import datetime
+
+def analizar_perfiles_productos(df):
+    """Genera la matriz de frecuencia y matriz de correlación entre productos."""
+    matriz = pd.crosstab(index=df['perfil_cliente'], columns=df['producto'])
+    correlaciones = matriz.corr()
+    # Nombres de archivos con timestamp para no sobrescribir
+    fecha = datetime.now().strftime('%Y%m%d_%H%M%S')
+    archivo_matriz = f"static/graficos/matriz_perfil_producto_{fecha}.xlsx"
+    archivo_corr = f"static/graficos/correlaciones_producto_{fecha}.xlsx"
+    matriz.to_excel(archivo_matriz)
+    correlaciones.to_excel(archivo_corr)
+    return archivo_matriz, archivo_corr
+
