@@ -298,3 +298,36 @@ def fidelizacion_clientes(df, output_dir="static/graficos"):
     logging.info(f"Clientes exportados a: {output_path}")
     return df, output_path
 
+    import pandas as pd
+import logging
+from textblob import TextBlob
+
+def analisis_sentimiento_nps(df, output_dir="static/graficos"):
+    """
+    Analiza el sentimiento de los comentarios y calcula NPS.
+    Exporta resultados CSV y score NPS.
+    """
+    if 'comentario' not in df.columns or 'nps' not in df.columns:
+        raise ValueError("El dataset debe contener las columnas 'comentario' y 'nps'.")
+
+    # Sentimiento
+    df['sentimiento'] = df['comentario'].apply(lambda x: TextBlob(str(x)).sentiment.polarity)
+    df['estado'] = df['sentimiento'].apply(lambda x: 'Negativo' if x < -0.1 else ('Positivo' if x > 0.1 else 'Neutral'))
+
+    # NPS
+    promotores = df[df['nps'] >= 9].shape[0]
+    detractores = df[df['nps'] <= 6].shape[0]
+    total = df.shape[0]
+    nps_score = ((promotores - detractores) / total) * 100 if total > 0 else 0
+
+    # Exportar
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    csv_out = os.path.join(output_dir, "feedback_sentimiento.csv")
+    txt_out = os.path.join(output_dir, "nps_resultado.txt")
+    df.to_csv(csv_out, index=False)
+    with open(txt_out, 'w') as f:
+        f.write(f"NPS actual: {nps_score}")
+    logging.info(f"Feedback exportado: {csv_out} | NPS: {nps_score}")
+    return df, nps_score, csv_out, txt_out
+
