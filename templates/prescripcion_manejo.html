@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Prescripción de Manejo Agrícola (Fertilización y Riego)</h2>
+<form method="post" style="margin-bottom:2rem;">
+    <label>Ruta archivo de datos (CSV):</label>
+    <input type="text" name="archivo_csv" value="zonas_analizadas.csv" required>
+    <br>
+    <button type="submit">Generar prescripción y mapa</button>
+</form>
+
+{% if resultado %}
+  <div class="alert alert-success">
+    Prescripciones y mapa generados.<br>
+    <ul>
+      <li>
+        <a href="/{{ resultado['output_csv'] }}" download>
+            Descargar prescripciones en CSV
+        </a>
+      </li>
+      {% if resultado['output_geojson'] %}
+      <li>
+        <a href="/{{ resultado['output_geojson'] }}" download>
+            Descargar prescripción GeoJSON
+        </a>
+      </li>
+      {% endif %}
+      <li>
+        <a href="/{{ resultado['output_mapa'] }}" target="_blank">
+            Ver mapa interactivo de prescripción
+        </a>
+      </li>
+    </ul>
+  </div>
+{% endif %}
+{% endblock %}
