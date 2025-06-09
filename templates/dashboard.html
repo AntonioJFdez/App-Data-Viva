@@ -5,9 +5,15 @@
 <section class="dashboard-section container" style="max-width:860px; margin-top:3rem;">
     <h2 class="corp-title center"><b>Dashboard de Análisis Rápido</b></h2>
     <p class="center" style="color:var(--primary); font-size:1.13rem;">
-        Sube un <strong>CSV</strong> o <strong>Excel</strong> con tus datos y visualiza automáticamente histogramas de todas las variables numéricas.<br>
-        <strong>Perfecto para una exploración rápida y detectar tendencias de un vistazo.</strong>
+        <b>¿Quieres analizar rápidamente la calidad y tendencias de tus datos?</b><br>
+        Sube un archivo <strong>CSV</strong> o <strong>Excel</strong> y obtén en segundos histogramas automáticos de todas las variables numéricas.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">Ahorra hasta <b>6-10 horas</b> de análisis manual por cada dataset y detecta oportunidades de mejora en <b>ventas, riesgos y operaciones</b> desde el primer vistazo.</span>
     </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> El archivo debe contener al menos una columna numérica. Puede incluir encabezados y cualquier cantidad de filas.</li>
+        <li>Formatos aceptados: <code>.csv</code>, <code>.xlsx</code>, <code>.xls</code>.</li>
+        <li>Revisa que los separadores y puntos decimales sean los habituales (coma o punto).</li>
+    </ul>
     <form method="POST" enctype="multipart/form-data" style="margin:2.1rem auto 2.1rem auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
         <input type="file" name="dashboard_data" accept=".csv,.xlsx,.xls" required>
         <button type="submit" class="cta-button btn-details" style="width:100%;">Ver dashboard</button>
@@ -21,12 +27,19 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+            <b>¿Cómo interpretar el dashboard?</b><br>
+            - Cada histograma te ayuda a detectar valores atípicos, sesgos y posibles errores en tus datos.<br>
+            - Utiliza estos gráficos para priorizar limpiezas, diseñar segmentos o detectar oportunidades de negocio.<br>
+            - Puedes exportar los gráficos (clic derecho → guardar como imagen) para tus informes.
+        </div>
     {% endif %}
     <div class="center">
         <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
     </div>
 </section>
 {% endblock %}
+
 
 
 
