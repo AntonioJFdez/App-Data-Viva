@@ -11,6 +11,7 @@ from modulos_modelos import panel_rendimiento_agentes
 from modulos_modelos import pricing_dinamico
 from modulos_modelos import marketing_personalizado
 from modulos_modelos import fidelizacion_clientes
+from modulos_modelos import analisis_sentimiento_nps
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -350,6 +351,32 @@ def fidelizacion_view():
         except Exception as e:
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('fidelizacion.html')
+
+    @app.route('/sentimiento', methods=['GET', 'POST'])
+def sentimiento_view():
+    """
+    Analiza sentimiento de comentarios y calcula NPS.
+    """
+    tabla_html = None
+    nps_score = None
+    csv_out = None
+
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            df_resultado, nps_score, csv_out, txt_out = analisis_sentimiento_nps(df)
+            flash(resultado_mensaje("Análisis de sentimiento y NPS completado."), "success")
+            tabla_html = df_resultado[['comentario', 'sentimiento', 'estado', 'nps']].head(10).to_html(classes="table table-striped", index=False)
+            return render_template(
+                'sentimiento.html',
+                tabla_html=tabla_html,
+                nps_score=nps_score,
+                csv_out=csv_out
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('sentimiento.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
