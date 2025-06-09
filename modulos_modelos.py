@@ -132,4 +132,40 @@ def prediccion_churn(df, columnas=None, target_col='churned', output_dir="static
 
     return reporte_csv, reporte_xlsx, predicciones_csv, reporte_dict
 
+    # modulos_modelos.py (añadir después de prediccion_churn)
+
+import pandas as pd
+import os
+import logging
+
+def panel_rendimiento_agentes(df, output_dir="static/graficos"):
+    """
+    Calcula KPIs y genera el panel de rendimiento de agentes.
+    Devuelve el path del panel exportado.
+    """
+    if 'agente' not in df.columns:
+        raise ValueError("El dataset debe tener una columna 'agente'.")
+
+    resumen = df.groupby('agente').agg({
+        'clientes_contactados': 'sum',
+        'ventas_cerradas': 'sum',
+        'ventas_cruzadas': 'sum',
+        'satisfaccion_cliente': 'mean',
+        'tiempo_respuesta_horas': 'mean'
+    }).reset_index()
+
+    resumen['conversion_rate'] = (resumen['ventas_cerradas'] / resumen['clientes_contactados']).round(2)
+    resumen['cross_sell_ratio'] = (
+        resumen['ventas_cruzadas'] / resumen['ventas_cerradas']
+    ).replace([float('inf'), float('nan')], 0).round(2)
+    resumen['tiempo_respuesta_horas'] = resumen['tiempo_respuesta_horas'].round(1)
+    resumen['nps_aproximado'] = (resumen['satisfaccion_cliente'] * 10).clip(upper=100).round(0)
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    panel_csv = os.path.join(output_dir, "panel_agentes.csv")
+    resumen.to_csv(panel_csv, index=False)
+
+    return panel_csv, resumen
+
 
