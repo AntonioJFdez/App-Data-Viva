@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Análisis de Correlaciones entre Perfiles y Productos</h2>
+  <form method="post" enctype="multipart/form-data">
+    <label>Sube tu archivo CSV:</label>
+    <input type="file" name="dataset" accept=".csv" required>
+    <button type="submit">Analizar</button>
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% if archivos %}
+    <div style="margin-top: 1.2rem;">
+      <h3>Descarga tus resultados:</h3>
+      <ul>
+        {% for nombre, ruta in archivos.items() %}
+          <li><a href="{{ url_for('static', filename=ruta.split('static/')[1]) }}" download>{{ nombre }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
