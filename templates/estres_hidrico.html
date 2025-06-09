@@ -1,30 +1,61 @@
 {% extends 'base.html' %}
-{% block content %}
-<h2>Detección de Estrés Hídrico (imagen térmica)</h2>
-<form method="post" style="margin-bottom:2rem;">
-    <label>Ruta imagen térmica (.tif):</label>
-    <input type="text" name="ruta_termica" value="imagenes_termicas/parcela1_2024-05-20.tif" required>
-    <br>
-    <label>Ruta parcelas (GeoJSON):</label>
-    <input type="text" name="ruta_parcelas" value="parcelas.geojson" required>
-    <br>
-    <label>Límite crítico temperatura (°C):</label>
-    <input type="number" name="limite_critico" step="0.1" value="30.0">
-    <br>
-    <label>CWSI crítico:</label>
-    <input type="number" name="cwsi_critico" step="0.01" value="0.7">
-    <br>
-    <button type="submit">Analizar Estrés</button>
-</form>
+{% block title %}Detección de Estrés Hídrico · Data Viva{% endblock %}
 
-{% if resultado %}
-  <div class="alert alert-info">
-    Porcentaje de área crítica: <strong>{{ resultado['porcentaje_critico'] }}%</strong>
-  </div>
-  <ul>
-    <li><a href="/{{ resultado['alertas_csv'] }}" download>Descargar CSV de puntos críticos</a></li>
-    <li><a href="/{{ resultado['resumen_csv'] }}" download>Descargar resumen por parcela</a></li>
-    <li><a href="/{{ resultado['mapa_html'] }}" target="_blank">Ver mapa interactivo</a></li>
-  </ul>
-{% endif %}
+{% block content %}
+<section class="dashboard-section container" style="max-width:860px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Detección de Estrés Hídrico (imagen térmica)</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Identifica <b>zonas críticas de estrés hídrico</b> en tus cultivos de forma visual y automática usando imágenes térmicas de dron o satélite.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Reduce pérdidas potenciales de <b>hasta el 35%</b> en cultivos por falta de riego, mejora la toma de decisiones y ahorra en recursos hídricos.
+        </span>
+    </p>
+
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Debes disponer de una imagen térmica en formato <code>.tif</code> georreferenciada y un archivo de parcelas <code>.geojson</code>.</li>
+        <li><b>Límite crítico de temperatura:</b> Umbral para detectar zonas en riesgo (en °C). Puedes modificarlo según tu cultivo/localidad.</li>
+        <li><b>CWSI crítico:</b> Umbral del índice de estrés hídrico. Valores típicos entre <b>0.6 y 0.8</b> para alertas severas.</li>
+    </ul>
+
+    <form method="post" style="margin-bottom:2.1rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 12px rgba(44,62,80,0.08); padding:2rem 1.2rem;">
+        <div style="margin-bottom:1rem;">
+            <label><b>Ruta imagen térmica (.tif):</b></label>
+            <input type="text" name="ruta_termica" value="imagenes_termicas/parcela1_2024-05-20.tif" required style="width:100%;">
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label><b>Ruta parcelas (GeoJSON):</b></label>
+            <input type="text" name="ruta_parcelas" value="parcelas.geojson" required style="width:100%;">
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label><b>Límite crítico temperatura (°C):</b></label>
+            <input type="number" name="limite_critico" step="0.1" value="30.0">
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label><b>CWSI crítico:</b></label>
+            <input type="number" name="cwsi_critico" step="0.01" value="0.7">
+        </div>
+        <button type="submit" class="cta-button" style="width:100%; margin-top:1rem;">Analizar Estrés</button>
+    </form>
+
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        - El porcentaje de área crítica indica la extensión de zonas en riesgo hídrico según los umbrales configurados.<br>
+        - Descarga el <b>CSV</b> con los puntos críticos para usar en GIS o en informes.<br>
+        - El <b>resumen por parcela</b> te ayuda a priorizar acciones de riego.<br>
+        - Abre el <b>mapa interactivo</b> para visualizar y compartir las zonas en alerta.<br>
+        <b>Consejo:</b> Ajusta los umbrales en función de la fenología y recomendaciones técnicas del cultivo.
+    </div>
+
+    {% if resultado %}
+      <div class="alert alert-info" style="margin-bottom:1.2rem;">
+        <b>Porcentaje de área crítica:</b> <span style="color:var(--secondary);font-size:1.1rem;"><strong>{{ resultado['porcentaje_critico'] }}%</strong></span>
+      </div>
+      <ul style="margin-bottom:2.2rem;">
+        <li><a href="/{{ resultado['alertas_csv'] }}" class="cta-button" style="margin-bottom:0.5rem;" download>Descargar CSV de puntos críticos</a></li>
+        <li><a href="/{{ resultado['resumen_csv'] }}" class="cta-button" style="margin-bottom:0.5rem;" download>Descargar resumen por parcela</a></li>
+        <li><a href="/{{ resultado['mapa_html'] }}" class="cta-button" style="background:var(--primary);color:var(--secondary);" target="_blank">Ver mapa interactivo</a></li>
+      </ul>
+    {% endif %}
+</section>
 {% endblock %}
+
