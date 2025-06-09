@@ -452,6 +452,28 @@ def renovaciones_view():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('renovaciones.html')
 
+    @app.route('/panel_kpis', methods=['GET', 'POST'])
+def panel_kpis_view():
+    """
+    Calcula y muestra los principales KPIs aseguradores.
+    """
+    resultado = None
+    file_export = None
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            resultado, file_export = calcular_panel_kpis(df)
+            flash(resultado_mensaje("Panel de KPIs calculado con éxito. Descarga el CSV abajo."), "success")
+            return render_template(
+                'panel_kpis.html',
+                resultado=resultado.to_html(classes="table table-striped", index=False),
+                file_export=file_export
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('panel_kpis.html')
+
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
 if __name__ == "__main__":
