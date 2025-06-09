@@ -9,6 +9,8 @@ from modulos_modelos import scoring_leads
 from modulos_modelos import prediccion_churn
 from modulos_modelos import panel_rendimiento_agentes
 from modulos_modelos import pricing_dinamico
+from modulos_modelos import marketing_personalizado
+
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -295,6 +297,33 @@ def pricing_view():
         except Exception as e:
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('pricing.html')
+
+    @app.route('/marketing', methods=['GET', 'POST'])
+def marketing_view():
+    """
+    Marketing personalizado 1:1 para campañas automáticas de clientes.
+    """
+    mensajes_html = None
+    output_path = None
+
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            # Es importante convertir fechas si no vienen en formato datetime64
+            for col in ['fecha_nacimiento', 'fecha_renovacion', 'fecha_siniestro']:
+                df[col] = pd.to_datetime(df[col], errors='coerce')
+            df_mensajes, output_path = marketing_personalizado(df)
+            flash(resultado_mensaje("Mensajes generados correctamente. Descarga el archivo o revisa los mensajes abajo."), "success")
+            mensajes_html = df_mensajes.head(10).to_html(classes="table table-striped", index=False)
+            return render_template(
+                'marketing.html',
+                mensajes_html=mensajes_html,
+                output_path=output_path
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('marketing.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
