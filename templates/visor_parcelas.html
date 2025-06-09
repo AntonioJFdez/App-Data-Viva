@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Visor interactivo de parcelas agrícolas</h2>
+<form method="post" enctype="multipart/form-data" class="form-visor">
+    <div>
+        <label>Archivo de parcelas (.geojson o .shp):</label>
+        <input type="file" name="archivo_parcelas" required>
+    </div>
+    <button type="submit">Generar visor</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if mapa %}
+    <h3>Mapa interactivo de parcelas</h3>
+    <iframe src="{{ '/' + mapa }}" width="100%" height="450" style="border-radius:1rem; border:1px solid #bbb"></iframe>
+{% endif %}
+{% endblock %}
