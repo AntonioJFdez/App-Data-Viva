@@ -215,5 +215,52 @@ def pricing_dinamico(df, margen_deseado=0.25, output_dir="static/graficos"):
 
     return csv_path, graf_path, df, sim_df
 
+    # modulos_modelos.py (añadir después de pricing_dinamico)
+import pandas as pd
+from datetime import datetime
+import logging
+import os
+
+def marketing_personalizado(df, output_dir="static/graficos"):
+    """
+    Segmenta clientes y genera mensajes personalizados para campañas de cumpleaños, renovación y siniestros recientes.
+    Devuelve el DataFrame de mensajes y el path al archivo CSV exportado.
+    """
+    hoy = datetime.today()
+    df['dias_para_renovar'] = (df['fecha_renovacion'] - hoy).dt.days
+    df['es_cumple'] = df['fecha_nacimiento'].apply(lambda x: x.day == hoy.day and x.month == hoy.month)
+    df['siniestro_reciente'] = (hoy - df['fecha_siniestro']).dt.days <= 30
+
+    campañas = []
+    for _, row in df.iterrows():
+        if row['es_cumple']:
+            campañas.append({
+                "nombre": row['nombre'],
+                "email": row['email'],
+                "asunto": "¡Feliz cumpleaños!",
+                "mensaje": f"{row['nombre']}, te felicitamos y te ofrecemos una revisión gratuita de tu póliza."
+            })
+        elif 0 <= row['dias_para_renovar'] <= 15:
+            campañas.append({
+                "nombre": row['nombre'],
+                "email": row['email'],
+                "asunto": "Renueva tu póliza a tiempo",
+                "mensaje": f"{row['nombre']}, tu póliza vence pronto. Contáctanos para renovarla con beneficios exclusivos."
+            })
+        elif row['siniestro_reciente']:
+            campañas.append({
+                "nombre": row['nombre'],
+                "email": row['email'],
+                "asunto": "¿Cómo estás tras tu siniestro?",
+                "mensaje": f"{row['nombre']}, queremos saber cómo estás y ayudarte en lo que necesites tras tu siniestro reciente."
+            })
+
+    df_mensajes = pd.DataFrame(campañas)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    output_path = os.path.join(output_dir, "campaña_email.csv")
+    df_mensajes.to_csv(output_path, index=False)
+    logging.info(f"Mensajes exportados en: {output_path}")
+    return df_mensajes, output_path
 
 
