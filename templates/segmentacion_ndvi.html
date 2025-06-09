@@ -1,38 +1,71 @@
 {% extends 'base.html' %}
+{% block title %}Segmentación Intra-Parcela NDVI · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Segmentación intra-parcela (NDVI + KMeans)</h2>
-<form method="post" enctype="multipart/form-data" class="form-segmentacion">
-    <div>
-        <label>Imagen NDVI (.tif):</label>
-        <input type="file" name="archivo_ndvi" required>
+<section class="dashboard-section container" style="max-width:750px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Segmentación Intra-Parcela (NDVI + KMeans)</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        <b>Detecta zonas homogéneas o problemáticas dentro de cada parcela</b> usando imágenes NDVI y KMeans.<br>
+        Divide automáticamente en zonas para riego/fertilización/monitorización y <b>optimiza recursos hasta un 15-20%</b>.
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Imagen NDVI en formato <code>.tif</code> (GeoTIFF) y archivo de parcela en <code>.geojson</code>.</li>
+        <li>Selecciona el número de zonas (clusters) según la precisión o granularidad deseada.</li>
+        <li>Ideal para agricultura de precisión, riego sectorizado, manejo de fertilización o inspección de cultivos.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data" class="form-segmentacion">
+        <div>
+            <label>Imagen NDVI (.tif):</label>
+            <input type="file" name="archivo_ndvi" required>
+        </div>
+        <div>
+            <label>Archivo de parcela (.geojson):</label>
+            <input type="file" name="archivo_parcela" required>
+        </div>
+        <div>
+            <label>Número de zonas:</label>
+            <input type="number" name="n_clusters" value="4" min="2" max="12" required>
+        </div>
+        <button type="submit" class="cta-button btn-details" style="width:100%;margin-top:1rem;">Segmentar</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% if mapa %}
+        <h3 class="center" style="margin-top:1.2rem;">Mapa interactivo de zonas</h3>
+        <iframe src="{{ '/' + mapa }}" width="100%" height="450" style="border-radius:1rem; border:1px solid #bbb"></iframe>
+        <br>
+    {% endif %}
+    <div class="center" style="margin-bottom:1.2rem;">
+        {% if recomendaciones %}
+            <a href="{{ '/' + recomendaciones }}" class="cta-button btn-details" download>
+                Descargar recomendaciones por zona
+            </a>
+        {% endif %}
+        {% if geojson %}
+            <a href="{{ '/' + geojson }}" class="cta-button btn-details" download>
+                Descargar GeoJSON de zonas
+            </a>
+        {% endif %}
+        {% if csv %}
+            <a href="{{ '/' + csv }}" class="cta-button btn-details" download>
+                Descargar CSV de zonas
+            </a>
+        {% endif %}
     </div>
-    <div>
-        <label>Archivo de parcela (.geojson):</label>
-        <input type="file" name="archivo_parcela" required>
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        - El mapa interactivo muestra las zonas segmentadas por características similares.<br>
+        - Los ficheros descargables te permiten aplicar directamente la segmentación en campo.<br>
+        <span style="color:var(--secondary);">
+            Aplica las zonas en tu plan de riego, fertilización o tratamiento diferencial.
+        </span>
     </div>
-    <div>
-        <label>Número de zonas:</label>
-        <input type="number" name="n_clusters" value="4" min="2" max="12" required>
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
     </div>
-    <button type="submit">Segmentar</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if mapa %}
-    <h3>Mapa interactivo de zonas</h3>
-    <iframe src="{{ '/' + mapa }}" width="100%" height="450" style="border-radius:1rem; border:1px solid #bbb"></iframe>
-    <br>
-{% endif %}
-{% if recomendaciones %}
-    <a href="{{ '/' + recomendaciones }}" class="btn btn-secondary">Descargar recomendaciones por zona</a>
-{% endif %}
-{% if geojson %}
-    <a href="{{ '/' + geojson }}" class="btn btn-secondary">Descargar GeoJSON de zonas</a>
-{% endif %}
-{% if csv %}
-    <a href="{{ '/' + csv }}" class="btn btn-secondary">Descargar CSV de zonas</a>
-{% endif %}
+</section>
 {% endblock %}
+
