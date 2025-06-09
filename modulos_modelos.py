@@ -496,3 +496,11 @@ def detectar_cross_sell(df):
     candidatos.to_excel(nombre_archivo, index=False)
     return nombre_archivo, len(candidatos)
 
+    def comparar_precios(coare, competencia):
+    df = coare.merge(competencia, on='producto', suffixes=('_propio', '_competencia'))
+    df['diferencia_absoluta'] = df['precio_propio'] - df['precio_competencia']
+    df['diferencia_relativa'] = ((df['precio_propio'] - df['precio_competencia']) / df['precio_competencia']).round(3)
+    fecha = datetime.now().strftime('%Y%m%d_%H%M%S')
+    nombre_archivo = f"static/graficos/benchmarking_precios_{fecha}.xlsx"
+    df.to_excel(nombre_archivo, index=False)
+    return nombre_archivo, len(df)
