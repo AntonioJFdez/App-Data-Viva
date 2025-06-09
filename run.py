@@ -241,6 +241,30 @@ def churn_view():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('churn.html')
 
+    @app.route('/panel-agentes', methods=['GET', 'POST'])
+def panel_agentes_view():
+    """
+    Panel 360° de rendimiento de agentes.
+    """
+    resumen = None
+    panel_csv = None
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            panel_csv, resumen = panel_rendimiento_agentes(df)
+            flash(resultado_mensaje("Panel generado con éxito. Descarga los resultados o revisa el resumen abajo."), "success")
+            # Mostrar tabla HTML resumida (las primeras filas)
+            resumen_html = resumen.head().to_html(classes="table table-striped", index=False)
+            return render_template(
+                'panel_agentes.html',
+                panel_csv=panel_csv,
+                resumen_html=resumen_html
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('panel_agentes.html')
+
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
 if __name__ == "__main__":
