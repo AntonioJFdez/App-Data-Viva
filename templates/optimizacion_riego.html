@@ -1,46 +1,65 @@
 {% extends 'base.html' %}
+{% block title %}Optimización del Riego ML · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Optimización del Riego de Cultivos (ML)</h2>
-<form method="post" enctype="multipart/form-data" class="form-riego" style="margin-bottom:2rem;">
-    <div>
-        <label>Sube tu archivo CSV de históricos de riego:</label>
-        <input type="file" name="datos_riego" required>
+<section class="dashboard-section container" style="max-width:800px; margin-top:2.2rem;">
+    <h2 class="corp-title center"><b>Optimización del Riego de Cultivos (ML)</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Calcula la cantidad óptima de riego en función de condiciones ambientales y predice ahorros de hasta <b>15-22%</b> en consumo de agua.<br>
+        <span style="color:var(--tertiary);">Entrena tu propio modelo y aplica recomendaciones adaptadas a cada parcela y momento.</span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Sube un CSV con históricos de riego. Columnas recomendadas: <b>fecha, parcela, humedad_suelo, temperatura, precipitacion, evapotranspiracion, litros_riego</b>.</li>
+        <li>El modelo aprende de tus datos reales y recomienda el riego ideal para cada situación.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data" class="form-riego" style="margin-bottom:2rem;">
+        <div>
+            <label>Sube tu archivo CSV de históricos de riego:</label>
+            <input type="file" name="datos_riego" required>
+        </div>
+        <button type="submit" class="cta-button" style="margin-top:1.1rem;">Entrenar modelo</button>
+    </form>
+    <hr>
+    <form method="post" class="form-prediccion">
+        <h3>Predicción de riego recomendado</h3>
+        <div>
+            <label>Humedad suelo (%)</label>
+            <input type="number" step="any" name="humedad_suelo" required>
+        </div>
+        <div>
+            <label>Temperatura (&deg;C)</label>
+            <input type="number" step="any" name="temperatura" required>
+        </div>
+        <div>
+            <label>Precipitación (mm)</label>
+            <input type="number" step="any" name="precipitacion" required>
+        </div>
+        <div>
+            <label>Evapotranspiración (mm)</label>
+            <input type="number" step="any" name="evapotranspiracion" required>
+        </div>
+        <button type="submit" class="cta-button" style="margin-top:1.1rem;">Calcular riego recomendado</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% if prediccion %}
+        <div class="resultado" style="margin:1.5rem 0; padding:1rem; border-radius:1rem; background:#e9f7ef;">
+            <b>Riego recomendado:</b> {{ prediccion|round(2) }} litros
+        </div>
+    {% endif %}
+    {% if grafico %}
+        <h3>Evolución histórica de la humedad del suelo</h3>
+        <img src="{{ '/' + grafico }}" alt="Panel humedad" style="max-width:480px; border-radius:1rem; margin-top:1rem;">
+    {% endif %}
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-top:2rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        • Introduce los valores actuales y obtendrás la recomendación personalizada.<br>
+        • Los históricos sirven para reentrenar y mejorar el modelo cada campaña.<br>
+        <b>¿Buscas integración automática con tu plataforma de sensores?</b> <span style="color:var(--secondary);">Solicítala aquí</span>.
     </div>
-    <button type="submit">Entrenar modelo</button>
-</form>
-<hr>
-<form method="post" class="form-prediccion">
-    <h3>Predicción de riego recomendado</h3>
-    <div>
-        <label>Humedad suelo (%)</label>
-        <input type="number" step="any" name="humedad_suelo" required>
-    </div>
-    <div>
-        <label>Temperatura (&deg;C)</label>
-        <input type="number" step="any" name="temperatura" required>
-    </div>
-    <div>
-        <label>Precipitación (mm)</label>
-        <input type="number" step="any" name="precipitacion" required>
-    </div>
-    <div>
-        <label>Evapotranspiración (mm)</label>
-        <input type="number" step="any" name="evapotranspiracion" required>
-    </div>
-    <button type="submit">Calcular riego recomendado</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if prediccion %}
-    <div class="resultado" style="margin:1.5rem 0; padding:1rem; border-radius:1rem; background:#e9f7ef;">
-        <b>Riego recomendado:</b> {{ prediccion|round(2) }} litros
-    </div>
-{% endif %}
-{% if grafico %}
-    <h3>Evolución histórica de la humedad del suelo</h3>
-    <img src="{{ '/' + grafico }}" alt="Panel humedad" style="max-width:480px; border-radius:1rem; margin-top:1rem;">
-{% endif %}
+</section>
 {% endblock %}
+
