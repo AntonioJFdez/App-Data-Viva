@@ -521,6 +521,29 @@ def cross_sell():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('cross_sell.html', archivo=archivo_generado)
 
+    @app.route('/benchmarking_precios', methods=['GET', 'POST'])
+def benchmarking_precios():
+    """
+    Sube dos archivos CSV (propio y competencia), compara precios y exporta resultados.
+    """
+    archivo_generado = None
+    num_productos = None
+    if request.method == 'POST':
+        archivo_propio = request.files.get('archivo_propio')
+        archivo_competencia = request.files.get('archivo_competencia')
+        if not archivo_propio or not archivo_competencia:
+            flash(resultado_mensaje("Debes subir ambos archivos CSV." , exito=False), "danger")
+            return render_template('benchmarking_precios.html')
+        try:
+            coare = pd.read_csv(archivo_propio)
+            competencia = pd.read_csv(archivo_competencia)
+            if not {'producto', 'precio'}.issubset(coare.columns) or not {'producto', 'precio'}.issubset(competencia.columns):
+                raise ValueError("Ambos archivos deben tener columnas 'producto' y 'precio'.")
+            archivo_generado, num_productos = comparar_precios(coare, competencia)
+            flash(resultado_mensaje(f"{num_productos} productos comparados. Descarga el Excel con los resultados."), "success")
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('benchmarking_precios.html', archivo=archivo_generado)
 
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
