@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Análisis de Índices Vegetativos (NDVI, GNDVI, SAVI)</h2>
+<form method="post" style="margin-bottom:2rem;">
+    <div>
+        <label>Carpeta con imágenes multiespectrales:</label>
+        <input type="text" name="carpeta_datos" value="imagenes_multiespectrales/" required>
+    </div>
+    <button type="submit">Analizar índices</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if resumen %}
+  <h4>Resumen de índices por campaña:</h4>
+  <div style="overflow-x:auto;">{{ resumen|safe }}</div>
+{% endif %}
+{% if imagenes %}
+  <h4>Gráficos de evolución:</h4>
+  <div>
+    {% for ruta in imagenes %}
+      <img src="/{{ ruta }}" style="max-width:600px; border-radius:1rem; margin-top:1rem;">
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}
