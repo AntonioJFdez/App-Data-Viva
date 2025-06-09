@@ -482,3 +482,17 @@ def analizar_perfiles_productos(df):
     correlaciones.to_excel(archivo_corr)
     return archivo_matriz, archivo_corr
 
+    import pandas as pd
+import logging
+from datetime import datetime
+
+def detectar_cross_sell(df):
+    matriz = df.pivot_table(index='cliente_id', columns='producto', aggfunc='size', fill_value=0)
+    matriz['num_productos'] = matriz.sum(axis=1)
+    media_productos = matriz['num_productos'].mean()
+    candidatos = matriz[matriz['num_productos'] < media_productos].reset_index()
+    fecha = datetime.now().strftime('%Y%m%d_%H%M%S')
+    nombre_archivo = f"static/graficos/cross_sell_{fecha}.xlsx"
+    candidatos.to_excel(nombre_archivo, index=False)
+    return nombre_archivo, len(candidatos)
+
