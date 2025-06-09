@@ -4,29 +4,63 @@
 {% block content %}
 <section class="download-section container" style="max-width:740px; margin-top:2.2rem;">
     <h2 style="margin-bottom:0.9rem;"><b>{{ titulo_pagina }}</b></h2>
+    
+    {# Descripción breve orientada a beneficios reales para el usuario #}
     <p class="modulo-subdesc" style="font-size:1.08rem; color:var(--primary); margin-bottom:1.2rem;">
         {{ descripcion_modulo }}
     </p>
+    
+    {# Lista de beneficios clave, personalizados por módulo (usar emojis/✔️ para destacar valor) #}
     <ul class="modulo-beneficios" style="margin-bottom:1.4rem;">
       {% for beneficio in beneficios %}
         <li>✔️ {{ beneficio }}</li>
       {% endfor %}
     </ul>
+    
+    {# Bloque TIP/Ejemplo realista y CTA emocional #}
     <p class="modulo-tip" style="color:var(--secondary); margin-bottom:1.2rem;">
         <b>Ejemplo/Tip:</b> {{ ejemplo_tip }}
     </p>
+    
+    {# Requisitos/formatos necesarios para el archivo, con ayuda visual si es posible #}
+    {% if requisitos %}
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2rem;">
+        <b>¿Qué necesitas?</b>
+        <ul style="margin:0.7rem 0 0 1.2rem;">
+            {% for req in requisitos %}
+                <li>🟢 {{ req }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    {# Formulario HTML dinámico (incrustado desde la vista Flask) #}
     <form method="POST" enctype="multipart/form-data" style="margin:2rem auto 1.4rem auto; background:var(--background); border-radius:1.1rem; box-shadow:0 2px 14px rgba(44,62,80,0.10); padding:1.6rem 1rem;">
         {{ formulario_html|safe }}
         <button type="submit" class="cta-button" style="width:100%; margin-top:1rem;">{{ boton_texto }}</button>
     </form>
+    
+    {# Explicación de resultados, si aplica #}
+    {% if como_interpretar %}
+    <div class="info-panel" style="background:var(--white);border-radius:1.1rem;box-shadow:0 2px 8px rgba(222,191,176,0.07);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.1rem;">
+        <b>¿Cómo interpretar los resultados?</b><br>
+        {{ como_interpretar }}
+    </div>
+    {% endif %}
+    
+    {# Salida de resultados generados dinámicamente #}
     {% if resultado %}
       <div class="output-card" style="margin:2rem 0;">
         {{ resultado|safe }}
       </div>
     {% endif %}
+    
+    {# Call to Action secundaria: volver al inicio #}
     <div class="center" style="margin-top:2.2rem;">
         <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
     </div>
+    
+    {# FAQ rápida o CTA a soporte si surgen dudas #}
     <div class="faq-footer" style="margin-top:2.5rem;">
         <b>¿Dudas? ¿Quieres ayuda personalizada?</b>
         <a href="{{ url_for('contacto') }}" class="cta-button" style="background:var(--primary);color:var(--white);margin-left:0.8rem;">Contacto rápido</a>
