@@ -77,3 +77,59 @@ def scoring_leads(df, target_col='convertido', output_dir="static/graficos"):
     joblib.dump(modelo, modelo_path)
     return output_csv, output_xlsx, reporte
 
+    # modulos_modelos.py (añade después del scoring_leads)
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, roc_auc_score
+import joblib
+import os
+
+def prediccion_churn(df, columnas=None, target_col='churned', output_dir="static/graficos"):
+    """
+    Entrena un modelo para predecir churn de clientes, exporta reporte y resultados.
+    """
+    if columnas is None:
+        # Por defecto columnas típicas para churn
+        columnas = ['edad', 'prima_anual', 'num_pólizas', 'score_interacción']
+    if target_col not in df.columns:
+        raise ValueError(f"Falta la columna objetivo '{target_col}'.")
+
+    X = df[columnas]
+    y = df[target_col].astype(int)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, stratify=y, test_size=0.2, random_state=42
+    )
+    modelo = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
+    modelo.fit(X_train, y_train)
+
+    preds = modelo.predict(X_test)
+    probas = modelo.predict_proba(X_test)[:, 1]
+    reporte_dict = classification_report(y_test, preds, output_dict=True)
+    roc_auc = roc_auc_score(y_test, probas)
+    reporte_dict['roc_auc'] = {'f1-score': roc_auc}
+
+    # Guardar reporte y scoring
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    reporte_csv = os.path.join(output_dir, "reporte_churn.csv")
+    reporte_xlsx = os.path.join(output_dir, "reporte_churn.xlsx")
+    predicciones_csv = os.path.join(output_dir, "clientes_churn_score.csv")
+    pd.DataFrame(reporte_dict).transpose().to_csv(reporte_csv)
+    try:
+        pd.DataFrame(reporte_dict).transpose().to_excel(reporte_xlsx)
+    except Exception as e:
+        pass
+
+    # Añade score de churn a todo el DataFrame
+    df['score_churn'] = modelo.predict_proba(df[columnas])[:, 1]
+    df.to_csv(predicciones_csv, index=False)
+
+    # Guardar modelo
+    modelo_path = os.path.join(output_dir, "modelo_churn.pkl")
+    joblib.dump(modelo, modelo_path)
+
+    return reporte_csv, reporte_xlsx, predicciones_csv, reporte_dict
+
+
