@@ -1,14 +1,78 @@
 {% extends "base.html" %}
+{% block title %}Priorización de Clientes Dormidos · Data Viva Analytics{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Identificación y Priorización de Clientes Dormidos</h2>
-  <form method="post" enctype="multipart/form-data">
-    <div>
-      <label>Sube tu dataset de clientes dormidos:</label>
-      <input type="file" name="dataset" required>
-    </div>
-    <button type="submit">Priorizar</button>
+<section class="download-section container" style="max-width:750px; margin-top:2.2rem;">
+  <h2 class="section-title">Identificación y Priorización de Clientes Dormidos</h2>
+  
+  <!-- VALOR Y BENEFICIO -->
+  <div style="color:var(--primary); font-size:1.15rem; margin-bottom:1.2rem;">
+    <p>
+      Detecta y prioriza los <b>clientes inactivos o dormidos</b> con mayor potencial de reactivación.<br>
+      <ul style="margin-left:1.3rem;">
+        <li>
+          <b>Incrementa ventas:</b> Reactivar clientes dormidos cuesta hasta 5 veces menos que captar nuevos.
+        </li>
+        <li>
+          <b>Impacto:</b> Los programas de recuperación aumentan ventas recurrentes hasta un 15-30% adicional.
+        </li>
+        <li>
+          <b>Resultados rápidos:</b> Envíales campañas personalizadas o recupera carteras con acciones dirigidas.
+        </li>
+      </ul>
+      <span style="color:#388e3c; font-weight:600;">
+        *Válido para seguros, retail, energía, banca, SaaS, clubes y cualquier sector con cartera de clientes recurrentes o inactivos.*
+      </span>
+    </p>
+  </div>
+
+  <!-- FORMULARIO Y REQUISITOS -->
+  <form method="post" enctype="multipart/form-data"
+        style="margin-bottom:1.6rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.13); padding:1.6rem 1.2rem;">
+    <h4 style="margin-bottom:0.6rem;">¿Qué necesitas subir?</h4>
+    <ul style="margin-left:1.1rem; color:#444; font-size:1em;">
+      <li><b>Archivo de clientes inactivos:</b> Formato .csv, .xlsx o .xls.</li>
+      <li>
+        <b>Columnas recomendadas:</b> ID, nombre, email/teléfono, fecha de última compra/interacción, importe acumulado, producto/servicio.
+      </li>
+      <li>
+        <b>Opcional:</b> Fecha de nacimiento, segmento, historial, ciudad, canal de contacto.
+      </li>
+    </ul>
+    <label style="font-weight:600;">Sube tu dataset de clientes dormidos:</label>
+    <input type="file" name="dataset" required>
+    <br><br>
+    <button type="submit" class="cta-button" style="width:100%;">Priorización Inteligente</button>
   </form>
+
+  <!-- EXPLICACIÓN DE RESULTADOS -->
+  <div style="background:#f7f9e6; border-radius:1rem; box-shadow:0 1px 8px rgba(44,62,80,0.08); padding:1rem 1.2rem; margin-bottom:1.1rem; color:#545210;">
+    <h4>¿Cómo interpretar los resultados?</h4>
+    <ul style="margin-left:1.2rem;">
+      <li>
+        <b>Top 10 clientes dormidos:</b> Los más propensos a reactivarse, ordenados por potencial de compra, engagement histórico y tiempo de inactividad.
+      </li>
+      <li>
+        <b>Descarga Excel completo:</b> Contiene el ranking de toda la cartera inactiva para tus campañas o llamadas.
+      </li>
+      <li>
+        <b>Tip:</b> Comienza la campaña con los primeros 10-20 clientes priorizados para obtener resultados inmediatos.
+      </li>
+    </ul>
+    <p>
+      Aplica ofertas personalizadas, llamadas proactivas o emails automáticos para aumentar las tasas de recuperación.
+    </p>
+  </div>
+
+  <!-- CTA EXTRA -->
+  <div style="margin-bottom:1.2rem;">
+    <span style="color:#b17019;">
+      ¿Quieres lanzar una campaña de recuperación automática o integrar esto en tu CRM? 
+      <a href="{{ url_for('contacto') }}" style="color:#a04a00;">Contacta aquí y recibe una demo.</a>
+    </span>
+  </div>
+
+  <!-- MENSAJES DE ESTADO -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul class="flashes">
@@ -18,14 +82,18 @@
       </ul>
     {% endif %}
   {% endwith %}
+
+  <!-- RESULTADOS Y DESCARGAS -->
   {% if resultado %}
-    <h4>Top 10 Clientes Dormidos Priorizados</h4>
-    {{ resultado|safe }}
+    <h4 style="margin-top:2rem;">Top 10 Clientes Dormidos Priorizados</h4>
+    <div style="overflow-x:auto;">{{ resultado|safe }}</div>
   {% endif %}
   {% if file_export %}
-    <a class="cta-button" href="/static/graficos/{{ file_export.split('/')[-1] }}" download>
-      Descargar Excel Completo
-    </a>
+    <div style="margin:1.4rem 0;">
+      <a class="cta-button" href="/static/graficos/{{ file_export.split('/')[-1] }}" download>
+        Descargar Excel Completo
+      </a>
+    </div>
   {% endif %}
-</div>
+</section>
 {% endblock %}
