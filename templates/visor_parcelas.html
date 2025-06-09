@@ -1,20 +1,43 @@
 {% extends 'base.html' %}
+{% block title %}Visor Interactivo de Parcelas Agrícolas · Data Viva{% endblock %}
+
 {% block content %}
-<h2>Visor interactivo de parcelas agrícolas</h2>
-<form method="post" enctype="multipart/form-data" class="form-visor">
-    <div>
-        <label>Archivo de parcelas (.geojson o .shp):</label>
-        <input type="file" name="archivo_parcelas" required>
+<section class="dashboard-section container" style="max-width:700px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Visor Interactivo de Parcelas Agrícolas</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Visualiza fácilmente tus parcelas y zonas de cultivo sobre el mapa.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Facilita el seguimiento, comunicación y planificación agronómica sin softwares complejos. Ideal para técnicos, cooperativas, bodegas y explotaciones agrícolas.
+        </span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Archivo de parcelas en formato <code>.geojson</code> o <code>.shp</code> (ShapeFile).</li>
+        <li>Si es ShapeFile, incluye todos los archivos asociados (.shp, .shx, .dbf, etc) en un .zip.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data" class="form-visor" style="margin-bottom:2rem;">
+        <div>
+            <label>Archivo de parcelas (.geojson o .shp/.zip):</label>
+            <input type="file" name="archivo_parcelas" required>
+        </div>
+        <button type="submit" class="cta-button btn-details" style="margin-top:1rem;width:100%;">Generar visor</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% if mapa %}
+        <h3 style="margin-top:1.8rem;">Mapa interactivo de parcelas</h3>
+        <iframe src="{{ '/' + mapa }}" width="100%" height="450" style="border-radius:1rem; border:1px solid #bbb"></iframe>
+        <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.06);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;margin-top:1rem;">
+            <b>¿Cómo interpretar?</b><br>
+            - Haz zoom y explora tus zonas.<br>
+            - Ideal para identificar áreas problemáticas y planificar inspecciones.<br>
+            - Exporta capturas para informes técnicos.
+        </div>
+    {% endif %}
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
     </div>
-    <button type="submit">Generar visor</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
-  {% endfor %}
-{% endwith %}
-{% if mapa %}
-    <h3>Mapa interactivo de parcelas</h3>
-    <iframe src="{{ '/' + mapa }}" width="100%" height="450" style="border-radius:1rem; border:1px solid #bbb"></iframe>
-{% endif %}
+</section>
 {% endblock %}
