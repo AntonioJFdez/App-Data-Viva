@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Benchmarking de Precios</h2>
+  <form method="post" enctype="multipart/form-data">
+    <label>Archivo de Precios Propios (.csv):</label>
+    <input type="file" name="archivo_propio" accept=".csv" required>
+    <br><br>
+    <label>Archivo de Precios Competencia (.csv):</label>
+    <input type="file" name="archivo_competencia" accept=".csv" required>
+    <br><br>
+    <button type="submit">Comparar</button>
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% if archivo %}
+    <div style="margin-top: 1.2rem;">
+      <h3>Descarga tu comparativa de precios:</h3>
+      <a href="{{ url_for('static', filename=archivo.split('static/')[1]) }}" download>Descargar Excel</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
