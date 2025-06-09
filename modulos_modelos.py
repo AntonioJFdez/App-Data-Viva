@@ -371,3 +371,35 @@ def analizar_siniestros(df, output_dir="static/graficos"):
     logging.info(f"Resultados exportados a: {cuellos_out} y {recomendaciones_out}")
     
     return df, cuellos, recomendaciones
+
+    import pandas as pd
+import logging
+from datetime import datetime
+
+def priorizar_clientes_dormidos(df, output_dir="static/graficos"):
+    """
+    Calcula un score de reactivación para clientes inactivos según inactividad y valor potencial.
+    """
+    columnas = ['cliente_id', 'nombre', 'meses_ultimo_contacto', 'prima_media', 'num_productos']
+    if not all(col in df.columns for col in columnas):
+        raise ValueError(f"El dataset debe tener las columnas: {columnas}")
+
+    df['meses_inactivos'] = df['meses_ultimo_contacto']
+    df['valor'] = df['prima_media'] * df['num_productos']
+    df['score_reactivacion'] = df['meses_inactivos'] * df['valor']
+    df_ordenado = df.sort_values(by='score_reactivacion', ascending=False)
+
+    fecha = datetime.now().strftime('%Y%m%d')
+    filename = f"{output_dir}/clientes_priorizados_{fecha}.xlsx"
+    try:
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        columnas_exportar = ['cliente_id', 'nombre', 'score_reactivacion', 'meses_inactivos', 'valor']
+        df_ordenado[columnas_exportar].to_excel(filename, index=False)
+        logging.info(f"Archivo de clientes priorizados exportado: {filename}")
+    except Exception as e:
+        logging.error(f"Error al exportar archivo: {e}")
+        raise
+
+    return df_ordenado, filename
+
