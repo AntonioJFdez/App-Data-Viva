@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Análisis de Biomasa 3D (LIDAR)</h2>
+<form method="post" enctype="multipart/form-data" class="form-biomasa3d">
+    <div>
+        <label>Archivo LIDAR (.las):</label>
+        <input type="file" name="archivo_las" required>
+    </div>
+    <div>
+        <label>Tamaño de celda para grid (m):</label>
+        <input type="number" name="grid_size" value="1" min="0.1" step="0.1">
+    </div>
+    <button type="submit">Analizar biomasa</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if dsm %}
+    <h3>Resultados</h3>
+    <div>
+        <strong>DSM (superficie):</strong><br>
+        <img src="{{ '/' + dsm }}" style="max-width: 90%;">
+    </div>
+{% endif %}
+{% if dtm %}
+    <div>
+        <strong>DTM (terreno):</strong><br>
+        <img src="{{ '/' + dtm }}" style="max-width: 90%;">
+    </div>
+{% endif %}
+{% if volumen %}
+    <div>
+        <strong>Volumen estimado de biomasa:</strong> {{ volumen | round(2) }} m³
+    </div>
+{% endif %}
+{% endblock %}
