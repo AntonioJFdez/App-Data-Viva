@@ -2,68 +2,109 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Data Viva · Soluciones Automáticas{% endblock %}</title>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo_favicon.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>{% block title %}Data Viva Analytics{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo_favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
-    {% block head %}{% endblock %}
+    <!-- Puedes añadir aquí FontAwesome o similar para iconos -->
 </head>
 <body>
-    <header>
-        <div class="nav-container">
-            <a class="nav-logo" href="{{ url_for('home') }}">
-                <img src="{{ url_for('static', filename='img/logo_data_viva.png') }}" alt="Logo Data Viva">
-                <span>Data Viva</span>
-            </a>
-            <nav>
-                <ul>
-                  <li><a href="{{ url_for('home') }}">Inicio</a></li>
-                  <li><a href="{{ url_for('perfilado') }}">Perfilado de datos</a></li>
-                  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                  <li><a href="{{ url_for('smartfilter') }}">Smart Filter</a></li>
-                  <li><a href="{{ url_for('prediccion') }}">Predicción</a></li>
-                  <li><a href="{{ url_for('segmentacion') }}">Segmentación de Clientes</a></li>
-                  <li><a href="{{ url_for('scoring_leads_view') }}">Scoring de Leads</a></li>
-                  <li><a href="{{ url_for('churn_view') }}">Predicción de Churn</a></li>
-                  <li><a href="{{ url_for('panel_agentes_view') }}">Panel de Agentes</a></li>
-                  <li><a href="{{ url_for('pricing_view') }}">Pricing Dinámico</a></li>
-                  <li><a href="{{ url_for('marketing_view') }}">Marketing Personalizado</a></li>
-                  <li><a href="{{ url_for('fidelizacion_view') }}">Fidelización</a></li>
-                  <li><a href="{{ url_for('sentimiento_view') }}">Sentimiento & NPS</a></li>
-                  <li><a href="{{ url_for('siniestros_view') }}">Gestión de Siniestros</a></li>
-                  <li><a href="{{ url_for('clientes_dormidos_view') }}">Clientes Dormidos</a></li>
-                  <li><a href="{{ url_for('renovaciones_view') }}">Renovaciones</a></li>
-                  <li><a href="{{ url_for('panel_kpis_view') }}">Panel KPIs</a></li>
-                  <li><a href="{{ url_for('correlacion_perfil_producto') }}">Correlación Perfiles-Productos</a></li>
-                  <li><a href="{{ url_for('cross_sell') }}">Oportunidades Cross-Sell</a></li>
-                  <li><a href="{{ url_for('benchmarking_precios') }}">Benchmarking Precios</a></li>
-                  <li><a href="{{ url_for('ltv_clientes') }}">Modelo LTV Clientes</a></li>
-
-
-  
-                  <!-- Puedes añadir más enlaces si creas más endpoints en el futuro -->
-                </ul>
-            </nav>
-            <a class="cta-nav" href="https://antoniojfdez.github.io/dataviva/" target="_blank">
-                ← Volver al Portfolio
+    <!-- NAVBAR MEGAMENU -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='img/logo_data_viva.png') }}" alt="Logo Data Viva" height="42">
             </a>
         </div>
-    </header>
-    <main>
+        <ul class="navbar-menu">
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <!-- Dashboards -->
+            <li class="dropdown">
+                <a href="#">Dashboards <span class="icon">&#9660;</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard Exploratorio</a></li>
+                    <li><a href="{{ url_for('panel_kpis') }}">Panel KPIs Integral</a></li>
+                    <li><a href="{{ url_for('panel_agentes') }}">Rendimiento de Agentes</a></li>
+                </ul>
+            </li>
+            <!-- Análisis de Clientes -->
+            <li class="dropdown">
+                <a href="#">Clientes <span class="icon">&#9660;</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('segmentacion') }}">Segmentación</a></li>
+                    <li><a href="{{ url_for('churn') }}">Churn / Scoring</a></li>
+                    <li><a href="{{ url_for('fidelizacion') }}">Fidelización</a></li>
+                    <li><a href="{{ url_for('cross_sell') }}">Cross-sell</a></li>
+                    <li><a href="{{ url_for('clientes_dormidos') }}">Clientes Dormidos</a></li>
+                    <li><a href="{{ url_for('ltv') }}">Valor de Cliente (LTV)</a></li>
+                </ul>
+            </li>
+            <!-- Predicción y Automatización -->
+            <li class="dropdown">
+                <a href="#">Predicción <span class="icon">&#9660;</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('prediccion') }}">Predicción de KPIs</a></li>
+                    <li><a href="{{ url_for('scoring_leads') }}">Scoring Leads</a></li>
+                    <li><a href="{{ url_for('pricing') }}">Pricing Dinámico</a></li>
+                    <li><a href="{{ url_for('renovaciones') }}">Digitalización Renovaciones</a></li>
+                </ul>
+            </li>
+            <!-- Feedback y Benchmarking -->
+            <li class="dropdown">
+                <a href="#">Feedback <span class="icon">&#9660;</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('sentimiento_nps') }}">Sentimiento & NPS</a></li>
+                    <li><a href="{{ url_for('benchmarking') }}">Benchmarking Precios</a></li>
+                </ul>
+            </li>
+            <!-- Herramientas -->
+            <li class="dropdown">
+                <a href="#">Herramientas <span class="icon">&#9660;</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('marketing_personalizado') }}">Marketing 1:1</a></li>
+                    <li><a href="{{ url_for('siniestros') }}">Gestión Siniestros</a></li>
+                    <li><a href="{{ url_for('correlaciones') }}">Correlaciones Productos</a></li>
+                    <li><a href="{{ url_for('leads_web') }}">Leads Web & WhatsApp</a></li>
+                </ul>
+            </li>
+            <!-- Módulo Drones (expandible) -->
+            <li class="dropdown">
+                <a href="#">Drones <span class="icon">&#9660;</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('analisis_drones') }}">Análisis NDVI</a></li>
+                    <li><a href="{{ url_for('predictivo_drones') }}">Predicción Rendimiento</a></li>
+                    <!-- Añadir aquí futuros scripts de drones -->
+                </ul>
+            </li>
+            <li><a href="{{ url_for('contacto') }}">Contacto</a></li>
+        </ul>
+        <!-- Hamburguesa solo móvil -->
+        <div class="navbar-hamburger" id="hamburger-btn">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message|safe }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </main>
-    <footer>
-        <div class="footer-contactos" id="contacto">
-            <a href="mailto:datavivalab@gmail.com">datavivalab@gmail.com</a>
-            <a href="tel:+34621003808">+34 621 00 38 08</a>
-            <a href="https://www.linkedin.com/in/antoniojfdez/" target="_blank">LinkedIn</a>
-        </div>
-        <div class="footer-derechos">© 2025 Data Viva. Todos los derechos reservados.</div>
+
+    <footer class="footer">
+        <p>© {{ current_year }} Data Viva Analytics. Todos los derechos reservados.</p>
     </footer>
+
+    <!-- JS del menú -->
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
 </html>
+
 
 
 
