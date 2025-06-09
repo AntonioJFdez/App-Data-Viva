@@ -5,9 +5,15 @@
 <section class="download-section container" style="max-width: 600px; margin-top:3rem;">
     <h2 class="corp-title center"><b>Predicción Automática de KPIs</b></h2>
     <p class="center" style="color:var(--primary); font-size:1.13rem; margin-bottom:1.4rem;">
-        Sube tu dataset <strong>(CSV/Excel)</strong>, elige la variable objetivo y obtén una predicción automática<br>
-        con <strong>Random Forest</strong> y el error cuadrático medio como métrica de calidad.
+        ¿Quieres anticipar ventas, riesgos o métricas clave?<br>
+        Sube tu <strong>dataset</strong> (<code>CSV</code> o <code>Excel</code>), elige la variable objetivo y obtén una predicción <b>en minutos</b> con <strong>IA Random Forest</strong>.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">Ideal para validar hipótesis, forecast comercial o ajustar primas y precios automáticamente.</span>
     </p>
+    <ul style="margin:1.2rem 0 2rem 0; color:var(--tertiary); font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> El archivo debe incluir una columna numérica objetivo y columnas predictoras relevantes.</li>
+        <li>Formatos aceptados: <code>.csv</code>, <code>.xlsx</code>, <code>.xls</code>.</li>
+        <li>Introduce el <b>nombre exacto</b> de la columna a predecir (respeta mayúsculas/minúsculas).</li>
+    </ul>
     <form method="POST" enctype="multipart/form-data" style="margin:0 auto; max-width:420px; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:2rem 1.2rem;">
         <input type="file" name="data_kpi" accept=".csv,.xlsx,.xls" required>
         <input type="text" name="target" placeholder="Variable objetivo (nombre exacto de la columna)" required>
@@ -17,11 +23,19 @@
         <div style="background:var(--secondary); color:var(--primary); border-radius:1.2rem; margin-top:2rem; text-align:center; padding:1.4rem 1rem; font-size:1.14rem; font-weight:600;">
             {{ resultado }}
         </div>
+        <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;margin-top:1.6rem;">
+            <b>¿Cómo interpretar el resultado?</b><br>
+            • El modelo predice la variable objetivo para tus filas y calcula el error medio.<br>
+            • Revisa el error (RMSE) para valorar la precisión.<br>
+            • Exporta los resultados y valida hipótesis de negocio sin programar.<br>
+            <span style="color:var(--secondary);">¿Quieres recomendaciones sobre cómo mejorar tu modelo? ¡Solicita una consultoría express!</span>
+        </div>
     {% endif %}
     <div class="center">
         <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
     </div>
 </section>
 {% endblock %}
+
 
 
