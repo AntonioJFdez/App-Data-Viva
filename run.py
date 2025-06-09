@@ -474,6 +474,32 @@ def panel_kpis_view():
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('panel_kpis.html')
 
+    @app.route('/correlacion_perfil_producto', methods=['GET', 'POST'])
+def correlacion_perfil_producto():
+    """
+    Permite subir un archivo CSV de clientes/productos y analiza la correlación.
+    """
+    archivos_generados = None
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        if not archivo:
+            flash(resultado_mensaje("Debes subir un archivo CSV.", exito=False), "danger")
+            return render_template('correlacion_perfil_producto.html')
+        try:
+            df = pd.read_csv(archivo)
+            if not {'perfil_cliente', 'producto'}.issubset(df.columns):
+                raise ValueError("El archivo debe contener las columnas 'perfil_cliente' y 'producto'.")
+            archivo_matriz, archivo_corr = analizar_perfiles_productos(df)
+            archivos_generados = {
+                "Matriz Frecuencia": archivo_matriz,
+                "Correlación Productos": archivo_corr
+            }
+            flash(resultado_mensaje("Análisis completado. Descarga los resultados abajo."), "success")
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('correlacion_perfil_producto.html', archivos=archivos_generados)
+
+
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
 if __name__ == "__main__":
