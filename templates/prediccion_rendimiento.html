@@ -1,24 +1,50 @@
 {% extends 'base.html' %}
-{% block content %}
-<h2>Predicción de Rendimiento Agrícola (ML)</h2>
-<form method="post" style="margin-bottom:2rem;">
-    <label>Ruta archivo de datos (CSV):</label>
-    <input type="text" name="archivo_datos" value="datos_rendimiento_parcelas.csv" required>
-    <br>
-    <button type="submit">Predecir y generar informe</button>
-</form>
+{% block title %}Predicción de Rendimiento Agrícola · Data Viva{% endblock %}
 
-{% if resultado %}
-  <div class="alert alert-success">
-    Informe generado para <b>{{ resultado['num_parcelas'] }}</b> parcelas.<br>
-    Error medio absoluto: <b>{{ resultado['error_medio'] }} t/ha</b>
-  </div>
-  <ul>
-    <li>
-      <a href="/{{ resultado['ruta_excel'] }}" download>
-        Descargar informe Excel de rendimiento
-      </a>
-    </li>
-  </ul>
-{% endif %}
+{% block content %}
+<section class="dashboard-section container" style="max-width:760px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Predicción de Rendimiento Agrícola (ML)</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        ¿Quieres anticipar la producción por parcela y optimizar tus decisiones agrícolas?<br>
+        Sube tu <strong>CSV</strong> de datos agronómicos y predice el rendimiento esperado por parcela usando <b>Machine Learning</b>.<br>
+        <span style="color:var(--tertiary);font-size:1rem;">
+            Perfecto para anticipar cosechas, ajustar compras/ventas y justificar inversiones ante clientes o socios.
+        </span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0; color:var(--tertiary); font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> El archivo debe estar en formato <code>.csv</code> e incluir al menos: <b>parcela, año, variable objetivo (ej: rendimiento), y variables predictoras</b> (NDVI, GNDVI, clima, fertilización, etc.).</li>
+        <li>Consulta la <b>plantilla de ejemplo</b> si tienes dudas sobre las columnas (¡solicítala gratis!).</li>
+    </ul>
+    <form method="post" style="margin-bottom:2rem;">
+        <label>Ruta archivo de datos (CSV):</label>
+        <input type="text" name="archivo_datos" value="datos_rendimiento_parcelas.csv" required>
+        <button type="submit" class="cta-button btn-details" style="margin-top:1rem;">Predecir y generar informe</button>
+    </form>
+    {% if resultado %}
+      <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+          <b>¿Cómo interpretar el informe?</b><br>
+          - El informe incluye la predicción de toneladas/hectárea por parcela.<br>
+          - El <b>error medio absoluto</b> indica la precisión media del modelo (valores bajos = mayor confianza).<br>
+          <span style="color:var(--secondary);">
+            Puedes usar este informe para justificar decisiones ante cooperativas, clientes o seguros agrícolas.<br>
+            <b>Ahorra hasta 1.200€/campaña</b> en análisis y evita pérdidas imprevistas.
+          </span>
+      </div>
+      <div class="alert alert-success">
+        Informe generado para <b>{{ resultado['num_parcelas'] }}</b> parcelas.<br>
+        Error medio absoluto: <b>{{ resultado['error_medio'] }} t/ha</b>
+      </div>
+      <ul>
+        <li>
+          <a href="/{{ resultado['ruta_excel'] }}" download>
+            Descargar informe Excel de rendimiento
+          </a>
+        </li>
+      </ul>
+    {% endif %}
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
+    </div>
+</section>
 {% endblock %}
+
