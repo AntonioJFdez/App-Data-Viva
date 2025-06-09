@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Identificación y Priorización de Clientes Dormidos</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Sube tu dataset de clientes dormidos:</label>
+      <input type="file" name="dataset" required>
+    </div>
+    <button type="submit">Priorizar</button>
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% if resultado %}
+    <h4>Top 10 Clientes Dormidos Priorizados</h4>
+    {{ resultado|safe }}
+  {% endif %}
+  {% if file_export %}
+    <a class="cta-button" href="/static/graficos/{{ file_export.split('/')[-1] }}" download>
+      Descargar Excel Completo
+    </a>
+  {% endif %}
+</div>
+{% endblock %}
