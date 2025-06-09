@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  <h2>Oportunidades de Cross-Sell</h2>
-  <form method="post" enctype="multipart/form-data">
+  <h2 style="margin-bottom:0.8rem;">Oportunidades de Cross-Sell</h2>
+  <p style="color:var(--primary);font-size:1.11rem;">
+    <b>Multiplica tus ingresos</b> identificando clientes con alto potencial de compra cruzada.<br>
+    Este análisis detecta clientes con mayor probabilidad de aceptar nuevos productos, lo que puede suponer un <b>aumento directo de ventas del 7-18%*</b> y mejorar la fidelidad de tu cartera.<br>
+    <small style="color:var(--tertiary);">*Basado en media sectorial de aseguradoras y servicios B2B.</small>
+  </p>
+  <ul style="margin-bottom:1.5rem;line-height:1.5;color:var(--tertiary);font-size:1.02rem;">
+    <li>Sube un <b>archivo CSV</b> con los datos de tus clientes. <b>Requisitos:</b>
+      <ul style="margin-top:0.3rem;margin-bottom:0.7rem;">
+        <li>Debe incluir, al menos, una columna <b>id_cliente</b> y columnas con productos/servicios contratados (por ejemplo: <code>hogar, auto, vida</code> o similar).</li>
+        <li>Opcional: incluye <b>fecha de última compra</b>, <b>edad</b>, <b>segmento</b> para mejorar la recomendación.</li>
+      </ul>
+    </li>
+    <li>El sistema identificará clientes con <b>potencial real de cross-sell</b> y generará un Excel descargable con los candidatos recomendados.</li>
+    <li>Cada oportunidad incluirá una <b>puntuación</b> y el/los productos recomendados para cada cliente.</li>
+  </ul>
+  <form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
     <label>Sube tu archivo CSV:</label>
-    <input type="file" name="dataset" accept=".csv" required>
-    <button type="submit">Analizar</button>
+    <input type="file" name="dataset" accept=".csv" required style="margin-left:1rem;">
+    <button type="submit" class="cta-button" style="margin-left:1.2rem;">Analizar oportunidades</button>
   </form>
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -18,9 +33,20 @@
   {% endwith %}
   {% if archivo %}
     <div style="margin-top: 1.2rem;">
-      <h3>Descarga los clientes candidatos a cross-sell:</h3>
-      <a href="{{ url_for('static', filename=archivo.split('static/')[1]) }}" download>Descargar Excel</a>
+      <h3>Descarga tu informe personalizado:</h3>
+      <a href="{{ url_for('static', filename=archivo.split('static/')[1]) }}" class="cta-button" download>Descargar Excel de Cross-Sell</a>
+      <p style="font-size:0.97rem;color:var(--tertiary);margin-top:0.6rem;">
+        <b>¿Cómo interpretar el resultado?</b><br>
+        - Filtra por la columna de puntuación: cuanto más alta, mayor probabilidad de éxito.<br>
+        - Prioriza los clientes con más productos recomendados.<br>
+        - Utiliza el Excel para lanzar campañas personalizadas de venta cruzada.
+      </p>
     </div>
   {% endif %}
+  <p style="margin-top:2.3rem;font-size:0.98rem;color:var(--tertiary);">
+    ¿Dudas sobre el formato del archivo o quieres maximizar el potencial de tu análisis? 
+    <a href="{{ url_for('contacto') }}" style="color:var(--secondary);font-weight:bold;">Contacta con nosotros</a>.
+  </p>
 </div>
 {% endblock %}
+
