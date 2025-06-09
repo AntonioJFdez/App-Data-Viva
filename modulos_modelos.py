@@ -504,3 +504,29 @@ def detectar_cross_sell(df):
     nombre_archivo = f"static/graficos/benchmarking_precios_{fecha}.xlsx"
     df.to_excel(nombre_archivo, index=False)
     return nombre_archivo, len(df)
+
+    from lifelines import KaplanMeierFitter
+import numpy as np
+
+def calcular_ltv(df):
+    df['fecha_compra'] = pd.to_datetime(df['fecha_compra'])
+    ultimo_dia = df['fecha_compra'].max()
+    agrupado = df.groupby('cliente_id').agg({
+        'fecha_compra': [np.min, np.max, 'count'],
+        'importe': 'sum'
+    })
+    agrupado.columns = ['primera_compra', 'ultima_compra', 'num_compras', 'total_gastado']
+    agrupado['duracion'] = (ultimo_dia - agrupado['primera_compra']).dt.days
+    agrupado['observado'] = (agrupado['ultima_compra'] == ultimo_dia).astype(int)
+
+    kmf = KaplanMeierFitter()
+    kmf.fit(agrupado['duracion'], event_observed=1 - agrupado['observado'])
+
+    agrupado['valor_medio'] = agrupado['total_gastado'] / agrupado['num_compras']
+    agrupado['ltv_estimado'] = agrupado['valor_medio'] * agrupado['num_compras'] * 1.5
+    agrupado['segmento'] = pd.qcut(agrupado['ltv_estimado'], 3, labels=['Bajo', 'Medio', 'Alto'])
+
+    fecha = datetime.now().strftime('%Y%m%d_%H%M%S')
+    nombre_archivo = f"static/graficos/ltv_clientes_{fecha}.xlsx"
+    agrupado.reset_index().to_excel(nombre_archivo, index=False)
+    return nombre_archivo, agrupado.shape[0]
