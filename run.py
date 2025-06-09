@@ -13,6 +13,7 @@ from modulos_modelos import marketing_personalizado
 from modulos_modelos import fidelizacion_clientes
 from modulos_modelos import analisis_sentimiento_nps
 from modulos_modelos import analizar_siniestros
+from modulos_modelos import priorizar_clientes_dormidos
 
 # -- CONFIGURACIÓN FLASK --
 app = Flask(__name__)
@@ -403,6 +404,29 @@ def siniestros_view():
         except Exception as e:
             flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
     return render_template('siniestros.html')
+
+    @app.route('/clientes_dormidos', methods=['GET', 'POST'])
+def clientes_dormidos_view():
+    """
+    Identifica y prioriza clientes dormidos para reactivación comercial.
+    """
+    resultado = None
+    file_export = None
+
+    if request.method == 'POST':
+        archivo = request.files.get('dataset')
+        try:
+            df = cargar_dataset(archivo)
+            resultado, file_export = priorizar_clientes_dormidos(df)
+            flash(resultado_mensaje("Clientes priorizados por score de reactivación. Puedes descargar el archivo Excel abajo."), "success")
+            return render_template(
+                'clientes_dormidos.html',
+                resultado=resultado.head(10).to_html(classes="table table-striped", index=False),
+                file_export=file_export
+            )
+        except Exception as e:
+            flash(resultado_mensaje(f"Error: {e}", exito=False), "danger")
+    return render_template('clientes_dormidos.html')
 
 # -- INICIO SEGURO (PRODUCCIÓN) --
 
