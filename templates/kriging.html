@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Interpolación Kriging (Mapa de Variabilidad Intra-Parcela)</h2>
+<form method="post" enctype="multipart/form-data" class="form-kriging">
+    <div>
+        <label>Sube tu archivo CSV de muestras:</label>
+        <input type="file" name="dataset" required>
+    </div>
+    <div>
+        <label>Variable a interpolar (ej. ndvi, savi, humedad):</label>
+        <input type="text" name="variable" value="ndvi">
+    </div>
+    <button type="submit">Generar mapa</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if grafico %}
+    <h3>Resultado</h3>
+    <img src="{{ '/' + grafico }}" style="max-width:90%">
+{% endif %}
+{% endblock %}
