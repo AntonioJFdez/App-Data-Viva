@@ -168,4 +168,52 @@ def panel_rendimiento_agentes(df, output_dir="static/graficos"):
 
     return panel_csv, resumen
 
+    # modulos_modelos.py (añadir después del panel de agentes)
+import pandas as pd
+import os
+import logging
+import matplotlib.pyplot as plt
+
+def pricing_dinamico(df, margen_deseado=0.25, output_dir="static/graficos"):
+    """
+    Calcula precios óptimos y simula impacto de márgenes sobre la ganancia total.
+    Devuelve path del CSV y path de la gráfica generada.
+    """
+    if not all(col in df.columns for col in ['coste', 'elasticidad', 'volumen_estimado']):
+        raise ValueError("El dataset debe incluir las columnas: 'coste', 'elasticidad', 'volumen_estimado'.")
+
+    df['precio_objetivo'] = df['coste'] * (1 + margen_deseado)
+    df['precio_ajustado'] = df['precio_objetivo'] * (1 - df['elasticidad'] * 0.1)
+    df['precio_ajustado'] = df['precio_ajustado'].round(2)
+    df['ganancia_estimada'] = (df['precio_ajustado'] - df['coste']) * df['volumen_estimado']
+
+    # Simulación de distintos márgenes
+    simulacion = []
+    for margen in [0.10, 0.20, 0.30, 0.40]:
+        temp = df.copy()
+        temp['precio_simulado'] = temp['coste'] * (1 + margen)
+        temp['ganancia_simulada'] = (temp['precio_simulado'] - temp['coste']) * temp['volumen_estimado']
+        total = temp['ganancia_simulada'].sum()
+        simulacion.append((margen, round(total, 2)))
+    sim_df = pd.DataFrame(simulacion, columns=['margen', 'ganancia_total'])
+
+    # Crear carpeta de salida si no existe
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    csv_path = os.path.join(output_dir, "precios_optimos.csv")
+    graf_path = os.path.join(output_dir, "simulacion_ganancias.png")
+
+    df.to_csv(csv_path, index=False)
+    sim_df.plot(x='margen', y='ganancia_total', kind='line', marker='o', title='Simulación de Ganancia por Margen')
+    plt.xlabel('Margen (%)')
+    plt.ylabel('Ganancia Total (€)')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(graf_path)
+    plt.close()
+
+    return csv_path, graf_path, df, sim_df
+
+
 
