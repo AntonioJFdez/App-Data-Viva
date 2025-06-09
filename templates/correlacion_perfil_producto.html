@@ -1,12 +1,79 @@
 {% extends "base.html" %}
+{% block title %}Correlaciones entre Perfiles y Productos · Data Viva Analytics{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Análisis de Correlaciones entre Perfiles y Productos</h2>
-  <form method="post" enctype="multipart/form-data">
-    <label>Sube tu archivo CSV:</label>
+<section class="download-section container" style="max-width:700px; margin-top:2.2rem;">
+  <h2 class="section-title">Análisis de Correlaciones entre Perfiles y Productos</h2>
+  
+  <!-- VALOR Y BENEFICIO -->
+  <div style="color:var(--primary); font-size:1.15rem; margin-bottom:1.3rem;">
+    <p>
+      Descubre <b>qué perfiles compran cada producto</b> y las combinaciones más rentables.<br>
+      <ul style="margin-left:1.3rem;">
+        <li>
+          <b>Segmenta y multiplica ventas:</b> Conoce los productos que van de la mano y diseña <b>ofertas personalizadas</b> para cada perfil.
+        </li>
+        <li>
+          <b>Aumenta el ticket medio:</b> Identifica oportunidades de <b>cross-selling</b> y <b>up-selling</b> en tu base de clientes.
+        </li>
+        <li>
+          <b>Resultados típicos:</b> La aplicación de campañas basadas en correlaciones incrementa un 10-25% el ticket medio y la recurrencia.
+        </li>
+      </ul>
+      <span style="color:#388e3c; font-weight:600;">
+        *Aplicable en seguros, banca, retail, energía, SaaS y cualquier negocio con productos o servicios recurrentes.*
+      </span>
+    </p>
+  </div>
+
+  <!-- FORMULARIO Y REQUISITOS -->
+  <form method="post" enctype="multipart/form-data"
+        style="margin-bottom:1.5rem; background:var(--background); border-radius:1.2rem; box-shadow:0 2px 16px rgba(222,191,176,0.11); padding:1.6rem 1.2rem;">
+    <h4 style="margin-bottom:0.5rem;">¿Qué archivo necesitas?</h4>
+    <ul style="margin-left:1.1rem; color:#444; font-size:1em;">
+      <li><b>Formato CSV</b>, máximo 20 MB.</li>
+      <li>
+        <b>Columnas mínimas:</b> <code>cliente_id</code>, <code>producto</code> (o <code>servicio</code>), <code>perfil</code> (ejemplo: segmento, edad, sexo, canal).
+      </li>
+      <li>
+        <b>Opcional:</b> fecha de compra, importe, localización, frecuencia, etc.
+      </li>
+      <li>
+        <b>Tip:</b> Si tu dataset tiene columnas tipo "compra_producto_X", indícalo en observaciones o pídenos adaptación.
+      </li>
+    </ul>
+    <label style="font-weight:600;">Sube tu archivo CSV:</label>
     <input type="file" name="dataset" accept=".csv" required>
-    <button type="submit">Analizar</button>
+    <br><br>
+    <button type="submit" class="cta-button" style="width:100%;">Analizar Correlaciones</button>
   </form>
+
+  <!-- EXPLICACIÓN DE RESULTADOS -->
+  <div style="background:#f7f9e6; border-radius:1rem; box-shadow:0 1px 8px rgba(44,62,80,0.08); padding:1rem 1.2rem; margin-bottom:1.1rem; color:#545210;">
+    <h4>¿Qué obtienes?</h4>
+    <ul style="margin-left:1.2rem;">
+      <li>
+        <b>Matriz de correlaciones:</b> Verás qué productos o servicios suelen ir juntos y con qué perfiles.
+      </li>
+      <li>
+        <b>Informe visual y Excel:</b> Descarga los resultados listos para tu equipo de marketing, ventas o fidelización.
+      </li>
+      <li>
+        <b>Interpretación:</b> Focaliza tus acciones en los segmentos con mayor potencial y ajusta tus campañas de manera inmediata.
+      </li>
+    </ul>
+    <p>
+      Utiliza el informe para diseñar packs de productos, bundles, o para ofertas personalizadas y campañas automatizadas.
+    </p>
+  </div>
+
+  <!-- CTA EXTRA -->
+  <div style="margin-bottom:1.2rem;">
+    ¿Quieres informes personalizados por segmento, producto o canal? 
+    <a href="{{ url_for('contacto') }}" style="color:#a04a00;">Pide una demo aquí.</a>
+  </div>
+
+  <!-- MENSAJES DE ESTADO -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul class="flashes">
@@ -16,15 +83,18 @@
       </ul>
     {% endif %}
   {% endwith %}
+
+  <!-- DESCARGAS -->
   {% if archivos %}
     <div style="margin-top: 1.2rem;">
       <h3>Descarga tus resultados:</h3>
       <ul>
         {% for nombre, ruta in archivos.items() %}
-          <li><a href="{{ url_for('static', filename=ruta.split('static/')[1]) }}" download>{{ nombre }}</a></li>
+          <li><a class="cta-button" href="{{ url_for('static', filename=ruta.split('static/')[1]) }}" download>{{ nombre }}</a></li>
         {% endfor %}
       </ul>
     </div>
   {% endif %}
-</div>
+</section>
 {% endblock %}
+
