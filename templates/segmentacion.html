@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Segmentación Avanzada de Clientes (K-Means)</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Sube tu dataset (CSV o Excel):</label>
+      <input type="file" name="dataset" required>
+    </div>
+    <div>
+      <label>Columnas a usar (separadas por coma, opcional):</label>
+      <input type="text" name="columnas" placeholder="edad,num_pólizas,prima_anual,siniestros_12m">
+    </div>
+    <div>
+      <label>Número de clusters:</label>
+      <input type="number" name="n_clusters" value="4" min="2" max="10">
+    </div>
+    <button type="submit">Segmentar</button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if grafico %}
+    <h4>Visualización de Clusters</h4>
+    <img src="{{ url_for('static', filename='graficos/segmentacion_clientes.png') }}" style="max-width:600px;">
+  {% endif %}
+
+  {% if descargar_csv %}
+    <a href="{{ url_for('static', filename='graficos/clientes_segmentados.csv') }}" class="cta-button" download>Descargar CSV Segmentado</a>
+  {% endif %}
+</div>
+{% endblock %}
