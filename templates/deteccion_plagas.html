@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Detección de Plagas y Enfermedades (Deep Learning)</h2>
+<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
+    <div>
+        <label>Sube imagen de cultivo para predicción (jpg/png):</label>
+        <input type="file" name="imagen_prediccion" required>
+    </div>
+    <button type="submit">Analizar imagen</button>
+</form>
+<hr>
+<form method="post" enctype="multipart/form-data" style="margin-bottom:2rem;">
+    <h3>Entrenamiento (opcional)</h3>
+    <div>
+        <label>Sube el CSV de etiquetas:</label>
+        <input type="file" name="labels_csv">
+    </div>
+    <div>
+        <label>Carpeta con imágenes (por defecto 'imagenes_dron'):</label>
+        <input type="text" name="carpeta_imgs" placeholder="imagenes_dron">
+    </div>
+    <button type="submit">Entrenar modelo (tarda minutos)</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message|safe }}</div>
+  {% endfor %}
+{% endwith %}
+{% if imagen_cargada %}
+    <h4>Imagen analizada:</h4>
+    <img src="{{ imagen_cargada }}" alt="Imagen de cultivo" style="max-width:400px; margin-bottom:1rem; border-radius:1rem;">
+{% endif %}
+{% if prediccion %}
+    <div class="resultado" style="margin:1.5rem 0; padding:1rem; border-radius:1rem; background:#fcf8e3;">
+        <b>Resultado:</b> {{ prediccion }}
+    </div>
+{% endif %}
+{% endblock %}
