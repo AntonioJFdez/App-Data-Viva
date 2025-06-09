@@ -1,31 +1,56 @@
 {% extends "base.html" %}
+{% block title %}Digitalización de Renovaciones · Data Viva{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Digitalización de Renovaciones</h2>
-  <form method="post" enctype="multipart/form-data">
-    <div>
-      <label>Sube tu dataset de pólizas:</label>
-      <input type="file" name="dataset" required>
-    </div>
-    <button type="submit">Detectar renovaciones</button>
-  </form>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class="flashes">
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message|safe }}</li>
-        {% endfor %}
-      </ul>
+<section class="dashboard-section container" style="max-width:620px; margin-top:3rem;">
+    <h2 class="corp-title center"><b>Digitalización de Renovaciones</b></h2>
+    <p class="center" style="color:var(--primary); font-size:1.13rem;">
+        Automatiza el seguimiento de renovaciones de pólizas o contratos con un solo clic.<br>
+        Sube tu <strong>CSV</strong> y genera alertas y recordatorios automáticos para tus clientes o equipo.<br>
+        <span style="color:var(--tertiary); font-size:1rem;">
+            Reduce el <b>abandono</b> hasta un <b>12-18%</b> y aumenta la retención con procesos digitales inmediatos.
+        </span>
+    </p>
+    <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+        <li><b>Requisitos:</b> Dataset en <code>.csv</code> o Excel con columnas mínimas: <b>cliente, fecha_renovación, producto/póliza</b>.</li>
+        <li>Funciona para pólizas, contratos de servicios, mantenimientos, suscripciones, etc.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data">
+        <div>
+          <label>Sube tu dataset de pólizas:</label>
+          <input type="file" name="dataset" required>
+        </div>
+        <button type="submit" class="cta-button btn-details" style="width:100%;margin-top:1rem;">Detectar renovaciones</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message|safe }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% if resultado %}
+      <h4>Top 10 Recordatorios Generados</h4>
+      <div style="overflow-x:auto;">{{ resultado|safe }}</div>
     {% endif %}
-  {% endwith %}
-  {% if resultado %}
-    <h4>Top 10 Recordatorios Generados</h4>
-    {{ resultado|safe }}
-  {% endif %}
-  {% if file_export %}
-    <a class="cta-button" href="/static/graficos/{{ file_export.split('/')[-1] }}" download>
-      Descargar Recordatorios CSV
-    </a>
-  {% endif %}
-</div>
+    {% if file_export %}
+      <a class="cta-button" href="/static/graficos/{{ file_export.split('/')[-1] }}" download>
+        Descargar Recordatorios CSV
+      </a>
+    {% endif %}
+    <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+        <b>¿Cómo interpretar el resultado?</b><br>
+        - El CSV exportado contiene las alertas y recordatorios, listos para importar en CRM, email o WhatsApp.<br>
+        - Cada alerta ayuda a anticipar renovaciones y reducir la pérdida de clientes o contratos.<br>
+        <span style="color:var(--secondary);">
+            Un proceso digitalizado puede aumentar tu ratio de renovaciones hasta un <b>12% en solo un trimestre</b>.
+        </span>
+    </div>
+    <div class="center">
+        <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
+    </div>
+</section>
 {% endblock %}
+
