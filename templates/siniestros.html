@@ -1,13 +1,25 @@
 {% extends "base.html" %}
+{% block title %}Optimización de Gestión de Siniestros · Data Viva{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h2>Optimización de Gestión de Siniestros</h2>
+<section class="dashboard-section container" style="max-width:700px; margin-top:3rem;">
+  <h2 class="corp-title center"><b>Optimización de Gestión de Siniestros</b></h2>
+  <p class="center" style="color:var(--primary); font-size:1.13rem;">
+      <b>Analiza los tiempos de gestión de tus siniestros y detecta cuellos de botella</b> de forma automática.<br>
+      <span style="color:var(--tertiary); font-size:1rem;">
+        Reduce hasta un <b>25%</b> los plazos de resolución e incrementa la satisfacción de clientes y mediadores.
+      </span>
+  </p>
+  <ul style="margin:1.2rem 0 2rem 0;color:var(--tertiary);font-size:1.03rem;line-height:1.5;">
+    <li><b>Requisitos:</b> Archivo <code>.csv</code> o Excel con fechas, hitos y tiempos de cada siniestro gestionado.</li>
+    <li>Ideal para corredurías, compañías, SATs o cualquier empresa que gestione incidencias complejas.</li>
+  </ul>
   <form method="post" enctype="multipart/form-data">
     <div>
       <label>Sube tu dataset (tiempos de gestión de siniestros):</label>
       <input type="file" name="dataset" required>
     </div>
-    <button type="submit">Analizar</button>
+    <button type="submit" class="cta-button btn-details" style="width:100%;margin-top:1rem;">Analizar</button>
   </form>
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -23,16 +35,26 @@
     {{ df_resultado|safe }}
   {% endif %}
   {% if cuellos %}
-    <h4>Cuellos de Botella</h4>
+    <h4 style="color:var(--primary);margin-top:1.3rem;">Cuellos de Botella Detectados</h4>
     {{ cuellos|safe }}
   {% endif %}
   {% if recomendaciones %}
-    <h4>Recomendaciones para Optimización</h4>
+    <h4 style="color:var(--primary);margin-top:1.3rem;">Recomendaciones para Optimización</h4>
     <ul>
       {% for etapa, recomendacion in recomendaciones.items() %}
         <li><strong>{{ etapa }}:</strong> {{ recomendacion }}</li>
       {% endfor %}
     </ul>
   {% endif %}
-</div>
+  <div class="info-panel" style="background:var(--background);border-radius:1.1rem;box-shadow:0 2px 8px rgba(44,62,80,0.05);padding:1rem 1.3rem;font-size:1.01rem;color:var(--primary);margin-bottom:2.2rem;">
+      <b>¿Cómo interpretar los resultados?</b><br>
+      - Revisa el resumen y detecta los tramos del proceso donde más se acumulan retrasos.<br>
+      - Sigue las recomendaciones automáticas para cada etapa y mide el impacto en los siguientes cierres.<br>
+      - Descarga los resultados y compártelos en tus informes de gestión o auditoría.
+  </div>
+  <div class="center">
+      <a href="{{ url_for('home') }}" class="cta-button volver-inicio-link">← Volver al inicio</a>
+  </div>
+</section>
 {% endblock %}
+
